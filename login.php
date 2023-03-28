@@ -1,7 +1,6 @@
 <?php
 
 include './components/connect.php';
-
 session_start();
 
 if(isset($_SESSION['user_id'])){
@@ -33,6 +32,10 @@ if(isset($_POST['submit'])){
 
 }
 
+
+
+
+
 ?>
 
 
@@ -48,9 +51,48 @@ if(isset($_POST['submit'])){
 </head>
 <body>
     
-<!-- Section: Design Block -->
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card text-white" style="border-radius: 1rem;background-color:#453c5c;">
+          <div class="card-body p-5 text-center">
+          <form action="" method="post">
+            <div class="mb-md-5 mt-md-4 pb-5">
+
+              <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+              <p class="text-white-50 mb-5">Please enter your Email and password!</p>
+
+              <div class="form-outline form-white mb-4">
+              <label class="form-label" for="typeEmailX">Email</label>
+                <input type="email" id="typeEmailX" class="form-control form-control-lg" name="email" required placeholder="Enter your email" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')"/>
+              </div>
+
+              <div class="form-outline form-white mb-4">
+              <label class="form-label" for="typePasswordX">Password</label>
+                <input type="password" id="typePasswordX" class="form-control form-control-lg" name="pass" required placeholder="Enter your password" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')"/>
+              </div>
+
+
+              <button class="btn btn-outline-light btn-lg px-5" type="submit"  name="submit">Login</button>
+            </div>
+
+            <div>
+              <p class="mb-0">Don't have an account? <a href="./register.php" class="text-white-50 fw-bold">Sign Up</a>
+              </p>
+            </div>
+          </div>
+</form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 
 <section class="">
-  <!-- Jumbotron -->
+  
   <div class="px-4 py-5 px-md-5 text-center text-lg-start" style="background-color: hsl(0, 0%, 96%)">
     <div class="container">
       <div class="row gx-lg-5 align-items-center">
@@ -71,28 +113,28 @@ if(isset($_POST['submit'])){
           <div class="card">
             <div class="card-body py-5 px-md-5">
               <form action="" method="post">
-                <!-- 2 column grid layout with text inputs for the first and last names -->
+            
                 <div class="row">
 
-                <!-- Email input -->
+              
                 <div class="form-outline mb-4">
                   <label class="form-label" for="form3Example3" >Email:</label>
                   <input type="email" id="form3Example3" class="form-control" name="email" required placeholder="Enter your email" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')"/>
                 </div>
 
-                <!-- Password input -->
+                
                 <div class="form-outline mb-4">
                   <label class="form-label" for="form3Example4">Password:</label>
                   <input type="password" id="form3Example4" class="form-control" name="pass" required placeholder="Enter your password" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')"/>
                 </div>
 
                
-                <!-- Submit button -->
+              
                 <button type="submit" class="btn btn-primary btn-block mb-4 " name="submit">
                   Login
                 </button>
 
-                <!-- Register buttons -->
+               
                 <div class="text-center">
                  <a href="./register.php"><p>Don't have account? Register Now.</p></a>
                 </div>
@@ -103,8 +145,8 @@ if(isset($_POST['submit'])){
       </div>
     </div>
   </div>
-  <!-- Jumbotron -->
-</section>
-<!-- Section: Design Block -->
+
+</section> -->
+
 </body>
 </html>

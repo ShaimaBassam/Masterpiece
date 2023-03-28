@@ -106,7 +106,7 @@ if(isset($_POST['new-admin']) && isset($_POST['password-newadmin'])){
 
 <head>
     <meta charset="utf-8">
-    <title>Art Hand Kraft</title>
+    <title>Center Point</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -122,7 +122,9 @@ if(isset($_POST['new-admin']) && isset($_POST['password-newadmin'])){
     <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="../images/logo.png">
+
+
+    <link rel="icon" type="image/x-icon" href="../assets/logo.png">
 
     <!-- Libraries Stylesheet -->
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
@@ -141,8 +143,8 @@ if(isset($_POST['new-admin']) && isset($_POST['password-newadmin'])){
             content: "\f0c9";
         }
         .btn-primary {
-            background-color: rgb(0, 0, 69);
-            border-color: rgb(0, 0, 69);
+            background-color: #42246C;
+            border-color: #42246C;
         }
         .sidebar {
             position: fixed;
@@ -158,7 +160,7 @@ if(isset($_POST['new-admin']) && isset($_POST['password-newadmin'])){
             background-color: #fff !important;
         }
         .bg-secondary {
-            background-color: rgb(0, 0, 69) !important;
+            background-color: #e8c91a !important;
         }
     </style>
 </head>
@@ -173,7 +175,7 @@ if(isset($_POST['new-admin']) && isset($_POST['password-newadmin'])){
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark" style="height: 100%;">
                 <a href="index.html" class="navbar-brand mx-4 mb-3" style="color:black !important">
-                    <img src="../uploaded_img/logo1.png" style="border-radius: 50%;" width="100px" height="100px" alt="0">
+                    <img src="../assets/logo.png" style="border-radius: 50%;" width="100px" height="100px" alt="0">
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="ms-3">
@@ -206,7 +208,7 @@ if(isset($_POST['new-admin']) && isset($_POST['password-newadmin'])){
         <!-- Content Start -->
         <div class="content">
 
-            <div class="container-fluid pt-4 px-4">
+            <!-- <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
                     <div class="col-sm-6 col-xl-3">
                         <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #fff !important; ">
@@ -245,11 +247,11 @@ if(isset($_POST['new-admin']) && isset($_POST['password-newadmin'])){
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             
             <!-- Sales Chart End -->
 
-            <div class="container-fluid pt-4 px-4">
+            <!-- <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-secondary text-center rounded p-4" style="background-color: #fff !important; ">
@@ -268,7 +270,7 @@ if(isset($_POST['new-admin']) && isset($_POST['password-newadmin'])){
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- Sales Chart End -->
 
 

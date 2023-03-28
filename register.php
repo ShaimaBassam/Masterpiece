@@ -73,87 +73,59 @@ if(isset($_POST['submit'])){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <title>Login</title>
+    <title>Register</title>
 </head>
 <body>
     
-<!-- Section: Design Block -->
-<section class="">
-  <!-- Jumbotron -->
-  <div class="px-4 py-5 px-md-5 text-center text-lg-start" style="background-color: hsl(0, 0%, 96%)">
-    <div class="container">
-      <div class="row gx-lg-5 align-items-center">
-        <div class="col-lg-6 mb-5 mb-lg-0">
-          <h1 class="my-5 display-3 fw-bold ls-tight">
-            The best offer <br />
-            <span class="text-primary">for your business</span>
-          </h1>
-          <p style="color: hsl(217, 10%, 50.8%)">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Eveniet, itaque accusantium odio, soluta, corrupti aliquam
-            quibusdam tempora at cupiditate quis eum maiores libero
-            veritatis? Dicta facilis sint aliquid ipsum atque?
-          </p>
-        </div>
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card text-white" style="border-radius: 1rem;background-color:#453c5c;">
+          <div class="card-body p-5 text-center">
+          <form action="" method="post">
+            <div class="mb-md-5 mt-md-4 pb-5">
 
-        <div class="col-lg-6 mb-5 mb-lg-0">
-          <div class="card">
-            <div class="card-body py-5 px-md-5">
+              <h2 class="fw-bold mb-2 text-uppercase">Register</h2>
 
-              <form action="" method="post">
-                <!-- 2 column grid layout with text inputs for the first and last names -->
-                <div class="row">
-                  <div class="form-outline mb-4">
-                    <div class="form-outline">
+              <div class="form-outline form-white mb-4">
+              <label class="form-label" for="typeNameX">Name</label>
+                <input type="text" id="typeNameX" class="form-control form-control-lg" name="name" required placeholder="Enter your name" maxlength="20"/>
+              </div>
 
-                    <label class="form-label" for="form3Example1">Name:</label>
-                      <input type="text" id="form3Example1" class="form-control" name="name" required placeholder="Enter your name" maxlength="20"/>
-                    </div>
-                  </div>
-                
+              <div class="form-outline form-white mb-4">
+              <label class="form-label" for="typeEmailX">Email</label>
+                <input type="email" id="typeEmailX" class="form-control form-control-lg" name="email" required placeholder="Enter your email" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')"/>
+              </div>
 
-                <!-- Email input -->
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example2" >Email:</label>
-                  <input type="email" id="form3Example2" class="form-control" name="email" required placeholder="Enter your email" maxlength="50" oninput="this.value = this.value.replace(/\s/g, '')" />
-                </div>
+              <div class="form-outline form-white mb-4">
+              <label class="form-label" for="typePasswordX">Password</label>
+                <input type="password" id="typePasswordX" class="form-control form-control-lg" name="pass" required placeholder="Enter your password" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')"/>
+              </div>
 
-                <!-- Password input -->
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example3" >Password:</label>
-                  <input type="password" id="form3Example3" class="form-control" name="pass" required placeholder="Enter your password" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')" />
-                </div>
+              <div class="form-outline form-white mb-4">
+              <label class="form-label" for="typeCPasswordX">Confirm Password</label>
+                <input type="password" id="typeCPasswordX" class="form-control form-control-lg"  name="cpass" required placeholder="Confirm your password" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')"/>
+              </div>
 
-                 <!-- Confirm Password input -->
-                 <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example4" >Confirm Password:</label>
-                  <input type="password" id="form3Example4" class="form-control" name="cpass" required placeholder="Confirm your password" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')" />
-                </div>
+              <div class="form-outline form-white mb-4">
+              <label class="form-label" for="typePhoneX">Phone Number:</label>
+                <input type="text" id="typePhoneX" class="form-control form-control-lg"  name="mobile" required placeholder="Enter your number" maxlength="20"/>
+              </div>
 
-                <!-- Mobile input -->
-                <div class="form-outline mb-4">
-                  <label class="form-label" for="form3Example5">Phone Number:</label>
-                  <input type="text" id="form3Example5" class="form-control" name="mobile" required placeholder="Enter your number" maxlength="20"/>
-                </div>
+              <button class="btn btn-outline-light btn-lg px-5" type="submit"  name="submit">Register</button>
+            </div>
 
-                <!-- Submit button -->
-                <button type="submit" class="btn btn-primary btn-block mb-4 " name="submit">
-                  Sign Up
-                </button>
-
-                <!-- Register buttons -->
-                <div class="text-center">
-                 <a href="./login.php"><p>Do You Have Account?Login.</p></a>
-                </div>
-              </form>
+            <div>
+              <p class="mb-0">Already registered?<a href="./login.php" class="text-white-50 fw-bold">Login</a>
+              </p>
             </div>
           </div>
+        </form>
         </div>
       </div>
     </div>
   </div>
-  <!-- Jumbotron -->
 </section>
-<!-- Section: Design Block -->
 </body>
 </html>

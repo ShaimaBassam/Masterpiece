@@ -31,7 +31,7 @@ if(isset($_POST['name']) && isset($_POST['pass'])){
 
 <head>
     <meta charset="utf-8">
-    <title>Art Hand Kraft/Login</title>
+    <title>Center Point</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -47,7 +47,7 @@ if(isset($_POST['name']) && isset($_POST['pass'])){
     <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="../images/logo.png">
+    <link rel="icon" type="image/x-icon" href="../assets/logo.png">
 
     <!-- Libraries Stylesheet -->
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
@@ -69,8 +69,8 @@ if(isset($_POST['name']) && isset($_POST['pass'])){
             content: "\f0c9";
         }
         .btn-primary {
-            background-color: rgb(0, 0, 69);
-            border-color: rgb(0, 0, 69);
+            background-color: #42246C;
+            border-color: #42246C;
         }
         .sidebar {
             position: fixed;
@@ -86,7 +86,7 @@ if(isset($_POST['name']) && isset($_POST['pass'])){
             background-color: #fff !important;
         }
         .bg-secondary {
-            background-color: rgb(0, 0, 69) !important;
+            background-color: #e8c91a !important;
         }
     </style>
 </head>
@@ -99,8 +99,7 @@ if(isset($_POST['name']) && isset($_POST['pass'])){
         <div class="container-fluid">
 
             <div style="position: absolute;">
-                <img src="../images/logo.png" width="250px" height="250px" style="border-radius: 50%; float: left; margin-left: 200px; margin-top: 200px;">
-                <p style="margin-left: 80px; color: rgb(0, 0, 69); font-size: 60px; font-weight: bold; margin-top: 460px;">ART HAND KRAFT</p>
+                <img src="../assets/logo.png" width="250px" height="250px" style="border-radius: 50%; float: left; margin-left: 200px; margin-top: 200px;">
             </div>
             
                <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh; margin-left: 500px;">

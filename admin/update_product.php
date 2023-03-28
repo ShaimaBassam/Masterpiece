@@ -57,7 +57,7 @@ if(isset($_POST['update'])){
 
 <head>
     <meta charset="utf-8">
-    <title>Art Hand Kraft</title>
+    <title>Center Point</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
@@ -77,7 +77,7 @@ if(isset($_POST['update'])){
     <!-- Libraries Stylesheet -->
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
     <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
-    <link rel="icon" type="image/x-icon" href="../images/logo.png">
+    <link rel="icon" type="image/x-icon" href="../assets/logo.png">
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">

@@ -1,3 +1,4 @@
+<?php session_start() ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,7 +52,9 @@
                     <div class="wrapper flexitem">
                         <a href="#" class="trigger desktop-hide"><span class="i ri-menu-2-line"></span></a>
                         <div class="left flexitem">
+                        
                             <div class="logo"><img src="assets/Untitled-1.png" alt=""></a></div>
+
                             <nav class="mobile-hide">
                                 <ul class="flexitem second-links">
                                     <li><a href="./index.html">Home</a></li>
@@ -60,6 +63,7 @@
                                         <a href="#">Women
                                             <div class="icon-small"><i class="ri-arrow-down-s-line"></i></div>
                                         </a>
+                                        
                                         <!-- mega menu -->
                                         <div class="mega">
                                             <div class="container">
