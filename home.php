@@ -1,4 +1,241 @@
-<?php session_start() ?>
+
+<?php
+
+include './components/connect.php';
+
+
+// header
+session_start();
+
+if(isset($_SESSION['user_id'])){
+   $user_id = $_SESSION['user_id'];
+}else{
+   $user_id = '';
+};
+
+if(isset($_SESSION['cart'])){
+   
+} else {
+   $_SESSION['cart'] = [];
+}
+
+if(isset($_SESSION['fav'])){
+   
+} else {
+   $_SESSION['fav'] = [];
+}
+
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addTOcart'])){
+   $product_id = $_POST['product_id'];
+   $product_name = $_POST['name'];
+   $product_price = $_POST['price'];
+   $product_image = $_POST['image'];
+   $product_quantity = $_POST['quantity'];
+
+   $check_product_id = $conn->prepare("SELECT product_id FROM `cart` WHERE user_id = '$user_id'");
+   $check_product_id->execute();
+   
+
+   $flag = true;
+
+   while($fetch_product = $check_product_id->fetch(PDO::FETCH_ASSOC)){
+      if (in_array($product_id, $fetch_product)){
+         $flag = false;
+         break;
+      }
+   };
+   if($flag==true){
+      if($user_id > 0){
+      $send_to_cart = $conn->prepare("INSERT INTO `cart` (user_id , product_id , name , price , image , quantity)
+                                    VALUES (? , ? , ? , ?, ? , ?)"); 
+      $send_to_cart->execute([$user_id , $product_id , $product_name , $product_price, $product_image, $product_quantity]);
+
+   }else {
+      $array_cart = [$product_id , $product_name , $product_price, $product_image, $product_quantity];
+      array_push($_SESSION['cart'], $array_cart);
+      // echo'<pre>';
+      // print_r($_SESSION['cart']);
+      // echo'</pre>';
+   }
+}
+}
+
+
+
+if(isset($_POST['add_to_wishlist'])){
+
+   if($user_id == ''){
+
+      $flag = true;
+      $pid = $_POST['product_id'];
+
+      foreach($_SESSION['fav'] as $id){
+         if (in_array($pid,$id)){
+            $flag = false;
+            break;
+         }
+      };
+      if($flag==true){
+         $array_fav = [$pid];
+         array_push($_SESSION['fav'], $array_fav);
+         // echo'<pre>';
+         // print_r($_SESSION['fav']);
+         // echo'</pre>';
+      }
+
+   }else{
+
+      $pid = $_POST['product_id'];
+
+
+      $check_wishlist_numbers = $conn->prepare("SELECT * FROM `favorite` WHERE product_id = ? AND user_id = ?");
+      $check_wishlist_numbers->execute([$pid, $user_id]);
+
+      $check_cart_numbers = $conn->prepare("SELECT * FROM `cart` WHERE product_id = ? AND user_id = ?");
+      $check_cart_numbers->execute([$pid, $user_id]);
+
+      if($check_wishlist_numbers->rowCount() > 0){
+         $message[] = 'Your Product <span style="color:red">Already</span> Added To Wishlist!';
+      }elseif($check_cart_numbers->rowCount() > 0){
+         $message[] = 'Your Product <span style="color:red">Already</span> Added To Cart!';
+      }else{
+         $insert_wishlist = $conn->prepare("INSERT INTO `favorite`(user_id, product_id) VALUES(?,?)");
+         $insert_wishlist->execute([$user_id, $pid]);
+         $message[] = 'Your Product <span style="color:green">Added</span> To Wishlist!';
+      }
+
+   }
+
+}
+?>
+
+<?php
+   if(isset($message)){
+      foreach($message as $message){
+         echo '
+         <div class="message" style="background-color:silver !important;">
+            <span style="color: black !important; font-weight:bold"> Notice : '.$message.'</span>
+            <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
+         </div>
+         ';
+      }
+   }
+
+
+?>
+<!-- end of header -->
+
+<!-- home -->
+<?php
+if(isset($_SESSION['user_id'])){
+   $user_id = $_SESSION['user_id'];
+}else{
+   $user_id = '';
+};
+
+if(isset($_SESSION['cart'])){
+   
+} else {
+   $_SESSION['cart'] = [];
+}
+
+if(isset($_SESSION['fav'])){
+   
+} else {
+   $_SESSION['fav'] = [];
+}
+
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addTOcart'])){
+   $product_id = $_POST['product_id'];
+   $product_name = $_POST['name'];
+   $product_price = $_POST['price'];
+   $product_image = $_POST['image'];
+   $product_quantity = $_POST['quantity'];
+
+   $check_product_id = $conn->prepare("SELECT product_id FROM `cart` WHERE user_id = '$user_id'");
+   $check_product_id->execute();
+   
+
+   $flag = true;
+
+   while($fetch_product = $check_product_id->fetch(PDO::FETCH_ASSOC)){
+      if (in_array($product_id, $fetch_product)){
+         $flag = false;
+         break;
+      }
+   };
+   if($flag==true){
+      if($user_id > 0){
+      $send_to_cart = $conn->prepare("INSERT INTO `cart` (user_id , product_id , name , price , image , quantity)
+                                    VALUES (? , ? , ? , ?, ? , ?)"); 
+      $send_to_cart->execute([$user_id , $product_id , $product_name , $product_price, $product_image, $product_quantity]);
+
+   }else {
+      $array_cart = [$product_id , $product_name , $product_price, $product_image, $product_quantity];
+      array_push($_SESSION['cart'], $array_cart);
+      // echo'<pre>';
+      // print_r($_SESSION['cart']);
+      // echo'</pre>';
+   }
+}
+}
+
+
+
+
+
+
+
+if(isset($_POST['add_to_wishlist'])){
+
+   if($user_id == ''){
+
+      $flag = true;
+      $pid = $_POST['product_id'];
+
+      foreach($_SESSION['fav'] as $id){
+         if (in_array($pid,$id)){
+            $flag = false;
+            break;
+         }
+      };
+      if($flag==true){
+         $array_fav = [$pid];
+         array_push($_SESSION['fav'], $array_fav);
+         // echo'<pre>';
+         // print_r($_SESSION['fav']);
+         // echo'</pre>';
+      }
+
+   }else{
+
+      $pid = $_POST['product_id'];
+
+
+      $check_wishlist_numbers = $conn->prepare("SELECT * FROM `favorite` WHERE product_id = ? AND user_id = ?");
+      $check_wishlist_numbers->execute([$pid, $user_id]);
+
+      $check_cart_numbers = $conn->prepare("SELECT * FROM `cart` WHERE product_id = ? AND user_id = ?");
+      $check_cart_numbers->execute([$pid, $user_id]);
+
+      if($check_wishlist_numbers->rowCount() > 0){
+         $message[] = 'Your Product <span style="color:red">Already</span> Added To Wishlist!';
+      }elseif($check_cart_numbers->rowCount() > 0){
+         $message[] = 'Your Product <span style="color:red">Already</span> Added To Cart!';
+      }else{
+         $insert_wishlist = $conn->prepare("INSERT INTO `favorite`(user_id, product_id) VALUES(?,?)");
+         $insert_wishlist->execute([$user_id, $pid]);
+         $message[] = 'Your Product <span style="color:green">Added</span> To Wishlist!';
+      }
+
+   }
+
+}
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,14 +246,47 @@
     <link rel="stylesheet" href="./style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+    <link rel="icon" type="image/x-icon" href="./assets/logo.png">
+
 </head>
+
+<style>
+
+li.dropdown {
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1;}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+</style>
+
 <body>
     <div id="page" class="site page-home">
         
         <aside class="site-off desktop-hide">
             <div class="off-canvas">
                 <div class="canvas-head flexitem">
-                    <div class="logo"><img src="assets/Untitled-1.png" alt=""></a></div>
+                    <div class="logo"><img src="./assets/logo.png" alt=""></a></div>
                       <a href="" class="t-close flexcenter"><i class="ri-close-line"></i></a>
                 </div>
                 <div class="departments"></div>
@@ -26,21 +296,17 @@
         </aside>
         <!-- first nav bar -->
         <header>
-            <div class="header-top mobile-hide">
+        <div class="header-top mobile-hide">
                 <div class="container">
                     <div class="wrapper flexitem">
                         <div class="left">
                             <ul class="flexitem main-links">
-                                <li><a href="#"></a>Wishlist</li>
-                                <li><a href="#"></a>Order Tracking</li>
+                                
                             </ul>
                         </div>
                         <div class="right">
                             <ul class="flexitem main-links">
-                                <li><a href="#"></a>Sign Up</li>
-                                <li><a href="#"></a>My Account</li>
-                                <li><a href="#">English</a></li>
-                                <li><a href="#">JOD</a></li>
+                                
                             </ul>
                         </div>
                     </div>
@@ -53,114 +319,96 @@
                         <a href="#" class="trigger desktop-hide"><span class="i ri-menu-2-line"></span></a>
                         <div class="left flexitem">
                         
-                            <div class="logo"><img src="assets/Untitled-1.png" alt=""></a></div>
+                            <div class="logo"><img src="./assets/logo.png" alt=""></a></div>
 
                             <nav class="mobile-hide">
                                 <ul class="flexitem second-links">
-                                    <li><a href="./index.html">Home</a></li>
-                                    <li><a href="./page-category.html">Shop</a></li>
+                                    <li><a href="./home.php">Home</a></li>
+                                    <li><a href="./shop.php">Shop</a></li>
                                     <li class="has-child">
-                                        <a href="#">Women
-                                            <div class="icon-small"><i class="ri-arrow-down-s-line"></i></div>
+                                        <a href="./about.php">About Us
+                                            <div class="icon-small"></div>
                                         </a>
-                                        
-                                        <!-- mega menu -->
-                                        <div class="mega">
-                                            <div class="container">
-                                                <div class="wrapper">
-                                                    <div class="flexcol">
-                                                        <div class="row">
-                                                            <ul>
-                                                                <h4>Women's Clothing</h4>
-                                                                <li><a href="#">Top</a></li>
-                                                                <li><a href="#">Prayer Clothes</a></li>
-                                                                <li><a href="#">Dresses</a></li>
-                                                                <li><a href="#">Pants</a></li>
-                                                                <li><a href="#">Pajamas & Robes</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flexcol">
-                                                        <div class="row">
-                                                            <ul>
-                                                                <h4>Jewelry</h4>
-                                                                <li><a href="#">Accessories</a></li>
-                                                                <li><a href="#">Bags & Purses</a></li>
-                                                                <li><a href="#">Necklaces</a></li>
-                                                                <li><a href="#">Rings</a></li>
-                                                                <li><a href="#">Bracelets</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flexcol">
-                                                        <div class="row">
-                                                            <ul>
-                                                                <h4>Beauty</h4>
-                                                                <li><a href="#">Skin Care</a></li>
-                                                                <li><a href="#">Hair Care</a></li>
-                                                                <li><a href="#">Makeup & Cosmetics</a></li>
-                                                                <li><a href="#">Face Masks</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flexcol">
-                                                        <div class="row">
-                                                            <ul class="women-stores">
-                                                                <h4>Women Stores</h4>
-                                                                <li><a href="#">Hills</a></li>
-                                                                <li><a href="#">Nai</a></li>
-                                                                <a href="./page-category.html" class="view-all">View All Stores<i class="ri-arrow-right-line"></i></a>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="flexcol products">
-                                                        <div class="row">
-                                                            <div class="media">
-                                                                <div class="thumbnail object-cover">
-                                                                    <a href="#">
-                                                                        <img src="assets/products/p6.png"
-                                                                            alt="">
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="text-content">
-                                                                <h4>Most Wanted!</h4>
-                                                                <a href="./page-offer.html" class="primary-button">Order Now </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- the end of mega menu -->
-                                    <li><a href="#">Men
-                                            <div class="fly-item">
+                                       
+                                    <li><a href="./contact.php">Contact
+                                            <!-- <div class="fly-item">
                                                 <span>New!</span>
-                                            </div>
+                                            </div> -->
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="#">Stores</a>
-                                    </li>
+                                    
                                 </ul>
                             </nav>
 
                         </div>
                         <div class="right">
                             <ul class="flexitem second-links">
-                                <li class="mobile-hide"><a href="#">
+                            <?php
+                             $count_wishlist_items = $conn->prepare("SELECT * FROM `favorite` WHERE user_id = ?");
+                             $count_wishlist_items->execute([$user_id]);
+                             $total_wishlist_counts = $count_wishlist_items->rowCount();
+
+                             $count_cart_items = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
+                             $count_cart_items->execute([$user_id]);
+                             $total_cart_counts = $count_cart_items->rowCount();
+                             ?>
+                                    <li class="dropdown mobile-hide">
+                                     <a href="javascript:void(0)" class="dropbtn"> <div class="icon-large"><i class="ri-user-3-line"></i></div></a>
+                                     <div class="dropdown-content">
+                                     <?php          
+                                    $select_profile = $conn->prepare("SELECT * FROM `users` WHERE user_id = ?");
+                                    $select_profile->execute([$user_id]);
+                                    if($select_profile->rowCount() > 0){
+                                    $fetch_profile = $select_profile->fetch(PDO::FETCH_ASSOC);
+                                     ?>
+                                    <a ><?= $fetch_profile["name"]; ?></a>
+                                     <a href="./account.php">Account</a>
+                                     <a href="./logout.php">Logout</a>
+
+                                     <?php
+                                     }else{
+                                      ?>
+                                     <a>please login or register first!</a>
+                                     <a href="./login.php">Login</a>
+                                     <a href="./register.php">Register</a>
+
+                                     <?php
+                                     }
+                                    ?>  
+                                     </div>
+                                    </li>
+
+                                <li class="mobile-hide"><a href="./whishlist.php">
                                         <div class="icon-large"><i class="ri-heart-line"></i></div>
-                                        <div class="fly-item"><span class="item-number">0</span></div>
+                                        <?php
+                                         if(isset($_SESSION['user_id'])){ ?>
+                                        <div class="fly-item"><span class="item-number"><?= $total_wishlist_counts; ?></span></div>
                                     </a>
                                 </li>
+
+                                
+
+                                <li class="iscart"><a href="./cart.php">
+                                    <div class="icon-large">
+                                        <i class="ri-shopping-cart-line"></i>
+                                        <div class="fly-item"><span class="item-number"> <?= $total_cart_counts; ?></span></div>
+                                    </div>
+                                    <?php
+                                        }else{ ?>
+                                    <div class="fly-item"><span class="item-number"><?= count($_SESSION['fav']); ?></span></div>
+                                    </a>
+                                </li>
+
+                                
 
                                 <li class="iscart"><a href="#">
                                     <div class="icon-large">
                                         <i class="ri-shopping-cart-line"></i>
-                                        <div class="fly-item"><span class="item-number">7</span></div>
+                                        <div class="fly-item"><span class="item-number"> <?= count($_SESSION['cart']); ?></span></div>
                                     </div>
+
+
+                                     <?php }; ?>
                                     <div class="icon-text">
                                         <div class="mini-text">Total</div>
                                         <div class="cart-total">95.38 JD</div>
@@ -168,14 +416,23 @@
                                 </a>
                                 <div class="mini-cart">
                                     <div class="content">
+                                    <?php
+                                        if(isset($_SESSION['user_id'])){ ?>
                                         <div class="cart-head">
-                                            7 items in cart
+                                        <?= $total_cart_counts; ?> items in cart
                                         </div>
+
+                                       <?php }else{ ?>
+                                        <div class="cart-head">
+                                        <?= count($_SESSION['cart']); ?>items in cart
+                                        </div>
+                                        <?php }; ?>
+
                                         <div class="cart-body">
                                             <ul class="products mini">
                                                 <li class="item">
                                                     <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/QUARTZ VEIL LIQUID EYESHADOW.png" alt=""></a>
+                                                        <a href=""><img src="assets/products/QUARTZ VEIL LIQUID EYESHADOW.png" alt=""></a>
                                                     </div>
                                                     <div class="item-content">
                                                         <p><a href="#">QUARTZ VEIL LIQUID EYESHADOW</a></p>
@@ -233,8 +490,8 @@
                                                 <p><strong>95.38 JD</strong></p>
                                             </div>
                                             <div class="actions">
-                                                <a href="./checkout.html" class="secondary-button">Checkout</a>
-                                                <a href="./cart.html" class="secondary-button">View Cart</a>
+                                                <a href="./checkout.php" class="secondary-button">Checkout</a>
+                                                <a href="./cart.php" class="secondary-button">View Cart</a>
                                             </div>
                                         </div>
                                     </div>
@@ -264,47 +521,47 @@
                                 <div class="dpt-menu">
                                     <ul class="second-links">
                                         <li class="has-child Womens">
-                                            <a href="#">
+                                            <a href="category.php?category=1">
                                                 <div class="icon-large"><i class="ri-t-shirt-line"></i></div>
                                                 Women's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Mens">
-                                            <a href="#">
+                                            <a href="category.php?category=2">
                                                 <div class="icon-large"><i class="ri-shirt-line"></i></div>
                                                 Men's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Girls">
-                                            <a href="#">
+                                            <a href="category.php?category=3">
                                                 <div class="icon-large"><i class="ri-user-5-line"></i></div>
                                                 Girl's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Boys">
-                                            <a href="#">
+                                            <a href="category.php?category=4">
                                                 <div class="icon-large"><i class="ri-user-6-line"></i></div>
                                                 Boy's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Home">
-                                            <a href="#">
+                                            <a href="category.php?category=5">
                                                 <div class="icon-large"><i class="ri-home-4-line"></i></div>
                                                 Home & Kitchen
                                             </a>
                                         </li>
                                         <li class="has-child Brokers">
-                                            <a href="#">
+                                            <a href="category.php?category=6">
                                                 <div class="icon-large"><i class="ri-stack-line"></i></div>
                                                 Products From Brokers
                                             </a>
                                         </li>
-                                        <li class="has-child Seller">
+                                        <!-- <li class="has-child Seller">
                                             <a href="#">
                                                 <div class="icon-large"><i class="ri-shield-star-line"></i></div>
                                                 Best Seller
                                             </a>
-                                        </li>
+                                        </li> -->
                                     </ul>
                                 </div>
                             </div>
@@ -336,70 +593,57 @@
                                     <img src="assets/slider1/s6.png" alt="slide1">
                                    </div>  
                                    <div class="text-content flexcol">
-                                    <h4>Women-Fashion</h4>
+                                    <!-- <h4>Women-Fashion</h4> -->
                                     <h2> 
-                                        <span>Come and Get it!</span><br><span>Brand New clothes</span> 
+                                        <span>Get ready for</span><br><span> summer with our latest collection </span> 
                                     </h2>
-                                    <a href="./page-category.html" class="primary-button">Shop Now</a>
+                                    <a href="./shop.php" class="primary-button">Shop Now</a>
                                    </div>       
                                 </div>
                             </div>
                             <div class="swiper-slide">
                                 <div class="item"> 
                                    <div class="image object-cover">
-                                    <img src="assets/slider1/s2.png" alt="">
+                                    <img src="./assets/slider1/s2.png" alt="">
                                    </div>  
                                    <div class="text-content flexcol">
-                                    <h4>Men Fashion</h4>
+                                    <!-- <h4>Men Fashion</h4> -->
                                     <h2> 
-                                        <span>Come and Get it!</span><br><span>Brand New Clothes</span> 
+                                        <span>Dress to impress</span><br><span> with our formal wear collection</span> 
                                     </h2>
-                                    <a href="#" class="primary-button">Shop Now</a>
+                                    <a href="./shop.php" class="primary-button">Shop Now</a>
                                    </div>       
                                 </div>
                             </div>
                             <div class="swiper-slide">
                                 <div class="item"> 
                                    <div class="image object-cover">
-                                    <img src="assets/slider1/s3.png" alt="">
+                                    <img src="./assets/slider1/61pBnu9VX+L._AC_SX679_.jpg" alt="">
                                    </div>  
                                    <div class="text-content flexcol">
-                                    <h4>Shoes Fashion</h4>
+                                    <!-- <h4>Shoes Fashion</h4> -->
                                     <h2> 
-                                        <span>Come and Get it!</span><br><span>Brand New Shoes</span> 
+                                        <span>Entertain with</span><br><span> style with our collection</span> 
                                     </h2>
-                                    <a href="#" class="primary-button">Shop Now</a>
+                                    <a href="./shop.php" class="primary-button">Shop Now</a>
                                    </div>       
                                 </div>
                             </div>
                             <div class="swiper-slide">
                                 <div class="item"> 
                                    <div class="image object-cover">
-                                    <img src="assets/slider1/s4.png" alt="">
+                                    <img src="assets/slider1/group-beautiful-girls-boys.jpg" alt="">
                                    </div>  
                                    <div class="text-content flexcol">
-                                    <h4>Shoes Fashion</h4>
+                                    <!-- <h4>Shoes Fashion</h4> -->
                                     <h2> 
-                                        <span>Come and Get it!</span><br><span>Brand New Shoes</span> 
+                                        <span>Trendy styles</span><br><span> for fashionable kids</span> 
                                     </h2>
-                                    <a href="#" class="primary-button">Shop Now</a>
+                                    <a href="./shop.php" class="primary-button">Shop Now</a>
                                    </div>       
                                 </div>
                             </div>
-                            <div class="swiper-slide">
-                                <div class="item"> 
-                                   <div class="image object-cover">
-                                    <img src="assets/slider1/s5.png" alt="">
-                                   </div>  
-                                   <div class="text-content flexcol">
-                                    <h4>Shoes Fashion</h4>
-                                    <h2> 
-                                        <span>Come and Get it!</span><br><span>Brand New Shoes</span> 
-                                    </h2>
-                                    <a href="#" class="primary-button">Shop Now</a>
-                                   </div>       
-                                </div>
-                            </div>
+                            
 
                         </div>
                         <div class="swiper-pagination"></div>
@@ -411,26 +655,28 @@
         <div class="brands">
             <div class="container">
                 <div class="wrapper flexitem">
-                    <div class="item">
-                        <a href="#">
-                            <img src="assets/brands/zara.png" alt="">
+                <div class="item">
+                        <a >
+                            <img src="assets/brands/272217624_109698628282453_2453873482967426746_n-removebg-preview.png" alt="" width="300px" height="200px">
                         </a>
                     </div>
                     <div class="item">
-                        <a href="#">
-                            <img src="assets/brands/zara.png" alt="">
-                        </a>
+                    <a >
+                            <img src="./assets/brands/68948073_658269107989189_3892282883292790784_n-removebg-preview.png" alt="" width="300px" height="200px">
+                     </a>
                     </div>
+                    
                     <div class="item">
-                        <a href="#">
-                            <img src="assets/brands/zara.png" alt="">
+                        <a >
+                            <img src="assets/brands/56997565_2493990500828639_4305479765327872000_n-removebg-preview.png" alt="" width="300px" height="200px">
                         </a>
                     </div>
+                   
                 </div>
             </div>
         </div>
         <!-- brands -->
-        <div class="trending">
+        <!-- <div class="trending">
             <div class="container">
                 <div class="wrapper">
                     <div class="sectop flexitem">
@@ -625,358 +871,155 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
+
+
         <!-- trending  -->
+        
         <div class="features">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="column">
-                        <div class="sectop flexitem">
-                            <h2><span class="circle"></span> <span>Featured Products</span></h2>
-                            <div class="second-links">
-                                <a href="#" class="view-all">View All<i class="ri-arrow-right-line"></i></a>
-                            </div>
-                        </div>
-                        <div class="products main flexwrap">
-                            <div class="item">
-                                <div class="media">
-                                    <div class="thumbnail object-cover">
-                                        <a href="#">
-                                            <img src="assets/products/p1.png" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="hoverable">
-                                        <ul>
-                                            <li class="active"><a href="#"><i class="ri-heart-line"></i></a></li>
-                                            <li><a href="#"><i class="ri-eye-line"></i></a></li>
-                                            <li><a href="#"><i class="ri-shuffle-line"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="discount circle flexcenter"><span>25%</span></div>
-                                </div>
-                                <div class="content">
-                                    <div class="rating">
-                                        <div class="stars"></div>
-                                        <span class="mini-text">(2,148)</span>
-                                    </div>
-                                    <h3 class="main-links"><a href="./page-offer.html">Happy Sailed Woman's Summer Boho Floral</a></h3>
-                                    <div class="price">
-                                        <span class="current"> 16.99 JD</span>
-                                        <span class="normal mini-text"> 12 JD</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="media">
-                                    <div class="thumbnail object-cover">
-                                        <a href="#">
-                                            <img src="assets/products/p3.png" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="hoverable">
-                                        <ul>
-                                            <li class="active"><a href="#"><i class="ri-heart-line"></i></a></li>
-                                            <li><a href="#"><i class="ri-eye-line"></i></a></li>
-                                            <li><a href="#"><i class="ri-shuffle-line"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="discount circle flexcenter"><span>25%</span></div>
-                                </div>
-                                <div class="content">
-                                    <div class="rating">
-                                        <div class="stars"></div>
-                                        <span class="mini-text">(2,548)</span>
-                                    </div>
-                                    <h3 class="main-links"><a href="./page-offer.html">Happy Sailed Woman's Summer Boho Floral</a></h3>
-                                    <div class="price">
-                                        <span class="current"> 126.99 JD</span>
-                                        <span class="normal mini-text"> 189 JD</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="media">
-                                    <div class="thumbnail object-cover">
-                                        <a href="#">
-                                            <img src="assets/products/p5.png" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="hoverable">
-                                        <ul>
-                                            <li class="active"><a href="#"><i class="ri-heart-line"></i></a></li>
-                                            <li><a href="#"><i class="ri-eye-line"></i></a></li>
-                                            <li><a href="#"><i class="ri-shuffle-line"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="discount circle flexcenter"><span>25%</span></div>
-                                </div>
-                                <div class="content">
-                                    <div class="rating">
-                                        <div class="stars"></div>
-                                        <span class="mini-text">(2,548)</span>
-                                    </div>
-                                    <h3 class="main-links"><a href="./page-offer.html">Happy Sailed Woman's Summer Boho Floral</a></h3>
-                                    <div class="price">
-                                        <span class="current"> 126.99 JD</span>
-                                        <span class="normal mini-text"> 189 JD</span>
-                                    </div>
-                                    <!-- Additional Structure -->
-                                    <div class="footer">
-                                        <ul class="mini-text">
-                                            <li>Polyster, Cotton</li>
-                                            <li>Pull On Closure</li>
-                                            <li>Fashion Personality</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="media">
-                                    <div class="thumbnail object-cover">
-                                        <a href="#">
-                                            <img src="assets/products/p8.png" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="hoverable">
-                                        <ul>
-                                            <li class="active"><a href="#"><i class="ri-heart-line"></i></a></li>
-                                            <li><a href="#"><i class="ri-eye-line"></i></a></li>
-                                            <li><a href="#"><i class="ri-shuffle-line"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="discount circle flexcenter"><span>25%</span></div>
-                                </div>
-                                <div class="content">
-                                    <div class="rating">
-                                        <div class="stars"></div>
-                                        <span class="mini-text">(2,548)</span>
-                                    </div>
-                                    <h3 class="main-links"><a href="./page-offer.html">Happy Sailed Woman's Summer Boho Floral</a></h3>
-                                    <div class="price">
-                                        <span class="current"> 126.99 JD</span>
-                                        <span class="normal mini-text"> 189 JD</span>
-                                    </div>
-                                    <!-- Additional Structure -->
-                                    <div class="footer">
-                                        <ul class="mini-text">
-                                            <li>Polyster, Cotton</li>
-                                            <li>Pull On Closure</li>
-                                            <li>Fashion Personality</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="container">
+        <div class="wrapper">
+            <div class="column">
+                <div class="sectop flexitem">
+                    <h2><span class="circle"></span> <span>Sales Products</span></h2>
+                    <div class="second-links">
+                        <a href="#" class="view-all">View All<i class="ri-arrow-right-line"></i></a>
                     </div>
+                </div>
+                <div class="products main flexwrap">
+                    <?php
+                        $select_products = $conn->prepare("SELECT * FROM `products` WHERE is_sale='1'"); 
+                        $select_products->execute();
+                        if($select_products->rowCount() > 0){
+                            while($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)){
+                                $i=0;
+                                $is_product_in_store = ($fetch_product['store']-$fetch_product['sold']);
+                                if ( $is_product_in_store <= 0 ){
+                                    continue;
+                                } else { 
+                    ?>
+                                    <input type="hidden" name="product_id" value="<?= $fetch_product['product_id']; ?>">
+                                    <input type="hidden" name="id" value="<?= $fetch_product['name']; ?>">
+                                    <?php 
+                                        if ($fetch_product['is_sale'] == 1){
+                                    ?>
+                                        <input type="hidden" name="price" value="<?=$fetch_product['price_discount'];?>">
+                                    <?php
+                                        } else {
+                                    ?>
+                                        <input type="hidden" name="price" value="<?=$fetch_product['price'];?>">
+                                    <?php
+                                        }
+                                    ?>
+                                    <input type="hidden" name="image" value="<?= $fetch_product['image']; ?>">
+                                    <div class="item">
+                                        <div class="media">
+                                            <div class="thumbnail object-cover">
+                                                <a href="#">
+                                                    <img src="uploaded_img/<?= $fetch_product['image']; ?>" alt="">
+                                                </a>
+                                            </div>
+                                            <form action="" method="post">
+                                                <div class="hoverable">
+                                                    <ul>
+                                                        <li class="active"><a href="#"><button type="submit"><i class="ri-heart-line"></i></button></a></li>
+                                                    </ul> 
+                                                </div>
+                                            </form>
+                                            <!-- <div class="discount circle flexcenter"><span>25%</span></div> -->
+                                        </div>
+                                        <div class="content">
+                                            <h3 class="main-links"><a href="#"><?= $fetch_product['name']; ?></a></h3>
+                                            <div class="price">
+                                                <?php if ($fetch_product['is_sale'] == 1){ ?>
+                                                    <div class="price"><span><del style="text-decoration:line-through; color:silver">JD<?=$fetch_product['price'];?></del><span style="color:#67022f;"> JD<?=$fetch_product['price_discount'];?></span> </span></div>
+                                                <?php } else { ?>
+                                                    <div class="name" style="color:#67022f; padding:20px 0px">JD<?=$fetch_product['price'];?></div> 
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                    <?php 
+                                }
+                            }
+                        }
+                    ?>
                 </div>
             </div>
         </div>
-        <!-- Featured products  -->
-        <div class="banners">
+    </div>
+</div>
+
+
+       <div class="banners">
             <div class="container">
                 <div class="wrapper">
                     <div class="column">
-                        <div class="banner flexwrap">
+                        <div class="banner flexwrap" >
                             <div class="row">
                                 <div class="item">
-                                    <div class="image">
-                                        <img src="assets/slider1/s6.png" alt="">
+                                    <div class="image" style="height:300px;!important">
+                                        <img src="assets/slider1/s6.png" alt="" style="height:300px;width:600px;!important" >
                                     </div>
                                     <div class="text-content flexcol">
-                                        <h4>Brutal Sale!</h4>
-                                        <h3><span>Get the deal in here</span><br>Living Room Chair</h3>
+                                        <!-- <h4>Brutal Sale!</h4> -->
+                                        <h3><br>Women Fashion</h3>
                                         <a href="#" class="primary-button">Shop Now</a>
                                     </div>
                                     <a href="#" class="over-link"></a>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="item get-gray">
+                                <div class="item get-gray" style="height:300px;!important">
                                     <div class="image">
-                                        <img src="assets/slider1/s2.png" alt="">
+                                        <img src="assets/slider1/s2.png" alt="" style="height:300px;width:600px;!important">
                                     </div>
                                     <div class="text-content flexcol">
-                                        <h4>Brutal Sale!</h4>
-                                        <h3><span>Discount Everyday</span><br>Office Outfit</h3>
+                                        <!-- <h4>Brutal Sale!</h4> -->
+                                        <h3><br>Men Fashion</h3>
                                         <a href="#" class="primary-button">Shop Now</a>
                                     </div>
                                     <a href="#" class="over-link"></a>
                                 </div>
-                            </div>
-                        
-                            <!-- banners  -->
-                            <div class="product-categories flexwrap">
-                            <div class="row">
-                                <div class="item">
-                                    <div class="image">
-                                        <img src="assets//products/Rachel Bag.png" alt="">
-                                    </div>
-                                    <div class="content mini-links">
-                                        <h4>Beauty</h4>
-                                        <ul class="flexcol">
-                                            <li><a href="#">Makeup</a></li>
-                                            <li><a href="#">Skin Care</a></li>
-                                            <li><a href="#">Hair Care</a></li>
-                                            <li><a href="#">Fragrance</a></li>
-                                            <li><a href="#">Foot & Hand Care</a></li>
-                                        </ul>
-                                        <div class="second-links">
-                                            <a href="#" class="view-all">View All<i class="ri-arrow-right-line"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="item">
-                                    <div class="image">
-                                        <img src="assets/products/Advanced Snail 96 Mucin Power Essence.png" alt="">
-                                    </div>
-                                    <div class="content mini-links">
-                                        <h4>Beauty</h4>
-                                        <ul class="flexcol">
-                                            <li><a href="#">Makeup</a></li>
-                                            <li><a href="#">Skin Care</a></li>
-                                            <li><a href="#">Hair Care</a></li>
-                                            <li><a href="#">Fragrance</a></li>
-                                            <li><a href="#">Foot & Hand Care</a></li>
-                                        </ul>
-                                        <div class="second-links">
-                                            <a href="#" class="view-all">View All<i class="ri-arrow-right-line"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="item">
-                                    <div class="image">
-                                        <img src="assets/products/spela.png" alt="">
-                                    </div>
-                                    <div class="content mini-links">
-                                        <h4>Beauty</h4>
-                                        <ul class="flexcol">
-                                            <li><a href="#">Makeup</a></li>
-                                            <li><a href="#">Skin Care</a></li>
-                                            <li><a href="#">Hair Care</a></li>
-                                            <li><a href="#">Fragrance</a></li>
-                                            <li><a href="#">Foot & Hand Care</a></li>
-                                        </ul>
-                                        <div class="second-links">
-                                            <a href="#" class="view-all">View All<i class="ri-arrow-right-line"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            </div> 
+                         
+                           
     </main>
 
     <footer>
-        <div class="newsletter">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="box">
-                        <div class="content">
-                            <h3>Join Our Newsletter</h3>
-                            <p>Get E-mail updates about our latest shop and <strong>special offers</strong></p>
-                        </div>
-                        <form action="" class="search">
-                            <span class="icon-large"><i class="ri-mail-line"></i></span>
-                            <input type="mail" placeholder="Your email address" required>
-                            <button type="submit">Sign Up</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- newsletter -->
 
-        <div class="widgets">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="flexwrap">
-                        <div class="row">
-                            <div class="item mini-links footer-list">
-                                <h4>Help & Contact</h4>
-                                <ul class="flexcol">
-                                    <li><a href="#">Your Account</a></li>
-                                    <li><a href="#">Your Order</a></li>
-                                    <li><a href="#">Shipping Rates</a></li>
-                                    <li><a href="#">Returns</a></li>
-                                    <li><a href="#">Assistant</a></li>
-                                    <li><a href="#">Help</a></li>
-                                    <li><a href="#">Contact Us</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Payment Info</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Bussines Card</a></li>
-                                    <li><a href="">Shop with Points</a></li>
-                                    <li><a href="">Reload Your Balance</a></li>
-                                    <li><a href="">Paypal</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>About Us</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Company Info</a></li>
-                                    <li><a href="">News</a></li>
-                                    <li><a href="">Investors</a></li>
-                                    <li><a href="">Careers</a></li>
-                                    <li><a href="">Policies</a></li>
-                                    <li><a href="">Customer reviews</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Product Categories</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Bueaty</a></li>
-                                    <li><a href="">Electronic</a></li>
-                                    <li><a href="">Woman's Fashion</a></li>
-                                    <li><a href="">Men's Fashion</a></li>
-                                    <li><a href="">Home & Kitchen</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- widgets -->
 
-        <div class="footer-info">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="flexcol">
-                        <div class="logo">
-                            <a href="">.Center Point<span class="circle"></span></a>
+        <div class="footer-info" style="background-color: var(--light-bg-color);">
+            <div class="container" >
+                <div class="wrapper" >
+                    <div class="flexcol" >
+                        <div class="logo" >
+                            <img src="./assets/logo.png" style="height: 150px;width:150px;margin-left:29px">
+                           
                         </div>
-                        <div class="socials">
-                            <ul class="flexitem">
-                                <li><a href="#"><i class="ri-twitter-line"></i></a></li>
-                                <li><a href="#"><i class="ri-facebook-line"></i></a></li>
-                                <li><a href="#"><i class="ri-instagram-line"></i></a></li>
-                                <li><a href="#"><i class="ri-linkedin-line"></i></a></li>
-                                <li><a href="#"><i class="ri-youtube-line"></i></a></li>
+                        <div class="socials" >
+                            <ul class="flexitem" >
+                                <!-- <li><a href="#"><i class="ri-twitter-line"></i></a></li> -->
+                                <li><a href="https://www.facebook.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-facebook-line" style="color:wihte;"></i></a></li>
+                                <li><a href="https://www.instagram.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-instagram-line"></i></a></li>
+                                <li><a href="https://www.linkedin.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-linkedin-line"></i></a></li>
+                                <li><a href="https://www.youtube.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-youtube-line"></i></a></li>
                             </ul>
                         </div>
+
+                        <div style="color:black; justify-content: space-between; display: flex;gap: 20px; margin-left:50px">
+                                <!-- <li><a href="#"><i class="ri-twitter-line"></i></a></li> -->
+                                <p><a href="./shop.php" style="color:var(--secondary-dark-color);">Shop</a></p>
+                                <p><a href="./account.php" style="color:var(--secondary-dark-color);">Account</a></p>
+                                <p><a href="./whishlist.php" style="color:var(--secondary-dark-color);">Whishlist</a></p>
+                                <p><a href="./cart.php" style="color:var(--secondary-dark-color);">Cart</a></p>
+                                <p><a href="./about.php" style="color:var(--secondary-dark-color);">About </a></p>
+                                <p><a href="./contact.php" style="color:var(--secondary-dark-color);">Contact</a></p>
+                        </div>
+                        
+                       
                     </div>
-                    <p class="mini-text">Copyright 2023 .StoreName. All right reserved. </p>
+                    <p class="mini-text"  style="color:black;margin-left:50px;font-size:8px;color:var(--secondary-dark-color);">Copyright 2023 .Center Point. All right reserved </p>
                 </div>
             </div>
         </div>
@@ -988,20 +1031,15 @@
             <div class="wrapper">
                 <nav>
                     <ul class="flexitem menu-unorder-list">
+                       
                         <li>
-                            <a href="#">
-                                <i class="ri-bar-chart-line"></i>
-                                <span>Trending</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
+                            <a href="./account.php">
                                 <i class="ri-user-6-line"></i>
                                 <span>Account</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="./whishlist.php">
                                 <i class="ri-heart-line"></i>
                                 <span>Wishlist</span>
                             </a>

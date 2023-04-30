@@ -39,28 +39,28 @@ if(isset($_POST['submit'])){
       }
    }
 
-//    $select_user_for_cart = $conn->prepare("SELECT * FROM `users` ORDER BY user_id DESC LIMIT 1");
-//    $select_user_for_cart->execute();
-//    if($select_user_for_cart->rowCount()>0){
-//       while($fetch_select_user_for_cart = $select_user_for_cart->fetch(PDO::FETCH_ASSOC)){
-//          $user_id = $fetch_select_user_for_cart['user_id'];
-//          $cart_array = $_SESSION['cart'];
-//          for( $i = 0 ; $i < count($cart_array) ; $i++){
-//             $sql = $conn->prepare("INSERT INTO cart (user_id , product_id , name , price , image , quantity)
-//                                     VALUES (?,?,?,?,?,?)");
-//             $sql->execute([$user_id , $cart_array[$i][0],$cart_array[$i][1],$cart_array[$i][2],$cart_array[$i][3],$cart_array[$i][4]]);
-//          }
-//          $fav_array = $_SESSION['cart'];
-//          for( $i = 0 ; $i < count($fav_array) ; $i++){
-//             $stm = $conn->prepare("INSERT INTO favorite (user_id , product_id)
-//                                     VALUES (?,?)");
-//             $stm->execute([$user_id , $fav_array[$i][0]]);
-//          }
-//       }
-//    }
+   $select_user_for_cart = $conn->prepare("SELECT * FROM `users` ORDER BY user_id DESC LIMIT 1");
+   $select_user_for_cart->execute();
+   if($select_user_for_cart->rowCount()>0){
+      while($fetch_select_user_for_cart = $select_user_for_cart->fetch(PDO::FETCH_ASSOC)){
+         $user_id = $fetch_select_user_for_cart['user_id'];
+         $cart_array = $_SESSION['cart'];
+         for( $i = 0 ; $i < count($cart_array) ; $i++){
+            $sql = $conn->prepare("INSERT INTO cart (user_id , product_id , name , price , image , quantity)
+                                    VALUES (?,?,?,?,?,?)");
+            $sql->execute([$user_id , $cart_array[$i][0],$cart_array[$i][1],$cart_array[$i][2],$cart_array[$i][3],$cart_array[$i][4]]);
+         }
+         $fav_array = $_SESSION['cart'];
+         for( $i = 0 ; $i < count($fav_array) ; $i++){
+            $stm = $conn->prepare("INSERT INTO favorite (user_id , product_id)
+                                    VALUES (?,?)");
+            $stm->execute([$user_id , $fav_array[$i][0]]);
+         }
+      }
+   }
 
-//    $_SESSION['cart']=[];
-//    $_SESSION['fav']=[];
+   $_SESSION['cart']=[];
+   $_SESSION['fav']=[];
 
 }
 
@@ -73,6 +73,8 @@ if(isset($_POST['submit'])){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="icon" type="image/x-icon" href="./assets/logo.png">
+
     <title>Register</title>
 </head>
 <body>

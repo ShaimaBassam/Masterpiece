@@ -174,7 +174,7 @@ if(isset($_GET['delete'])){
                             <h5 class="mb-4">Add New Category</h5>
                             <form action="" method="post" enctype="multipart/form-data">
                                 <div class="mb-3">
-                                    <label for="exampleInputEmail1" class="form-label">Product Name</label>
+                                    <label for="exampleInputEmail1" class="form-label">Category Name</label>
                                     <input type="text" name="name" required class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                                 </div>
                                 <div class="mb-3">

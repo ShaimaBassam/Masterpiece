@@ -30,6 +30,9 @@
     --trans-background: background-color .3s;
     --trans-color: color .3s;
 }
+
+
+
 *,::before,::after{
     box-sizing: border-box;
 }
@@ -545,6 +548,7 @@ form.search button:hover {
 .slider .item {
     position: relative;
     height: 474px;
+    
 }
 .slider .item::before {
     content: '';
@@ -562,7 +566,7 @@ form.search button:hover {
     position: relative;
     height: var(--percent100);
     justify-content: flex-end;
-    padding: 0 0 10% 10%;
+    padding: 0 0 4% 4% !important;
     z-index: 1;
 }
 .slider h4{
@@ -599,6 +603,7 @@ form.search button:hover {
 .stores .item img {
     opacity: 0.25;
     transition: opacity .3s;
+    
 }
 .stores .item a:hover img {
     opacity: 1;
@@ -978,7 +983,7 @@ form.search button:hover {
           Footer Info
       --------------*/
 .footer-info {
-    padding: 3.5em 0 5em;
+    padding:-5.5em 0 5em;
 }
 .footer-info .wrapper .flexcol {
     align-items: center;

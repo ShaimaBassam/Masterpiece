@@ -87,8 +87,8 @@ if(isset($_POST['update'])){
             content: "\f0c9";
         }
         .btn-primary {
-            background-color: rgb(0, 0, 69);
-            border-color: rgb(0, 0, 69);
+            background-color: #42246C;
+            border-color: #42246C;
         }
         .sidebar {
             position: fixed;
@@ -104,7 +104,7 @@ if(isset($_POST['update'])){
             background-color: #fff !important;
         }
         .bg-secondary {
-            background-color: rgb(0, 0, 69) !important;
+            background-color: #e8c91a !important;
         }
     </style>
 </head>
@@ -119,7 +119,7 @@ if(isset($_POST['update'])){
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark" style="height: 100%;">
                 <a href="index.html" class="navbar-brand mx-4 mb-3">
-                    <img src="../uploaded_img/logo1.png" style="border-radius: 50%;" width="100px" height="100px" alt="0">
+                    <img src="../assets/logo.png" style="border-radius: 50%;" width="100px" height="100px" alt="0">
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="ms-3">

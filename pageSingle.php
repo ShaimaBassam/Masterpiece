@@ -1,3 +1,7 @@
+<?php
+include './components/connect.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +12,8 @@
     <link rel="stylesheet" href="./style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+    <link rel="icon" type="image/x-icon" href="./assets/logo.png">
+
 </head>
 <body>
     <div id="page" class="site page-single">
@@ -25,7 +31,7 @@
         <!-- first nav bar -->
         <header>
             <div class="header-top mobile-hide">
-                <div class="container">
+                <!-- <div class="container">
                     <div class="wrapper flexitem">
                         <div class="left">
                             <ul class="flexitem main-links">
@@ -42,133 +48,12 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <!-- header-top  -->
 
-            <!-- second nav bar -->
-            <div class="header-nav">
-                <div class="container">
-                    <div class="wrapper flexitem">
-                        <a href="#" class="trigger desktop-hide"><span class="i ri-menu-2-line"></span></a>
-                        <div class="left flexitem">
-                            <div class="logo"><img src="assets/Untitled-1.png" alt=""></a></div>
-                            <nav class="mobile-hide">
-                                <ul class="flexitem second-links">
-                                    <li><a href="./index.html">Home</a></li>
-                                    <li><a href="./page-category.html">Shop</a></li>
-                                    <li class="has-child">
-                                        <a href="#">Women
-                                            <div class="icon-small"><i class="ri-arrow-down-s-line"></i></div>
-                                        </a>
-                                        <!-- mega menu -->
-                                        <div class="mega">
-                                            <div class="container">
-                                                <div class="wrapper">
-                                                    <div class="flexcol">
-                                                        <div class="row">
-                                                            <ul>
-                                                                <h4>Women's Clothing</h4>
-                                                                <li><a href="#">Top</a></li>
-                                                                <li><a href="#">Prayer Clothes</a></li>
-                                                                <li><a href="#">Dresses</a></li>
-                                                                <li><a href="#">Pants</a></li>
-                                                                <li><a href="#">Pajamas & Robes</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flexcol">
-                                                        <div class="row">
-                                                            <ul>
-                                                                <h4>Jewelry</h4>
-                                                                <li><a href="#">Accessories</a></li>
-                                                                <li><a href="#">Bags & Purses</a></li>
-                                                                <li><a href="#">Necklaces</a></li>
-                                                                <li><a href="#">Rings</a></li>
-                                                                <li><a href="#">Bracelets</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flexcol">
-                                                        <div class="row">
-                                                            <ul>
-                                                                <h4>Beauty</h4>
-                                                                <li><a href="#">Skin Care</a></li>
-                                                                <li><a href="#">Hair Care</a></li>
-                                                                <li><a href="#">Makeup & Cosmetics</a></li>
-                                                                <li><a href="#">Face Masks</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flexcol">
-                                                        <div class="row">
-                                                            <ul class="women-stores">
-                                                                <h4>Women Stores</h4>
-                                                                <li><a href="#">Hills</a></li>
-                                                                <li><a href="#">Nai</a></li>
-                                                                <a href="#" class="view-all">View All Stores <i class="ri-arrow-right-line"></i></a>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
+            <?php include './components/user_header.php'?>
 
-                                                    <div class="flexcol products">
-                                                        <div class="row">
-                                                            <div class="media">
-                                                                <div class="thumbnail object-cover">
-                                                                    <a href="#">
-                                                                        <img src="assets/2.png"
-                                                                            alt="">
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="text-content">
-                                                                <h4>Most Wanted!</h4>
-                                                                <a href="" class="primary-button">Order Now </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- the end of mega menu -->
-                                    <li><a href="">Men
-                                            <div class="fly-item">
-                                                <span>New!</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="">Stores</a>
-                                    </li>
-                                </ul>
-                            </nav>
-
-                        </div>
-                        <div class="right">
-                            <ul class="flexitem second-links">
-                                <li class="mobile-hide"><a href="#">
-                                        <div class="icon-large"><i class="ri-heart-line"></i></div>
-                                        <div class="fly-item"><span class="item-number">0</span></div>
-                                    </a>
-                                </li>
-
-                                <li><a href="#" class="iscart">
-                                        <div class="icon-large">
-                                            <i class="ri-shopping-cart-line"></i>
-                                            <div class="fly-item"><span class="item-number">0</span></div>
-                                        </div>
-                                        <div class="icon-text">
-                                            <div class="mini-text">Total</div>
-                                            <div class="cart-total">JD 0.00</div>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
             
             <div class="header-main mobile-hide">
                 <div class="container">

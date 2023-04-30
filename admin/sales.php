@@ -272,17 +272,17 @@ if( isset($_POST['remove-category-sale'])){
             <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
                     <div class="col-sm-6 col-xl-3">
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #fff !important; ">
+                        <!-- <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #fff !important; ">
                             <div class="ms-3">
                                 <form action="" method="post">
                                     <button type="submit" name="add-all-product-sale" class="mb-2 sales-btn" style="width:90%">Add Sale On All Products</button>
                                     <input type="number" name="add-sale-on-all" class="mb-0" style="color:black !important;width:82%;; border:1px solid silver"> %
                                 </form>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-sm-6 col-xl-3">
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #fff !important; ">
+                        <!-- <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #fff !important; ">
                             <div class="ms-3">
                                 <form action="" method="post">
                                     <button type="submit" name="add-category-sale" class="mb-2 sales-btn" style="width:90%">Add Category Sale</button>
@@ -305,10 +305,10 @@ if( isset($_POST['remove-category-sale'])){
                                     <input type="number" name="add-sale-on-category" class="mb-0" style="color:black !important;width:32%; border:1px solid silver"> %
                                 </form>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-sm-6 col-xl-3">
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #fff !important; ">
+                        <!-- <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #fff !important; ">
                             <div class="ms-3">
                                 <form action="" method="post">
                                     <button type="submit" name="remove-category-sale" class="mb-2 sales-btn1" style="width:90%">Remove Category Sale</button>
@@ -330,18 +330,16 @@ if( isset($_POST['remove-category-sale'])){
                                     </select>
                                 </form>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-sm-6 col-xl-3">
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #fff !important; ">
-                            <!-- <i class="fa fa-chart-pie fa-3x text-primary" style="color:rgb(0, 0, 69) !important"></i> -->
+                        <!-- <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #fff !important; ">
                             <div class="ms-3">
                                 <form action="" method="post">
                                     <button type="submit" name="remove-all-sales" class="mb-2 sales-btn1" style="width:90%">Remove Sale From All Products In Market</button>
-                                    <!-- <h6 class="mb-0" style="color:black !important">$2606</h6> -->
                                 </form>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -379,7 +377,7 @@ if( isset($_POST['remove-category-sale'])){
 
                                             <td><img src="../uploaded_img/<?= $fetch_products['image']; ?>" alt="" width="50px" height="50px"></td> <!-- image -->
 
-                                            <td style="color:rgb(0, 220, 0);">$<?= $fetch_products['price']; ?></td>
+                                            <td style="color:rgb(0, 220, 0);">JOD<?= $fetch_products['price']; ?></td>
 
                                             <td><a href="add_sale.php?sale=<?= $fetch_products['product_id']; ?>" style="color:blue" class="option-btn">Add</a></td>
                                             </tr>
@@ -420,8 +418,8 @@ if( isset($_POST['remove-category-sale'])){
 
                                             <td><img src="../uploaded_img/<?= $fetch_products['image']; ?>" alt="" width="50px" height="50px"></td> <!-- image -->
 
-                                            <td><del style="text-decoration:line-through; color:silver">$<?= $fetch_products['price']; ?></del></td>
-                                            <td><ins style="color:rgb(0, 220, 0);"> $<?=$fetch_products['price_discount'];?></ins></td>
+                                            <td><del style="text-decoration:line-through; color:silver">JOD<?= $fetch_products['price']; ?></del></td>
+                                            <td><ins style="color:rgb(0, 220, 0);"> JOD<?=$fetch_products['price_discount'];?></ins></td>
 
                                             <td><a href="remove_sale.php?removeSale=<?= $fetch_products['product_id']; ?>" style="color:red" class="option-btn">Remove</a></td>
                                             </tr>

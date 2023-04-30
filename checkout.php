@@ -1,3 +1,9 @@
+
+<?php
+
+include './components/connect.php';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,13 +14,15 @@
     <link rel="stylesheet" href="./style.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+    <link rel="icon" type="image/x-icon" href="./assets/logo.png">
+
 </head>
 <body>
     <div id="page" class="site page-checkout">
         <aside class="site-off desktop-hide">
             <div class="off-canvas">
                 <div class="canvas-head flexitem">
-                    <div class="logo"><img src="assets/Untitled-1.png" alt=""></a></div>
+                    <div class="logo"><img src="./assets/logo.png" alt=""></a></div>
                       <a href="" class="t-close flexcenter"><i class="ri-close-line"></i></a>
                 </div>
                 <div class="departments"></div>
@@ -25,7 +33,7 @@
         <!-- first nav bar -->
         <header>
             <div class="header-top mobile-hide">
-                <div class="container">
+                <!-- <div class="container">
                     <div class="wrapper flexitem">
                         <div class="left">
                             <ul class="flexitem main-links">
@@ -42,206 +50,12 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <!-- header-top  -->
 
-            <!-- second nav bar -->
-            <div class="header-nav">
-                <div class="container">
-                    <div class="wrapper flexitem">
-                        <a href="#" class="trigger desktop-hide"><span class="i ri-menu-2-line"></span></a>
-                        <div class="left flexitem">
-                            <div class="logo"><img src="assets/Untitled-1.png" alt=""></a></div>
-                            <nav class="mobile-hide">
-                                <ul class="flexitem second-links">
-                                    <li><a href="./index.html">Home</a></li>
-                                    <li><a href="./page-category.html">Shop</a></li>
-                                    <li class="has-child">
-                                        <a href="#">Women
-                                            <div class="icon-small"><i class="ri-arrow-down-s-line"></i></div>
-                                        </a>
-                                        <!-- mega menu -->
-                                        <div class="mega">
-                                            <div class="container">
-                                                <div class="wrapper">
-                                                    <div class="flexcol">
-                                                        <div class="row">
-                                                            <ul>
-                                                                <h4>Women's Clothing</h4>
-                                                                <li><a href="#">Top</a></li>
-                                                                <li><a href="#">Prayer Clothes</a></li>
-                                                                <li><a href="#">Dresses</a></li>
-                                                                <li><a href="#">Pants</a></li>
-                                                                <li><a href="#">Pajamas & Robes</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flexcol">
-                                                        <div class="row">
-                                                            <ul>
-                                                                <h4>Jewelry</h4>
-                                                                <li><a href="#">Accessories</a></li>
-                                                                <li><a href="#">Bags & Purses</a></li>
-                                                                <li><a href="#">Necklaces</a></li>
-                                                                <li><a href="#">Rings</a></li>
-                                                                <li><a href="#">Bracelets</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flexcol">
-                                                        <div class="row">
-                                                            <ul>
-                                                                <h4>Beauty</h4>
-                                                                <li><a href="#">Skin Care</a></li>
-                                                                <li><a href="#">Hair Care</a></li>
-                                                                <li><a href="#">Makeup & Cosmetics</a></li>
-                                                                <li><a href="#">Face Masks</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flexcol">
-                                                        <div class="row">
-                                                            <ul class="women-stores">
-                                                                <h4>Women Stores</h4>
-                                                                <li><a href="#">Hills</a></li>
-                                                                <li><a href="#">Nai</a></li>
-                                                                <a href="#" class="view-all">View All Stores <i class="ri-arrow-right-line"></i></a>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="flexcol products">
-                                                        <div class="row">
-                                                            <div class="media">
-                                                                <div class="thumbnail object-cover">
-                                                                    <a href="#">
-                                                                        <img src="assets/2.png"
-                                                                            alt="">
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="text-content">
-                                                                <h4>Most Wanted!</h4>
-                                                                <a href="" class="primary-button">Order Now </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- the end of mega menu -->
-                                    <li><a href="">Men
-                                            <div class="fly-item">
-                                                <span>New!</span>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="">Stores</a>
-                                    </li>
-                                </ul>
-                            </nav>
-
-                        </div>
-                        <div class="right">
-                            <ul class="flexitem second-links">
-                                <li class="mobile-hide"><a href="#">
-                                        <div class="icon-large"><i class="ri-heart-line"></i></div>
-                                        <div class="fly-item"><span class="item-number">0</span></div>
-                                    </a>
-                                </li>
-
-                                <li  class="iscart"><a href="#">
-                                        <div class="icon-large">
-                                            <i class="ri-shopping-cart-line"></i>
-                                            <div class="fly-item"><span class="item-number">7</span></div>
-                                        </div>
-                                        <div class="icon-text">
-                                            <div class="mini-text">Total</div>
-                                            <div class="cart-total">95.38 JD</div>
-                                        </div>
-                                    </a>
-                                    <div class="mini-cart">
-                                        <div class="content">
-                                            <div class="cart-head">
-                                                7 items in cart
-                                            </div>
-                                            <div class="cart-body">
-                                                <ul class="products mini">
-                                                    <li class="item">
-                                                        <div class="thumbnail object-cover">
-                                                            <a href="#"><img src="assets/products/QUARTZ VEIL LIQUID EYESHADOW.png" alt=""></a>
-                                                        </div>
-                                                        <div class="item-content">
-                                                            <p><a href="#">QUARTZ VEIL LIQUID EYESHADOW</a></p>
-                                                            <span class="price">
-                                                                <span>9.55 JD</span>
-                                                                <span class="fly-item"><span>2x</span></span>
-                                                            </span>
-                                                        </div>
-                                                        <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                    </li>
-                                                    <li class="item">
-                                                        <div class="thumbnail object-cover">
-                                                            <a href="#"><img src="assets/products/BEADED SHOULDER BAG.png" alt=""></a>
-                                                        </div>
-                                                        <div class="item-content">
-                                                            <p><a href="#">BEADED SHOULDER BAG</a></p>
-                                                            <span class="price">
-                                                                <span>25.99 JD</span>
-                                                                <span class="fly-item"><span>2x</span></span>
-                                                            </span>
-                                                        </div>
-                                                        <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                    </li>
-                                                    <li class="item">
-                                                        <div class="thumbnail object-cover">
-                                                            <a href="#"><img src="assets/products/EYE SHADOW PALETTE.png" alt=""></a>
-                                                        </div>
-                                                        <div class="item-content">
-                                                            <p><a href="#">EYE SHADOW PALETTE</a></p>
-                                                            <span class="price">
-                                                                <span>9.55 JD</span>
-                                                                <span class="fly-item"><span>2x</span></span>
-                                                            </span>
-                                                        </div>
-                                                        <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                    </li>
-                                                    <li class="item">
-                                                        <div class="thumbnail object-cover">
-                                                            <a href="#"><img src="assets/products/EYEBROW PENCIL.png" alt=""></a>
-                                                        </div>
-                                                        <div class="item-content">
-                                                            <p><a href="#">EYEBROW PENCIL</a></p>
-                                                            <span class="price">
-                                                                <span>5.20 JD</span>
-                                                                <span class="fly-item"><span>1x</span></span>
-                                                            </span>
-                                                        </div>
-                                                        <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="cart-footer">
-                                                <div class="subtotal">
-                                                    <p>Subtotal</p>
-                                                    <p><strong>95.38 JD</strong></p>
-                                                </div>
-                                                <div class="actions">
-                                                    <a href="./checkout.html" class="primary-button">Checkout</a>
-                                                    <a href="./cart.html" class="secondary-button">View Cart</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php include './components/user_header.php'?>
+          
             <div class="header-main mobile-hide">
                 <div class="container">
                     <div class="wrapper flexitem">
@@ -636,7 +450,7 @@
     </div>
     <!-- Search bottom  -->
 
-    <div id="modal" class="modal">
+    <!-- <div id="modal" class="modal">
         <div class="content flexcol">
             <div class="image object-cover">
                 <img src="assets/products/p3.png" alt="">
@@ -653,7 +467,7 @@
                 <i class="ri-close-line"></i>
             </a>
         </div>
-    </div>
+    </div> -->
     <!-- modal -->
     <div class="backtotop">
         <a href="#" class="flexcol">
@@ -662,9 +476,9 @@
         </a>
     </div>
 
-    <div class="overlay">
+    <!-- <div class="overlay">
         
-    </div>
+    </div> -->
     </div>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.3.1/index.js"></script>
