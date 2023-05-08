@@ -2,6 +2,7 @@
 
 include './components/connect.php';
 
+
 session_start();
 
 if(isset($_SESSION['user_id'])){
@@ -10,6 +11,66 @@ if(isset($_SESSION['user_id'])){
    $user_id = '';
 };
 
+
+if(isset($_POST['delete'])){
+   $wishlist_id = $_POST['id'];
+   $delete_wishlist_item = $conn->prepare("DELETE FROM `favorite` WHERE id = ?");
+   $delete_wishlist_item->execute([$wishlist_id]);
+}
+
+if(isset($_GET['delete_all'])){
+   $delete_wishlist_item = $conn->prepare("DELETE FROM `favorite` WHERE user_id = ?");
+   $delete_wishlist_item->execute([$user_id]);
+   header('location:wishlist.php');
+}
+
+
+
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addTOcart'])){
+   $product_id = $_POST['product_id'];
+   $product_name = $_POST['name'];
+   $product_price = $_POST['price'];
+   $product_image = $_POST['image'];
+   $product_quantity = $_POST['quantity'];
+
+   $check_product_id = $conn->prepare("SELECT product_id FROM `cart` WHERE user_id = '$user_id'");
+   $check_product_id->execute();
+   
+
+   $flag = true;
+
+   while($fetch_product = $check_product_id->fetch(PDO::FETCH_ASSOC)){
+      if (in_array($product_id, $fetch_product)){
+         $flag = false;
+         break;
+      }
+   };
+   if($flag==true){
+      $send_to_cart = $conn->prepare("INSERT INTO `cart` (user_id , product_id , name , price , image , quantity)
+                                    VALUES (? , ? , ? , ?, ? , ?)"); 
+      $send_to_cart->execute([$user_id , $product_id , $product_name , $product_price, $product_image, $product_quantity]);
+   }
+}
+
+
+
+if(isset($_SESSION['user_id'])){
+   $user_id = $_SESSION['user_id'];
+}else{
+   $user_id = '';
+};
+
+if(isset($_SESSION['cart'])){
+   
+} else {
+   $_SESSION['cart'] = [];
+}
+
+if(isset($_SESSION['fav'])){
+   
+} else {
+   $_SESSION['fav'] = [];
+}
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addTOcart'])){
    $product_id = $_POST['product_id'];
@@ -45,6 +106,9 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addTOcart'])){
    }
 }
 }
+
+
+
 
 
 
@@ -94,6 +158,19 @@ if(isset($_POST['add_to_wishlist'])){
    }
 
 }
+?>
+
+<?php
+   if(isset($message)){
+      foreach($message as $message){
+         echo '
+         <div class="message" style="background-color:silver !important;">
+            <span style="color: black !important; font-weight:bold"> Notice : '.$message.'</span>
+            <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
+         </div>
+         ';
+      }
+   }
 
 
 ?>
@@ -164,12 +241,16 @@ li.dropdown {
                     <div class="wrapper flexitem">
                         <div class="left">
                             <ul class="flexitem main-links">
-                                
+                                <!-- <li><a href="#"></a>Wishlist</li>
+                                <li><a href="#"></a>Order Tracking</li> -->
                             </ul>
                         </div>
                         <div class="right">
                             <ul class="flexitem main-links">
-                             
+                                <!-- <li><a href="#"></a>Sign Up</li>
+                                <li><a href="#"></a>My Account</li>
+                                <li><a href="#">English</a></li>
+                                <li><a href="#">JOD</a></li> -->
                             </ul>
                         </div>
                     </div>
@@ -368,13 +449,13 @@ li.dropdown {
                 </div>
             </div>
 
-            <div class="header-main mobile-hide">
+            <div class="header-main mobile-hide" style="height:86px;">
                 <div class="container">
                     <div class="wrapper flexitem">
                         <div class="left">
                             <div class="dpt-cat">
                                 <div class="dpt-head">
-                                <div class="main-text">All Departments</div>
+                                    <div class="main-text">All Departments</div>
                                     <?php
                                     // prepare SQL query to count total number of products
 $sql = "SELECT COUNT(*) as total FROM products";
@@ -395,6 +476,7 @@ if ($stmt->rowCount() > 0) {
 }
 ?>
                                     </div>
+                                    
                                     <a href="#" class="dpt-trigger mobile-hide">
                                         <i class="ri-menu-3-line ri-xl"></i>
                                         <i class="ri-close-line ri-xl"></i>
@@ -444,11 +526,11 @@ if ($stmt->rowCount() > 0) {
                         </div>
                         <div class="right">
                             <div class="search-box">
-                                <form action="" class="search">
+                                <!-- <form action="" class="search">
                                     <span class="icon-large"><i class="ri-search-line"></i></span>
                                     <input type="search" placeholder="Search for products">
                                     <button type="submit">Search</button>
-                                </form>
+                                </form> -->
                             </div>
                         </div>
                     </div>
@@ -458,107 +540,83 @@ if ($stmt->rowCount() > 0) {
          <!-- header  -->
     <main>
 
-        <div class="single-category">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="column">
-                        <div class="holder">
+    <div class="single-category">
+    <div class="container">
+        <div class="wrapper">
+            <div class="column">
+                <div class="holder">
+                    <div class="section">
+                        <div class="row">
+                            <div class="cat-head">
+                                <div class="breadcrumb">
+                                    <ul class="flexitem">
+                                        <li><a href="./home.php">Home</a></li>
+                                        <li>Search </li>
+                                    </ul>
+                                </div>
+                                <div class="page-title">
+                                    <h1>Search Results</h1>
+                                </div>
+                                <div class="cat-navigation flexitem">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="features">
+                            <div class="container">
+                                <div class="wrapper">
+                                    <div class="column">
+                                        <div class="products main flexwrap">
+                                            <?php
+                                            // Check if the query parameter is set
+                                            if (isset($_GET['query'])) {
+                                                // Retrieve the search query
+                                                $query = $_GET['query'];
 
-                            <div class="section">
-                                <div class="row">
-                                    <div class="cat-head">
-                                        <div class="breadcrumb">
-                                          <ul class="flexitem">
-                                          <?php
-   $category = $_GET['category'];
-   $name_of_category = $conn->prepare("SELECT * FROM `category` WHERE category_id = '$category' "); 
-   $name_of_category->execute();
-   $fetch_category_name = $name_of_category->fetch(PDO::FETCH_ASSOC);
-   ?>
-                                                <li><a href="./home.php">Home</a></li>
-                                                <li><?= $fetch_category_name['category_name']; ?></li>
-                                            </ul>
-                                        </div>
-                                        <div class="page-title">
-                                            <h1><?= $fetch_category_name['category_name']; ?></h1>
-                                        </div>
-                                      
-                                        <div class="cat-navigation flexitem">
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="features">
-                                <div class="container">
-    <div class="wrapper">
-        <div class="column">
-            <div class="products main flexwrap">
-                <?php
-                $select_products = $conn->prepare("SELECT * FROM `products` WHERE category_id = '$category'"); 
-                $select_products->execute();
-                if($select_products->rowCount() > 0){
-                    while($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)){
-                        $i=0;
-                        $is_product_in_store = ($fetch_product['store']-$fetch_product['sold']);
-                        if ( $is_product_in_store <= 0 ){
-                            continue;
-                        } else { 
-                            if ($fetch_product['is_sale'] == 1){ ?>
-                                <input type="hidden" name="price" value="<?=$fetch_product['price_discount'];?>">
-                            <?php } else { ?>
-                                <input type="hidden" name="price" value="<?=$fetch_product['price'];?>">
-                            <?php }
-                            ?>
-                            <input type="hidden" name="image" value="<?= $fetch_product['image']; ?>">
-                            <div class="item">
-                                <div class="media">
-                                    <div class="thumbnail object-cover">
-                                        <a href="pageSingle.php?pid=<?= $fetch_product['product_id']; ?>">
-                                            <img src="uploaded_img/<?= $fetch_product['image']; ?>" alt="">
-                                        </a>
-                                    </div>
-                                    <div class="hoverable">
-                                        <form action="" method="post">
-                                            <input type="hidden" name="product_id" value="<?= $fetch_product['product_id']; ?>">
-                                            <input type="hidden" name="id" value="<?= $fetch_product['name']; ?>">
-                                            <ul>
-                                                <li><button type="submit" name="add_to_wishlist" class="active" style="background-color: transparent; border: none;"><a href="#"><i class="ri-heart-line"></i></a></button></li>
-                                            </ul>
-                                        </form>
-                                    </div>
-                                </div>
-                                <?php 
-                                $product_category = $conn->prepare("SELECT * FROM `products` INNER JOIN `category` ON products.category_id = category.category_id WHERE products.category_id = '$category'");
-                                $product_category->execute();
-                                if($product_category->rowCount() > 0){
-                                    while($fetch_product_category = $product_category->fetch(PDO::FETCH_ASSOC)){ 
-                                        if($i==0 && $fetch_product['category_id'] == $fetch_product_category['category_id'] ){
-                                            $i++;
-                                ?>
-                                            <div class="content">
-                                                <h3 class="main-links"><a href="pageSingle.php?pid=<?= $fetch_product['product_id']; ?>"><?= $fetch_product['name']; ?></a></h3>
-                                                <div class="price">
-                                                    <?php if ($fetch_product['is_sale'] == 1){ ?>
-                                                        <div class="price"><span><del style="text-decoration:line-through; color:silver">JD<?=$fetch_product['price'];?></del><span style="color:red;  text-decoration: none;"> JD<?=$fetch_product['price_discount'];?></span> </span></div>
-                                                    <?php } else { ?>
-                                                        <div class="name" style="color:#67022f; padding:20px 0px">JD<?=$fetch_product['price'];?></div> 
-                                                    <?php } ?>
+                                                // Use the search query to fetch results from the database
+                                                $sql = "SELECT * FROM products WHERE name LIKE '%".$query."%' OR description LIKE '%".$query."%'";
+                                                $result = $conn->query($sql);
+
+                                                // Display the search results
+                                                if ($result->rowCount() > 0) {
+                                                    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                                        // Display each product's details
+                                            ?>
+                                            <div class="item">
+                                                <div class="media">
+                                                    <div class="thumbnail object-cover">
+                                                        <a href="pageSingle.php?pid=<?= $row['product_id']; ?>">
+                                                            <img src="uploaded_img/<?= $row['image']; ?>" alt="">
+                                                        </a>
+                                                    </div>
+                                                    <div class="hoverable">
+                                                        <form  action="" method="post">
+                                                            <input type="hidden" name="id" value="<?= $row['name']; ?>">
+                                                            <ul>
+                                                                <button type="submit" name="add_to_wishlist" class="active" style="background-color: transparent;border: none;">
+                                                                    <li><a href="#"><i class="ri-heart-line"></i></a></li>
+                                                                </button>
+                                                            </ul>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="content">
+                                                    <h3 class="main-links"><a href="pageSingle.php?pid=<?= $row['product_id']; ?>"><?= $row['name']; ?></a></h3>
                                                 </div>
                                             </div>
-                                        <?php 
-                                        }
-                                    }
-                                }
-                                ?>
+                                            <?php 
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        <?php 
-                        }
-                    }
-                }
-                ?>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
       
     </main>
@@ -643,31 +701,6 @@ if ($stmt->rowCount() > 0) {
 </div>
 <!-- menu bottom  -->
 
-    <!-- <div id="modal" class="modal">
-        <div class="content flexcol">
-            <div class="image object-cover">
-                <img src="assets/products/p3.png" alt="">
-            </div>
-            <h2>Get the latest deals and coupons</h2>
-            <p class="mobile-hide">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet, velit!</p>
-            <form action="" class="search">
-                <span class="icon-large"><i class="ri-mail-line"></i></span>
-                <input type="email" placeholder="Your Email Address">
-                <button>Subscribe</button>
-            </form>
-            <a href="#" class="mini-text">Do not show me this again</a>
-            <a href="#" class="t-close modalclose flexcenter">
-                <i class="ri-close-line"></i>
-            </a>
-        </div>
-    </div> -->
-    <!-- modal -->
-    <!-- <div class="backtotop">
-        <a href="#" class="flexcol">
-            <i class="ri-arrow-up-line"></i>
-            <span>Top</span>
-        </a>
-    </div> -->
 
     <div class="search-bottom desktop-hide">
         <div class="container">

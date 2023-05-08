@@ -11,19 +11,23 @@ if(isset($_SESSION['user_id'])){
    $user_id = $_SESSION['user_id'];
 }else{
    $user_id = '';
+   header('location:login.php');
 };
 
-if(isset($_SESSION['cart'])){
-   
-} else {
-   $_SESSION['cart'] = [];
+
+if(isset($_POST['delete'])){
+   $wishlist_id = $_POST['id'];
+   $delete_wishlist_item = $conn->prepare("DELETE FROM `favorite` WHERE id = ?");
+   $delete_wishlist_item->execute([$wishlist_id]);
 }
 
-if(isset($_SESSION['fav'])){
-   
-} else {
-   $_SESSION['fav'] = [];
+if(isset($_GET['delete_all'])){
+   $delete_wishlist_item = $conn->prepare("DELETE FROM `favorite` WHERE user_id = ?");
+   $delete_wishlist_item->execute([$user_id]);
+   header('location:wishlist.php');
 }
+
+
 
 if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addTOcart'])){
    $product_id = $_POST['product_id'];
@@ -45,88 +49,14 @@ if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addTOcart'])){
       }
    };
    if($flag==true){
-      if($user_id > 0){
       $send_to_cart = $conn->prepare("INSERT INTO `cart` (user_id , product_id , name , price , image , quantity)
                                     VALUES (? , ? , ? , ?, ? , ?)"); 
       $send_to_cart->execute([$user_id , $product_id , $product_name , $product_price, $product_image, $product_quantity]);
-
-   }else {
-      $array_cart = [$product_id , $product_name , $product_price, $product_image, $product_quantity];
-      array_push($_SESSION['cart'], $array_cart);
-      // echo'<pre>';
-      // print_r($_SESSION['cart']);
-      // echo'</pre>';
    }
 }
-}
 
 
 
-if(isset($_POST['add_to_wishlist'])){
-
-   if($user_id == ''){
-
-      $flag = true;
-      $pid = $_POST['product_id'];
-
-      foreach($_SESSION['fav'] as $id){
-         if (in_array($pid,$id)){
-            $flag = false;
-            break;
-         }
-      };
-      if($flag==true){
-         $array_fav = [$pid];
-         array_push($_SESSION['fav'], $array_fav);
-         // echo'<pre>';
-         // print_r($_SESSION['fav']);
-         // echo'</pre>';
-      }
-
-   }else{
-
-      $pid = $_POST['product_id'];
-
-
-      $check_wishlist_numbers = $conn->prepare("SELECT * FROM `favorite` WHERE product_id = ? AND user_id = ?");
-      $check_wishlist_numbers->execute([$pid, $user_id]);
-
-      $check_cart_numbers = $conn->prepare("SELECT * FROM `cart` WHERE product_id = ? AND user_id = ?");
-      $check_cart_numbers->execute([$pid, $user_id]);
-
-      if($check_wishlist_numbers->rowCount() > 0){
-         $message[] = 'Your Product <span style="color:red">Already</span> Added To Wishlist!';
-      }elseif($check_cart_numbers->rowCount() > 0){
-         $message[] = 'Your Product <span style="color:red">Already</span> Added To Cart!';
-      }else{
-         $insert_wishlist = $conn->prepare("INSERT INTO `favorite`(user_id, product_id) VALUES(?,?)");
-         $insert_wishlist->execute([$user_id, $pid]);
-         $message[] = 'Your Product <span style="color:green">Added</span> To Wishlist!';
-      }
-
-   }
-
-}
-?>
-
-<?php
-   if(isset($message)){
-      foreach($message as $message){
-         echo '
-         <div class="message" style="background-color:silver !important;">
-            <span style="color: black !important; font-weight:bold"> Notice : '.$message.'</span>
-            <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
-         </div>
-         ';
-      }
-   }
-
-
-?>
-<!-- end of header -->
-
-<!-- home -->
-<?php
 if(isset($_SESSION['user_id'])){
    $user_id = $_SESSION['user_id'];
 }else{
@@ -231,7 +161,19 @@ if(isset($_POST['add_to_wishlist'])){
    }
 
 }
+?>
 
+<?php
+   if(isset($message)){
+      foreach($message as $message){
+         echo '
+         <div class="message" style="background-color:silver !important;">
+            <span style="color: black !important; font-weight:bold"> Notice : '.$message.'</span>
+            <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
+         </div>
+         ';
+      }
+   }
 
 
 ?>
@@ -383,6 +325,7 @@ li.dropdown {
                                         <?php
                                          if(isset($_SESSION['user_id'])){ ?>
                                         <div class="fly-item"><span class="item-number"><?= $total_wishlist_counts; ?></span></div>
+                                        <?php }?>
                                     </a>
                                 </li>
 
@@ -391,111 +334,12 @@ li.dropdown {
                                 <li class="iscart"><a href="./cart.php">
                                     <div class="icon-large">
                                         <i class="ri-shopping-cart-line"></i>
-                                        <div class="fly-item"><span class="item-number"> <?= $total_cart_counts; ?></span></div>
-                                    </div>
-                                    <?php
-                                        }else{ ?>
-                                    <div class="fly-item"><span class="item-number"><?= count($_SESSION['fav']); ?></span></div>
-                                    </a>
-                                </li>
-
-                                
-
-                                <li class="iscart"><a href="#">
-                                    <div class="icon-large">
-                                        <i class="ri-shopping-cart-line"></i>
-                                        <div class="fly-item"><span class="item-number"> <?= count($_SESSION['cart']); ?></span></div>
                                     </div>
 
 
-                                     <?php }; ?>
-                                    <div class="icon-text">
-                                        <div class="mini-text">Total</div>
-                                        <div class="cart-total">95.38 JD</div>
-                                    </div>
+                                    
                                 </a>
-                                <div class="mini-cart">
-                                    <div class="content">
-                                    <?php
-                                        if(isset($_SESSION['user_id'])){ ?>
-                                        <div class="cart-head">
-                                        <?= $total_cart_counts; ?> items in cart
-                                        </div>
-
-                                       <?php }else{ ?>
-                                        <div class="cart-head">
-                                        <?= count($_SESSION['cart']); ?>items in cart
-                                        </div>
-                                        <?php }; ?>
-
-                                        <div class="cart-body">
-                                            <ul class="products mini">
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href=""><img src="assets/products/QUARTZ VEIL LIQUID EYESHADOW.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">QUARTZ VEIL LIQUID EYESHADOW</a></p>
-                                                        <span class="price">
-                                                            <span>9.55 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/BEADED SHOULDER BAG.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">BEADED SHOULDER BAG</a></p>
-                                                        <span class="price">
-                                                            <span>25.99 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/EYE SHADOW PALETTE.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">EYE SHADOW PALETTE</a></p>
-                                                        <span class="price">
-                                                            <span>9.55 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/EYEBROW PENCIL.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">EYEBROW PENCIL</a></p>
-                                                        <span class="price">
-                                                            <span>5.20 JD</span>
-                                                            <span class="fly-item"><span>1x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="cart-footer">
-                                            <div class="subtotal">
-                                                <p>Subtotal</p>
-                                                <p><strong>95.38 JD</strong></p>
-                                            </div>
-                                            <div class="actions">
-                                                <a href="./checkout.php" class="secondary-button">Checkout</a>
-                                                <a href="./cart.php" class="secondary-button">View Cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                             </li>
                             
                             </ul>
@@ -510,9 +354,26 @@ li.dropdown {
                         <div class="left">
                             <div class="dpt-cat">
                                 <div class="dpt-head">
-                                    <div class="main-text">All Departments</div>
+                                      <div class="main-text">All Departments</div>
+                                    <?php
+                                    // prepare SQL query to count total number of products
+$sql = "SELECT COUNT(*) as total FROM products";
+// execute query
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+?>
+
                                     <div class="mini-text mobile-hide">
-                                        Total 40 Products
+                                        <?php
+                                    // output total number of products
+if ($stmt->rowCount() > 0) {
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $total_products = $row["total"];
+    echo "Total $total_products Products<br>";
+} else {
+    echo "No products found.";
+}
+?>
                                     </div>
                                     <a href="#" class="dpt-trigger mobile-hide">
                                         <i class="ri-menu-3-line ri-xl"></i>
@@ -556,25 +417,39 @@ li.dropdown {
                                                 Products From Brokers
                                             </a>
                                         </li>
-                                        <!-- <li class="has-child Seller">
-                                            <a href="#">
-                                                <div class="icon-large"><i class="ri-shield-star-line"></i></div>
-                                                Best Seller
-                                            </a>
-                                        </li> -->
+                                       
                                     </ul>
                                 </div>
                             </div>
                         </div>
+                        
+
                         <div class="right">
-                            <div class="search-box">
-                                <form action="" class="search">
-                                    <span class="icon-large"><i class="ri-search-line"></i></span>
-                                    <input type="search" placeholder="Search for products">
-                                    <button type="submit">Search</button>
-                                </form>
-                            </div>
-                        </div>
+  <div class="search-box">
+    <form class="search" method="get" action="search.php">
+      <span class="icon-large"><i class="ri-search-line"></i></span>
+      <input type="search" name="query" placeholder="Search for products" value="<?php echo isset($_GET['query']) ? $_GET['query'] : ''; ?>">
+      <button type="submit">Search</button>
+    </form>
+    <?php
+    if (isset($_GET['query'])) {
+      $query = $_GET['query'];
+
+      $sql = "SELECT * FROM products WHERE name LIKE '%".$query."%' OR description LIKE '%".$query."%'";
+      $result = $conn->query($sql);
+      
+      if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+          echo "<a href='./search.php?pid=".$row['product_id']."'>".$row['name']."</a><br>";
+        }
+      } else {
+        echo "No results found.";
+      }
+    }
+    ?>
+  </div>
+</div>
+
                     </div>
                 </div>
             </div>
@@ -882,9 +757,9 @@ li.dropdown {
             <div class="column">
                 <div class="sectop flexitem">
                     <h2><span class="circle"></span> <span>Sales Products</span></h2>
-                    <div class="second-links">
+                    <!-- <div class="second-links">
                         <a href="#" class="view-all">View All<i class="ri-arrow-right-line"></i></a>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="products main flexwrap">
                     <?php
@@ -915,24 +790,27 @@ li.dropdown {
                                     <div class="item">
                                         <div class="media">
                                             <div class="thumbnail object-cover">
-                                                <a href="#">
+                                                <a href="pageSingle.php?pid=<?= $fetch_product['product_id']; ?>">
                                                     <img src="uploaded_img/<?= $fetch_product['image']; ?>" alt="">
                                                 </a>
                                             </div>
-                                            <form action="" method="post">
+                                            <form  action="" method="post"  >
+                                     <input type="hidden" name="product_id" value="<?= $fetch_product['product_id']; ?>">
+                                    <input type="hidden" name="id" value="<?= $fetch_product['name']; ?>">
                                                 <div class="hoverable">
-                                                    <ul>
-                                                        <li class="active"><a href="#"><button type="submit"><i class="ri-heart-line"></i></button></a></li>
-                                                    </ul> 
+                                                <ul>
+                                                    <button type="submit" name="add_to_wishlist" class="active" style="  background-color: transparent;
+  border: none;"><li ><a href="#"><i class="ri-heart-line"></i></a></li></button>
+                                                    </ul>
+                                            </form> 
                                                 </div>
-                                            </form>
                                             <!-- <div class="discount circle flexcenter"><span>25%</span></div> -->
                                         </div>
                                         <div class="content">
-                                            <h3 class="main-links"><a href="#"><?= $fetch_product['name']; ?></a></h3>
+                                            <h3 class="main-links"><a href="pageSingle.php?pid=<?= $fetch_product['product_id']; ?>"><?= $fetch_product['name']; ?></a></h3>
                                             <div class="price">
                                                 <?php if ($fetch_product['is_sale'] == 1){ ?>
-                                                    <div class="price"><span><del style="text-decoration:line-through; color:silver">JD<?=$fetch_product['price'];?></del><span style="color:#67022f;"> JD<?=$fetch_product['price_discount'];?></span> </span></div>
+                                                    <div class="price"><span><del style="text-decoration:line-through; color:silver">JD<?=$fetch_product['price'];?></del><span style="color:red;  text-decoration: none;"> JD<?=$fetch_product['price_discount'];?></span> </span></div>
                                                 <?php } else { ?>
                                                     <div class="name" style="color:#67022f; padding:20px 0px">JD<?=$fetch_product['price'];?></div> 
                                                 <?php } ?>
@@ -964,9 +842,9 @@ li.dropdown {
                                     <div class="text-content flexcol">
                                         <!-- <h4>Brutal Sale!</h4> -->
                                         <h3><br>Women Fashion</h3>
-                                        <a href="#" class="primary-button">Shop Now</a>
+                                        <a href="category.php?category=1" class="primary-button">Shop Now</a>
                                     </div>
-                                    <a href="#" class="over-link"></a>
+                                    <a href="category.php?category=1" class="over-link"></a>
                                 </div>
                             </div>
                             <div class="row">
@@ -977,9 +855,9 @@ li.dropdown {
                                     <div class="text-content flexcol">
                                         <!-- <h4>Brutal Sale!</h4> -->
                                         <h3><br>Men Fashion</h3>
-                                        <a href="#" class="primary-button">Shop Now</a>
+                                        <a href="category.php?category=2" class="primary-button">Shop Now</a>
                                     </div>
-                                    <a href="#" class="over-link"></a>
+                                    <a href="category.php?category=2" class="over-link"></a>
                                 </div>
                             </div> 
                          
@@ -1045,18 +923,16 @@ li.dropdown {
                             </a>
                         </li>
                         <li>
-                            <a href="#0" class="t-search">
+                            <a href="#" class="t-search">
                                 <i class="ri-search-line"></i>
                                 <span>Search</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#0">
+                            <a href="./cart.php">
                                 <i class="ri-shopping-cart-line"></i>
                                 <span>Cart</span>
-                                <div class="fly-item">
-                                    <span class="item-number">0</span>
-                                </div>
+                                
                             </a>
                         </li>
                     </ul>
@@ -1070,17 +946,32 @@ li.dropdown {
         <div class="container">
             <div class="wrapper">
 
-                <form action="" class="search">
-                    <a href="#" class="t-close search-close flexcenter"><i class="ri-close-line"></i></a>
-                    <span class="icon-large"><i class="ri-search-line"></i></span>
-                    <input type="search" placeholder="Your email address" required>
-                    <button type="submit">Search</button>
-                </form>
+            <form class="search" method="get" action="search.php">
+      <span class="icon-large"><i class="ri-search-line"></i></span>
+      <input type="search" name="query" placeholder="Search for products" value="<?php echo isset($_GET['query']) ? $_GET['query'] : ''; ?>">
+      <button type="submit">Search</button>
+    </form>
+    <?php
+    if (isset($_GET['query'])) {
+      $query = $_GET['query'];
+
+      $sql = "SELECT * FROM products WHERE name LIKE '%".$query."%' OR description LIKE '%".$query."%'";
+      $result = $conn->query($sql);
+      
+      if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+          echo "<a href='./search.php?pid=".$row['product_id']."'>".$row['name']."</a><br>";
+        }
+      } else {
+        echo "No results found.";
+      }
+    }
+    ?>
             </div>
         </div>
     </div>
     <!-- Search bottom  -->
-
+    
     <div class="backtotop">
         <a href="#" class="flexcol">
             <i class="ri-arrow-up-line"></i>

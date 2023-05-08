@@ -2,8 +2,81 @@
 <?php
 
 include './components/connect.php';
+session_start();
+
+if(isset($_SESSION['user_id'])){
+   $user_id = $_SESSION['user_id'];
+}else{
+   $user_id = '';
+   header('location:user_login.php');
+};
+
+if(isset($_POST['order'])){
+
+   $chose_name = $conn->prepare("SELECT * 
+                                 FROM cart 
+                                 INNER JOIN users WHERE cart.user_id = users.user_id");
+   $chose_name->execute();
+   $fetch_name_user = $chose_name->fetch(PDO::FETCH_ASSOC);
+
+   $name = $fetch_name_user['name'];
+   $number = $fetch_name_user['mobile'];
+   $email = $fetch_name_user['email'];
+
+   $address = 'flat no. '. $_POST['flat'] .', '. $_POST['street'] .', '. $_POST['city'] .','. $_POST['country'];
+   $total_quantity = $_POST['quantity'];
+   $total_price = $_POST['total_price'];
+
+   $check_cart = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
+   $check_cart->execute([$user_id]);
+
+   if($check_cart->rowCount() > 0){
+
+      $insert_order = $conn->prepare("INSERT INTO `orders`(user_id, location, total_quantity, total_price, order_time, mobile) VALUES(?,?,?,?,?,?)");
+      date_default_timezone_set("Asia/Amman");
+      $date_of_order = date("Y:m:d h:i:sa"); 
+      $insert_order->execute([$user_id, $address, $total_quantity, $total_price, $date_of_order, $number]);
+
+      $select_order_to_add = $conn->prepare("SELECT * FROM `orders`ORDER BY order_id DESC LIMIT 1;");
+      $select_order_to_add->execute();
+      if($select_order_to_add->rowCount()>0){
+         while($fetch_order_to_details = $select_order_to_add->fetch(PDO::FETCH_ASSOC)){
+            $order_id = $fetch_order_to_details['order_id']; } }
+      
+      $add_product_id_to_order_details = $conn->prepare("SELECT * FROM `cart` WHERE user_id='$user_id'");
+      $add_product_id_to_order_details->execute();
+
+      while ($fetch_to_take_product_id = $add_product_id_to_order_details->fetch(PDO::FETCH_ASSOC)){
+         $product_id_in_cart = $fetch_to_take_product_id['product_id'];
+         $product_quantity = $fetch_to_take_product_id['quantity'];
+         $product_price = $fetch_to_take_product_id['price'];
+         $insert_order_details = $conn->prepare("INSERT INTO `order_details`(order_id, product_id, quantity, price) VALUES(?,?,?,?)");
+         $insert_order_details->execute([$order_id, $product_id_in_cart, $product_quantity, $product_price]);
+      }
+
+
+      while($fetch_cart_to_update = $check_cart->fetch(PDO::FETCH_ASSOC)){
+         $id = $fetch_cart_to_update['product_id'];
+         $update_products_after_sell = $conn->prepare("SELECT sold FROM `products` WHERE product_id = '$id' ");
+         $update_products_after_sell->execute();
+         $fetch_product_to_update_store = $update_products_after_sell->fetch(PDO::FETCH_ASSOC);
+         $sold_item = (int)$fetch_product_to_update_store['sold'] + 1;
+         $update_sold_product = $conn->prepare("UPDATE `products` SET sold ='$sold_item' WHERE product_id = '$id' ");
+         $update_sold_product->execute();
+      }
+
+
+      $delete_cart = $conn->prepare("DELETE FROM `cart` WHERE user_id = ?");
+      $delete_cart->execute([$user_id]);
+
+      
+
+   }
+
+}
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +90,64 @@ include './components/connect.php';
     <link rel="icon" type="image/x-icon" href="./assets/logo.png">
 
 </head>
+<style>
+
+li.dropdown {
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1;}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.shipping-methods {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.inputBox {
+  width: calc(50% - 10px);
+  margin-bottom: 20px;
+}
+
+.inputBox span {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.box {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.box:focus {
+  outline: none;
+  border-color: #666;
+}
+</style>
 <body>
     <div id="page" class="site page-checkout">
         <aside class="site-off desktop-hide">
@@ -32,358 +163,389 @@ include './components/connect.php';
         </aside>
         <!-- first nav bar -->
         <header>
-            <div class="header-top mobile-hide">
-                <!-- <div class="container">
+        <div class="header-top mobile-hide">
+                <div class="container">
                     <div class="wrapper flexitem">
                         <div class="left">
                             <ul class="flexitem main-links">
-                                <li><a href="#"></a>Wishlist</li>
-                                <li><a href="#"></a>Order Tracking</li>
+                                
                             </ul>
                         </div>
                         <div class="right">
                             <ul class="flexitem main-links">
-                                <li><a href="#"></a>Sign Up</li>
-                                <li><a href="#"></a>My Account</li>
-                                <li><a href="#">English</a></li>
-                                <li><a href="#">JOD</a></li>
+                                
                             </ul>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
             <!-- header-top  -->
+            <div class="header-nav">
+                <div class="container">
+                    <div class="wrapper flexitem">
+                        <a href="#" class="trigger desktop-hide"><span class="i ri-menu-2-line"></span></a>
+                        <div class="left flexitem">
+                        
+                            <div class="logo"><img src="./assets/logo.png" alt=""></a></div>
 
-            <?php include './components/user_header.php'?>
-          
+                            <nav class="mobile-hide">
+                                <ul class="flexitem second-links">
+                                    <li><a href="./home.php">Home</a></li>
+                                    <li><a href="./shop.php">Shop</a></li>
+                                    <li class="has-child">
+                                        <a href="./about.php">About Us
+                                            <div class="icon-small"></div>
+                                        </a>
+                                       
+                                    <li><a href="./contact.php">Contact
+                                            <!-- <div class="fly-item">
+                                                <span>New!</span>
+                                            </div> -->
+                                        </a>
+                                    </li>
+                                    
+                                </ul>
+                            </nav>
+
+                        </div>
+                        <div class="right">
+                            <ul class="flexitem second-links">
+                            <?php
+                             $count_wishlist_items = $conn->prepare("SELECT * FROM `favorite` WHERE user_id = ?");
+                             $count_wishlist_items->execute([$user_id]);
+                             $total_wishlist_counts = $count_wishlist_items->rowCount();
+
+                             $count_cart_items = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
+                             $count_cart_items->execute([$user_id]);
+                             $total_cart_counts = $count_cart_items->rowCount();
+                             ?>
+                                    <li class="dropdown mobile-hide">
+                                     <a href="javascript:void(0)" class="dropbtn"> <div class="icon-large"><i class="ri-user-3-line"></i></div></a>
+                                     <div class="dropdown-content">
+                                     <?php          
+                                    $select_profile = $conn->prepare("SELECT * FROM `users` WHERE user_id = ?");
+                                    $select_profile->execute([$user_id]);
+                                    if($select_profile->rowCount() > 0){
+                                    $fetch_profile = $select_profile->fetch(PDO::FETCH_ASSOC);
+                                     ?>
+                                    <a ><?= $fetch_profile["name"]; ?></a>
+                                     <a href="./account.php">Account</a>
+                                     <a href="./logout.php">Logout</a>
+
+                                     <?php
+                                     }else{
+                                      ?>
+                                     <a>please login or register first!</a>
+                                     <a href="./login.php">Login</a>
+                                     <a href="./register.php">Register</a>
+
+                                     <?php
+                                     }
+                                    ?>  
+                                     </div>
+                                    </li>
+
+                                <li class="mobile-hide"><a href="./whishlist.php">
+                                        <div class="icon-large"><i class="ri-heart-line"></i></div>
+                                        <?php
+                                         if(isset($_SESSION['user_id'])){ ?>
+                                        <div class="fly-item"><span class="item-number"><?= $total_wishlist_counts; ?></span></div>
+                                    </a>
+                                </li>
+
+                                
+
+                                <li class="iscart"><a href="./cart.php">
+                                    <div class="icon-large">
+                                        <i class="ri-shopping-cart-line"></i>
+                                        <div class="fly-item"><span class="item-number"> <?= $total_cart_counts; ?></span></div>
+                                    </div>
+                                    <?php
+                                        }else{ ?>
+                                    <div class="fly-item"><span class="item-number"><?= count($_SESSION['fav']); ?></span></div>
+                                    </a>
+                                </li>
+
+                                
+
+                                <li class="iscart"><a href="#">
+                                    <div class="icon-large">
+                                        <i class="ri-shopping-cart-line"></i>
+                                        <div class="fly-item"><span class="item-number"> <?= count($_SESSION['cart']); ?></span></div>
+                                    </div>
+
+
+                                     <?php }; ?>
+                                    <div class="icon-text">
+                                        <div class="mini-text">Total</div>
+                                        <div class="cart-total">95.38 JD</div>
+                                    </div>
+                                </a>
+                                <div class="mini-cart">
+                                    <div class="content">
+                                    <?php
+                                        if(isset($_SESSION['user_id'])){ ?>
+                                        <div class="cart-head">
+                                        <?= $total_cart_counts; ?> items in cart
+                                        </div>
+
+                                       <?php }else{ ?>
+                                        <div class="cart-head">
+                                        <?= count($_SESSION['cart']); ?>items in cart
+                                        </div>
+                                        <?php }; ?>
+
+                                        <div class="cart-body">
+                                            <ul class="products mini">
+                                                <li class="item">
+                                                    <div class="thumbnail object-cover">
+                                                        <a href=""><img src="assets/products/QUARTZ VEIL LIQUID EYESHADOW.png" alt=""></a>
+                                                    </div>
+                                                    <div class="item-content">
+                                                        <p><a href="#">QUARTZ VEIL LIQUID EYESHADOW</a></p>
+                                                        <span class="price">
+                                                            <span>9.55 JD</span>
+                                                            <span class="fly-item"><span>2x</span></span>
+                                                        </span>
+                                                    </div>
+                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
+                                                </li>
+                                                
+                                                
+                                            </ul>
+                                        </div>
+                                        <div class="cart-footer">
+                                            <div class="subtotal">
+                                                <p>Subtotal</p>
+                                                <p><strong>95.38 JD</strong></p>
+                                            </div>
+                                            <div class="actions">
+                                                <a href="./checkout.php" class="secondary-button">Checkout</a>
+                                                <a href="./cart.php" class="secondary-button">View Cart</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- second nav bar -->
             <div class="header-main mobile-hide">
                 <div class="container">
                     <div class="wrapper flexitem">
                         <div class="left">
                             <div class="dpt-cat">
                                 <div class="dpt-head">
-                                    <div class="main-text">All Departments</div>
+                                      <div class="main-text">All Departments</div>
+                                    <?php
+                                    // prepare SQL query to count total number of products
+$sql = "SELECT COUNT(*) as total FROM products";
+// execute query
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+?>
+
                                     <div class="mini-text mobile-hide">
-                                        Total 40 Products
+                                        <?php
+                                    // output total number of products
+if ($stmt->rowCount() > 0) {
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $total_products = $row["total"];
+    echo "Total $total_products Products<br>";
+} else {
+    echo "No products found.";
+}
+?>
                                     </div>
                                     <a href="#" class="dpt-trigger mobile-hide">
                                         <i class="ri-menu-3-line ri-xl"></i>
-                                        <i class="ri-close-line ri-xl"></i>
                                     </a>
                                 </div>
                                 <div class="dpt-menu">
                                     <ul class="second-links">
                                         <li class="has-child Womens">
-                                            <a href="#">
+                                            <a href="category.php?category=1">
                                                 <div class="icon-large"><i class="ri-t-shirt-line"></i></div>
                                                 Women's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Mens">
-                                            <a href="#">
+                                            <a href="category.php?category=2">
                                                 <div class="icon-large"><i class="ri-shirt-line"></i></div>
                                                 Men's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Girls">
-                                            <a href="#">
+                                            <a href="category.php?category=3">
                                                 <div class="icon-large"><i class="ri-user-5-line"></i></div>
                                                 Girl's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Boys">
-                                            <a href="#">
+                                            <a href="category.php?category=4">
                                                 <div class="icon-large"><i class="ri-user-6-line"></i></div>
                                                 Boy's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Home">
-                                            <a href="#">
+                                            <a href="category.php?category=5">
                                                 <div class="icon-large"><i class="ri-home-4-line"></i></div>
                                                 Home & Kitchen
                                             </a>
                                         </li>
                                         <li class="has-child Brokers">
-                                            <a href="#">
+                                            <a href="category.php?category=6">
                                                 <div class="icon-large"><i class="ri-stack-line"></i></div>
                                                 Products From Brokers
                                             </a>
                                         </li>
-                                        <li class="has-child Seller">
-                                            <a href="#">
-                                                <div class="icon-large"><i class="ri-shield-star-line"></i></div>
-                                                Best Seller
-                                            </a>
-                                        </li>
+                                       
                                     </ul>
                                 </div>
                             </div>
                         </div>
+                        
+
                         <div class="right">
-                            <div class="search-box">
-                                <form action="" class="search">
-                                    <span class="icon-large"><i class="ri-search-line"></i></span>
-                                    <input type="search" placeholder="Search for products">
-                                    <button type="submit">Search</button>
-                                </form>
-                            </div>
-                        </div>
+  <div class="search-box">
+    <form class="search" method="get" action="search.php">
+      <span class="icon-large"><i class="ri-search-line"></i></span>
+      <input type="search" name="query" placeholder="Search for products" value="<?php echo isset($_GET['query']) ? $_GET['query'] : ''; ?>">
+      <button type="submit">Search</button>
+    </form>
+    <?php
+    if (isset($_GET['query'])) {
+      $query = $_GET['query'];
+
+      $sql = "SELECT * FROM products WHERE name LIKE '%".$query."%' OR description LIKE '%".$query."%'";
+      $result = $conn->query($sql);
+      
+      if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+          echo "<a href='./search.php?pid=".$row['product_id']."'>".$row['name']."</a><br>";
+        }
+      } else {
+        echo "No results found.";
+      }
+    }
+    ?>
+  </div>
+</div>
+
                     </div>
                 </div>
             </div>
         </header>
          <!-- header  -->
-    <main>
-         <div class="single-checkout">
-            <div class="container">
-                <div class="wrapper">
-                   <div class="checkout flexwrap">
-                    <div class="item left styled">
-                       <h1>Shipping Address</h1>
-                       <form action="">
-                        <p>
-                            <label for="email">Email Address <span></span></label>
-                            <input type="email" name="email" id="email" autocomplete="off" required>
-                        </p>
-                        <p>
-                            <label for="fname">First Name <span></span></label>
-                            <input type="text" id="fname" required>
-                        </p>
-                        <p>
-                            <label for="lname">Last Name <span></span></label>
-                            <input type="text" id="lname" required>
-                        </p>
-                        <p>
-                            <label for="cname">Company Name</label>
-                            <input type="text" id="cname" required>
-                        </p>
-                        <p>
-                            <label for="adress">Street Address<span></span></label>
-                            <input type="text" id="adress" required>
-                        </p>
-                        <p>
-                            <label for="city">City <span></span></label>
-                            <input type="text" id="city" required>
-                        </p>
-                        <p>
-                            <label for="state">State/Province<span></span></label>
-                            <input type="text" id="state" required>
-                        </p>
-                        <p>
-                            <label for="country">Country</label>
-                            <select name="country" id="country">
-                                <option value=""></option>
-                                <option value="1">Iraq</option>
-                                <option value="2">Saudi Arabia</option>
-                                <option value="3">Lebanon</option>
-                                <option value="4" selected="selected">Jordan</option>
-                                <option value="5">Others</option>
-                            </select>
-                        </p>
-                        <p>
-                            <label for="phone">Phone Number<span></span></label>
-                            <input type="number" id="phone" required>
-                        </p>
-                        <p>
-                            <lable>Order Notes (Optional)</lable>
-                            <textarea cols="30" rows="10"></textarea>
-                        </p>
-                        <p class="checkset">
-                            <input type="checkbox" id="anaccount">
-                            <label for="anaccount">Create an account?</label>
-                        </p>
-                       </form>
-                       <div class="shipping-methods">
-                            <h2>Shipping Methods</h2>
-                            <p class="checkset">
-                                <input type="radio" checked>
-                                <label>5.00 JD Flate Rate</label>
-                            </p>
-                       </div>
-                       <div class="primary-checkout">
-                            <button class="primary-button">Place Order</button>
-                       </div>
-                    </div>
-                    <div class="item right">
-                        <h2>Order Summary</h2>
-                        <div class="summary-order is_sticky">
-                            <div class="summary-totals">
-                                <ul>
-                                    <li>
-                                        <span>Subtotal</span>
-                                        <span>105.35 JD</span>
-                                    </li>
-                                    <li>
-                                        <span>Discount</span>
-                                        <span>-5.00 JD</span>
-                                    </li>
-                                    <li>
-                                        <span>Shipping: Flat</span>
-                                        <span>10.00 JD</span>
-                                    </li>
-                                    <li>
-                                        <span>Total</span>
-                                        <span>110.35 JD</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <ul class="products mini object-cover">
-                                <li class="item">
-                                    <div class="thumbnail">
-                                        <img src="assets/products/QUARTZ VEIL LIQUID EYESHADOW.png" alt="">
-                                    </div>
-                                    <div class="item-content">
-                                        <p>QUARTZ VEIL LIQUID EYESHADOW</p>
-                                        <span class="price">
-                                            <span>9.55 JD</span>
-                                            <span>x 2</span>
-                                        </span>
-                                    </div>
-                                </li>
-                                <li class="item">
-                                    <div class="thumbnail">
-                                        <img src="assets/products/BEADED SHOULDER BAG.png" alt="">
-                                    </div>
-                                    <div class="item-content">
-                                        <p>BEADED SHOULDER BAG</p>
-                                        <span class="price">
-                                            <span>25.99 JD</span>
-                                            <span>x 2</span>
-                                        </span>
-                                    </div>
-                                </li>
-                                <li class="item">
-                                    <div class="thumbnail">
-                                        <img src="assets/products/EYE SHADOW PALETTE.png" alt="">
-                                    </div>
-                                    <div class="item-content">
-                                        <p>EYEBROW PENCIL</p>
-                                        <span class="price">
-                                            <span>9.55 JD</span>
-                                            <span>x 2</span>
-                                        </span>
-                                    </div>
-                                </li>
-                                <li class="item">
-                                    <div class="thumbnail">
-                                        <img src="assets/products/EYEBROW PENCIL.png" alt="">
-                                    </div>
-                                    <div class="item-content">
-                                        <p>EYEBROW PENCIL</p>
-                                        <span class="price">
-                                            <span>5.20 JD</span>
-                                            <span>x 1</span>
-                                        </span>
-                                    </div>
-                                </li>
-                            </ul>
+         <main>
+   <div class="single-checkout">
+      <div class="container">
+         <div class="wrapper">
+            <div class="checkout flexwrap">
+               <div class="item left styled">
+                  <form action="" method="POST">
+                     <div class="shipping-methods">
+                        <div class="inputBox">
+                           <span>payment method :</span>
+                           <select name="method" class="box" required>
+                              <option value="cash on delivery" selected>cash on delivery</option>
+                           </select>
                         </div>
-                    </div>
-                   </div>
-                </div>
+                        <div class="inputBox">
+                           <span>Flat number :</span>
+                           <input type="text" name="flat" placeholder="e.g. flat number" class="box" maxlength="50" required>
+                        </div>
+                        <div class="inputBox">
+                           <span>Street name :</span>
+                           <input type="text" name="street" placeholder="e.g. street name" class="box" maxlength="50" required>
+                        </div>
+                        <div class="inputBox">
+                           <span>City :</span>
+                           <input type="text" name="city" placeholder="e.g. mumbai" class="box" maxlength="50" required>
+                        </div>
+                        <div class="inputBox">
+                           <span>Country :</span>
+                           <input type="text" name="country" placeholder="e.g. India" class="box" maxlength="50" required>
+                        </div>
+                     </div>
+               </div>
+               <div class="item right">
+                  <h2>Order Summary</h2>
+                  <div class="summary-order is_sticky">
+                     <?php
+                        $total_quantity=0;
+                        $total_price = 0;
+                        $cart_items[] = '';
+                        $select_cart = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
+                        $select_cart->execute([$user_id]);
+                        if($select_cart->rowCount() > 0){
+                           while($fetch_cart = $select_cart->fetch(PDO::FETCH_ASSOC)){
+                              $cart_items[] = $fetch_cart['name'].' ('.$fetch_cart['price'].' x '. $fetch_cart['quantity'].') - ';
+                              $total_products = implode($cart_items);
+                              $total_price += ($fetch_cart['price'] * $fetch_cart['quantity']);
+                              $total_quantity += $fetch_cart['quantity'];
+                     ?>
+                     <p> <?= $fetch_cart['name']; ?> <span>(<?= 'JD'.$fetch_cart['price'].' x '. $fetch_cart['quantity']; ?>)</span> </p>
+                     <?php
+                        }
+                     }else{
+                        echo '<p class="empty">your cart is empty!</p>';
+                     }
+                     ?>
+                     <input type="hidden" name="total_products" value="<?= $total_products; ?>">
+                     <input type="hidden" name="total_price" value="<?= $total_price; ?>" value="">
+                     <div class="grand-total">Total Price : <span>JD<?= $total_price; ?></span></div>
+                     <div class="primary-checkout" style="margin-top:50px;">
+                        <input type="hidden" name="quantity" value="<?= $total_quantity ?>">
+                         <input  type="submit" name="order" href="./home.php" class="primary-button" <?= ($total_price > 1)?'':'disabled'; ?> value="place order" style="border:none;">
+                     </div>
+                  </form>
+
+                  </div>
+               </div>
             </div>
          </div>
-
-    </main>
-
+      </div>
+   </div>
+</main>
     <footer>
-        <div class="newsletter">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="box">
-                        <div class="content">
-                            <h3>Join Our Newsletter</h3>
-                            <p>Get E-mail updates about our latest shop and <strong>special offers</strong></p>
-                        </div>
-                        <form action="" class="search">
-                            <span class="icon-large"><i class="ri-mail-line"></i></span>
-                            <input type="mail" placeholder="Your email address" required>
-                            <button type="submit">Sign Up</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- newsletter -->
 
-        <div class="widgets">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="flexwrap">
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Help & Contact</h4>
-                                <ul class="flexcol">
-                                    <li><a href="#">Your Account</a></li>
-                                    <li><a href="#">Your Order</a></li>
-                                    <li><a href="#">Shipping Rates</a></li>
-                                    <li><a href="#">Returns</a></li>
-                                    <li><a href="#">Assistant</a></li>
-                                    <li><a href="#">Help</a></li>
-                                    <li><a href="#">Contact Us</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Payment Info</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Bussines Card</a></li>
-                                    <li><a href="">Shop with Points</a></li>
-                                    <li><a href="">Reload Your Balance</a></li>
-                                    <li><a href="">Paypal</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>About Us</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Company Info</a></li>
-                                    <li><a href="">News</a></li>
-                                    <li><a href="">Investors</a></li>
-                                    <li><a href="">Careers</a></li>
-                                    <li><a href="">Policies</a></li>
-                                    <li><a href="">Customer reviews</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Product Categories</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Bueaty</a></li>
-                                    <li><a href="">Electronic</a></li>
-                                    <li><a href="">Woman's Fashion</a></li>
-                                    <li><a href="">Men's Fashion</a></li>
-                                    <li><a href="">Home & Kitchen</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- widgets -->
 
-        <div class="footer-info">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="flexcol">
-                        <div class="logo">
-                            <a href=""><span class="circle">.Store</span></a>
+        <div class="footer-info" style="background-color: var(--light-bg-color);">
+            <div class="container" >
+                <div class="wrapper" >
+                    <div class="flexcol" >
+                        <div class="logo" >
+                            <img src="./assets/logo.png" style="height: 150px;width:150px;margin-left:29px">
+                           
                         </div>
-                        <div class="socials">
-                            <ul class="flexitem">
-                                <li><a href="#"><i class="ri-twitter-line"></i></a></li>
-                                <li><a href="#"><i class="ri-facebook-line"></i></a></li>
-                                <li><a href="#"><i class="ri-instagram-line"></i></a></li>
-                                <li><a href="#"><i class="ri-linkedin-line"></i></a></li>
-                                <li><a href="#"><i class="ri-youtube-line"></i></a></li>
+                        <div class="socials" >
+                            <ul class="flexitem" >
+                                <!-- <li><a href="#"><i class="ri-twitter-line"></i></a></li> -->
+                                <li><a href="https://www.facebook.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-facebook-line" style="color:wihte;"></i></a></li>
+                                <li><a href="https://www.instagram.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-instagram-line"></i></a></li>
+                                <li><a href="https://www.linkedin.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-linkedin-line"></i></a></li>
+                                <li><a href="https://www.youtube.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-youtube-line"></i></a></li>
                             </ul>
                         </div>
+
+                        <div style="color:black; justify-content: space-between; display: flex;gap: 20px; margin-left:50px">
+                                <!-- <li><a href="#"><i class="ri-twitter-line"></i></a></li> -->
+                                <p><a href="./shop.php" style="color:var(--secondary-dark-color);">Shop</a></p>
+                                <p><a href="./account.php" style="color:var(--secondary-dark-color);">Account</a></p>
+                                <p><a href="./whishlist.php" style="color:var(--secondary-dark-color);">Whishlist</a></p>
+                                <p><a href="./cart.php" style="color:var(--secondary-dark-color);">Cart</a></p>
+                                <p><a href="./about.php" style="color:var(--secondary-dark-color);">About </a></p>
+                                <p><a href="./contact.php" style="color:var(--secondary-dark-color);">Contact</a></p>
+                        </div>
+                        
+                       
                     </div>
-                    <p class="mini-text">Copyright 2023 .StoreName. All right reserved. </p>
+                    <p class="mini-text"  style="color:black;margin-left:50px;font-size:8px;color:var(--secondary-dark-color);">Copyright 2023 .Center Point. All right reserved </p>
                 </div>
             </div>
         </div>
@@ -395,32 +557,27 @@ include './components/connect.php';
             <div class="wrapper">
                 <nav>
                     <ul class="flexitem menu-unorder-list">
+                       
                         <li>
-                            <a href="#">
-                                <i class="ri-bar-chart-line"></i>
-                                <span>Trending</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
+                            <a href="./account.php">
                                 <i class="ri-user-6-line"></i>
                                 <span>Account</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="./whishlist.php">
                                 <i class="ri-heart-line"></i>
                                 <span>Wishlist</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#0" class="t-search">
+                            <a href="#" class="t-search">
                                 <i class="ri-search-line"></i>
                                 <span>Search</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#0" class="cart-trigger">
+                            <a href="./cart.php">
                                 <i class="ri-shopping-cart-line"></i>
                                 <span>Cart</span>
                                 <div class="fly-item">
@@ -439,36 +596,32 @@ include './components/connect.php';
         <div class="container">
             <div class="wrapper">
 
-                <form action="" class="search">
-                    <a href="#" class="t-close search-close flexcenter"><i class="ri-close-line"></i></a>
-                    <span class="icon-large"><i class="ri-search-line"></i></span>
-                    <input type="search" placeholder="Your email address" required>
-                    <button type="submit">Search</button>
-                </form>
+            <form class="search" method="get" action="search.php">
+      <span class="icon-large"><i class="ri-search-line"></i></span>
+      <input type="search" name="query" placeholder="Search for products" value="<?php echo isset($_GET['query']) ? $_GET['query'] : ''; ?>">
+      <button type="submit">Search</button>
+    </form>
+    <?php
+    if (isset($_GET['query'])) {
+      $query = $_GET['query'];
+
+      $sql = "SELECT * FROM products WHERE name LIKE '%".$query."%' OR description LIKE '%".$query."%'";
+      $result = $conn->query($sql);
+      
+      if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+          echo "<a href='./search.php?pid=".$row['product_id']."'>".$row['name']."</a><br>";
+        }
+      } else {
+        echo "No results found.";
+      }
+    }
+    ?>
             </div>
         </div>
     </div>
     <!-- Search bottom  -->
 
-    <!-- <div id="modal" class="modal">
-        <div class="content flexcol">
-            <div class="image object-cover">
-                <img src="assets/products/p3.png" alt="">
-            </div>
-            <h2>Get the latest deals and coupons</h2>
-            <p class="mobile-hide">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet, velit!</p>
-            <form action="" class="search">
-                <span class="icon-large"><i class="ri-mail-line"></i></span>
-                <input type="email" placeholder="Your Email Address">
-                <button>Subscribe</button>
-            </form>
-            <a href="#" class="mini-text">Do not show me this again</a>
-            <a href="#" class="t-close modalclose flexcenter">
-                <i class="ri-close-line"></i>
-            </a>
-        </div>
-    </div> -->
-    <!-- modal -->
     <div class="backtotop">
         <a href="#" class="flexcol">
             <i class="ri-arrow-up-line"></i>

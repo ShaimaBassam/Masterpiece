@@ -25,6 +25,12 @@ if(isset($_POST['add_product'])){
    $category_id = $_POST['category'];
    $quantity = $_POST['store'];
 
+   // Insert the product sizes into an array
+$sizes = $_POST['size'];
+// Convert the array of sizes into a string
+$size_str = implode(',', $sizes);
+
+
 // تحميل صورة و تشفيرها
 
 // قراءة اسم الصورة
@@ -55,8 +61,10 @@ if(isset($_POST['add_product'])){
 
 // القيام برفع كافة تفاصيل المنتج التي تم ادخالها و يجب التاكد من ان عدد الاعمدة مساوي لعدد البيانات المراد رفعها
 
-    $insert_products = $conn->prepare("INSERT INTO `products`(name, details, price, image, category_id, store) VALUES(?,?,?,?,?,?)");
-    $insert_products->execute([$name, $details, $price, $image, $category_id , $quantity ]);
+    
+// Insert the product details into the database
+$insert_products = $conn->prepare("INSERT INTO `products`(name, details, price, image, category_id, size, store) VALUES(?,?,?,?,?,?,?)");
+$insert_products->execute([$name, $details, $price, $image, $category_id, $size_str, $quantity]);
       
 // شرط للتأكد من ان حجم الصورة اقل من 2 ميجا
 
@@ -241,6 +249,16 @@ if(isset($_GET['delete'])){
                                     <input type="number" name="store" class="form-control" required id="exampleInputPassword1">
                                 </div>
                                 <div class="mb-3">
+                                <label for="size" class="form-label">Sizes:</label><br>
+                                <input type="text" name="size[]" id="size" class="form-control"><br>
+                                <input type="text" name="size[]" id="size" class="form-control"><br>
+                                <input type="text" name="size[]" id="size" class="form-control"><br>
+                                <input type="text" name="size[]" id="size" class="form-control"><br>
+                                <input type="text" name="size[]" id="size" class="form-control"><br>
+                                <input type="text" name="size[]" id="size" class="form-control"><br>
+                                </div>
+
+                                <div class="mb-3">
                                     <label for="exampleInputPassword1" class="form-label">Product Category</label>
                                     <select name="category" placeholder="enter product category" required class="box" required maxlength="500" cols="60" rows="10">
                                         <?php
@@ -299,6 +317,7 @@ if(isset($_GET['delete'])){
                                             <th scope="col">Product Price</th>
                                             <th scope="col">Product Discount</th>
                                             <th scope="col">Product Category</th>
+                                            <th scope="col">Product Sizes</th>
                                             <th scope="col">Product Details</th>
                                             <th scope="col">Remaining</th>
                                             <th scope="col">Product Update</th>
@@ -324,11 +343,11 @@ if(isset($_GET['delete'])){
 
                                             <?php if ($fetch_products['is_sale'] == 1){ ?>
 
-                                                <td><del style="text-decoration:line-through; color:silver">$<?= $fetch_products['price']; ?></del></td>
-                                                <td><ins style="color:rgb(0, 220, 0);"> $<?=$fetch_products['price_discount'];?></ins></td>
+                                                <td><del style="text-decoration:line-through; color:silver">JOD<?= $fetch_products['price']; ?></del></td>
+                                                <td><ins style="color:rgb(0, 220, 0);"> JOD<?=$fetch_products['price_discount'];?></ins></td>
 
                                                 <?php } else { ?>
-                                                <td style="color:rgb(0, 220, 0);">$<?= $fetch_products['price']; ?></td>
+                                                <td style="color:rgb(0, 220, 0);">JOD<?= $fetch_products['price']; ?></td>
                                                 <td>Not On Sale</td>
                                                 <?php } 
                                             ?>
@@ -344,6 +363,7 @@ if(isset($_GET['delete'])){
                                             ?>
 
                                             <td>Category : <?= $fetch_product_category['category_name']; ?></td>
+                                            <td>Size : <?= $fetch_products['size']; ?></td>
 
                                             <?php } } } ?>
          

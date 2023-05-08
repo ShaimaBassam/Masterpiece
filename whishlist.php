@@ -173,6 +173,49 @@ if(isset($_POST['add_to_wishlist'])){
    }
 
 
+
+if(isset($_POST['delete'])){
+   $wishlist_id = $_POST['id'];
+   $delete_wishlist_item = $conn->prepare("DELETE FROM `favorite` WHERE id = ?");
+   $delete_wishlist_item->execute([$wishlist_id]);
+}
+
+if(isset($_GET['delete_all'])){
+   $delete_wishlist_item = $conn->prepare("DELETE FROM `favorite` WHERE user_id = ?");
+   $delete_wishlist_item->execute([$user_id]);
+   header('location:wishlist.php');
+}
+
+
+
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['addTOcart'])){
+   $product_id = $_POST['product_id'];
+   $product_name = $_POST['name'];
+   $product_price = $_POST['price'];
+   $product_image = $_POST['image'];
+   $product_quantity = $_POST['quantity'];
+
+   $check_product_id = $conn->prepare("SELECT product_id FROM `cart` WHERE user_id = '$user_id'");
+   $check_product_id->execute();
+   
+
+   $flag = true;
+
+   while($fetch_product = $check_product_id->fetch(PDO::FETCH_ASSOC)){
+      if (in_array($product_id, $fetch_product)){
+         $flag = false;
+         break;
+      }
+   };
+   if($flag==true){
+      $send_to_cart = $conn->prepare("INSERT INTO `cart` (user_id , product_id , name , price , image , quantity)
+                                    VALUES (? , ? , ? , ?, ? , ?)"); 
+      $send_to_cart->execute([$user_id , $product_id , $product_name , $product_price, $product_image, $product_quantity]);
+   }
+}
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -216,6 +259,18 @@ li.dropdown {
 
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+.delete-btn {
+  background-color: white; /* set background color */
+  border: none; /* remove border */
+  padding: 10px; /* add padding */
+  margin: 10px 20px; /* add margin */
+  border-radius: 50%; /* make button circular */
+}
+
+.delete-btn i {
+  margin-right: 10px; /* add space between icon and text */
 }
 </style>
 <body>
@@ -522,81 +577,106 @@ li.dropdown {
          <!-- header  -->
     <main>
 
-        <div class="single-category">
+    <div class="single-category">
             <div class="container">
-                
-        <?php
-
-         $grand_total = 0;
-         $select_wishlist = $conn->prepare("SELECT * FROM `favorite` WHERE user_id = ?");
-        $select_wishlist->execute([$user_id]);
-        if($select_wishlist->rowCount() > 0){
-        while($fetch_wishlist = $select_wishlist->fetch(PDO::FETCH_ASSOC)){
-      
-        $product_cart_id = $fetch_wishlist['product_id'];
-        $select_products = $conn->prepare("SELECT * FROM `products` WHERE product_id = $product_cart_id");
-        $select_products->execute();
-        if($select_products->rowCount() > 0){ 
-         while ($select_product = $select_products->fetch(PDO::FETCH_ASSOC)){
-            $grand_total += $select_product['price'];
-         ?>
                 <div class="wrapper">
                     <div class="column">
                         <div class="holder">
-                            <div class="row sidebar">
-                                <div class="products main flexwrap">
-                                <input type="hidden" name="product_id" value="<?= $fetch_wishlist['product_id']; ?>">
-                                <input type="hidden" name="id" value="<?= $fetch_wishlist['id']; ?>">
+
+                            <div class="section">
+                                <div class="row">
+                                    <div class="cat-head">
+                                        <div class="breadcrumb">
+                                                                       <ul class="flexitem">
+                                                <li><a href="./home.php">Home</a></li>
+                                                <li>Wishlist</li>
+                                            </ul>
+                                        </div>
+                                       
+                                      
+                                        <div class="cat-navigation flexitem">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="features">
+    <div class="container">
+        <div class="wrapper">
+            <div class="column">
+                
+                <div class="products main flexwrap">
+                <?php
+
+      $grand_total = 0;
+      $select_wishlist = $conn->prepare("SELECT * FROM `favorite` WHERE user_id = ?");
+      $select_wishlist->execute([$user_id]);
+      if($select_wishlist->rowCount() > 0){
+         while($fetch_wishlist = $select_wishlist->fetch(PDO::FETCH_ASSOC)){
+            
+            $product_cart_id = $fetch_wishlist['product_id'];
+            $select_products = $conn->prepare("SELECT * FROM `products` WHERE product_id = $product_cart_id");
+            $select_products->execute();
+            if($select_products->rowCount() > 0){ 
+               while ($select_product = $select_products->fetch(PDO::FETCH_ASSOC)){
+                  $grand_total += $select_product['price'];
+   ?>
+                                   
+                                   
                                     <div class="item">
                                         <div class="media">
                                             <div class="thumbnail object-cover">
-                                                <a href="#">
+                                                <a href="pageSingle.php?pid=<?= $fetch_wishlist['product_id']; ?>">
                                                     <img src="uploaded_img/<?= $select_product['image']; ?>" alt="">
                                                 </a>
                                             </div>
-                                            <div class="hoverable">
-                                                <!-- <ul>
-                                                    <li class="active"><a href="#"><i class="ri-heart-line"></i></a></li>
-                                                    <li><a href="#"><i class="ri-eye-line"></i></a></li>
-                                                    <li><a href="#"><i class="ri-shuffle-line"></i></a></li>
-                                                </ul> -->
-                                            </div>
+                                                <div class="hoverable">
+                                     <form  action="" method="post"  >
+                                     <input type="hidden" name="product_id" value="<?= $fetch_wishlist['product_id']; ?>">
+      <input type="hidden" name="id" value="<?= $fetch_wishlist['id']; ?>">
+      <input type="hidden" name="name" value="<?= $select_product['name']; ?>">
+      <input type="hidden" name="price" value="<?= $select_product['price']; ?>">
+      <input type="hidden" name="image" value="<?= $select_product['image']; ?>">
+                                                    <ul>
+                                                    <li><button type="submit" value=""  
+   onclick="return confirm('delete this from wishlist?');"  name="delete" style="  background-color: transparent;
+  border: none;"><i class=" delete-btn ri-close-line" ></i></button></li>
+                                                    </ul>
+                                            </form>
+                                                    
+                                                </div>
                                             <!-- <div class="discount circle flexcenter"><span>25%</span></div> -->
                                         </div>
                                         <div class="content">
-                                           
-                                            <h3 class="main-links"><a href="#"><?= $select_product['name']; ?></a></h3>
+                                            <h3 class="main-links"><a href="pageSingle.php?pid=<?= $fetch_wishlist['product_id']; ?>"><?= $select_product['name']; ?></a></h3>
                                             <div class="price">
-                                                <span class="current"> <?php if ($select_product['is_sale'] == 1){ ?></span>
-                                                
-                  <div class="price" ><span><del style="text-decoration:line-through; color:silver">JD<?= $select_product['price']; ?></del><span style="color:#67022f;"> JD<?=$select_product['price_discount'];?></span> </span></div>
-
-<?php } else { ?>
-
-   <div class="name" style="color:#67022f; padding:20px 0px">JD<?= $select_product['price']; ?></div> <?php } ?>
-
-
-</div>
-<?php
-} } } 
-}else{
-echo '<p class="empty">Your Favorite Is Empty</p>';
-}
-?>
+                                                <?php if ($select_product['is_sale'] == 1){ ?>
+                                                    <div class="price"><span><del style="text-decoration:line-through; color:silver">JD<?=$select_product['price'];?></del><span style="color:#67022f;"> JD<?=$select_product['price_discount'];?></span> </span></div>
+                                                <?php } else { ?>
+                                                    <div class="name" style="color:#67022f; padding:20px 0px">JD<?=$select_product['price'];?></div> 
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
-                                   
+                    <?php 
+                                }
+                            }}
+                        }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                                <div class="load-more flexcenter">
-                                    <a href="#" class="secondary-button">Load More</a></div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+
+
+
     <footer>
 
 
@@ -634,6 +714,8 @@ echo '<p class="empty">Your Favorite Is Empty</p>';
         </div>
     </div>
 </div>
+
+
 </footer>
 <!-- footer  -->
 

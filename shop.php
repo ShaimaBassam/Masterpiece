@@ -9,7 +9,6 @@ if(isset($_SESSION['user_id'])){
    $user_id = $_SESSION['user_id'];
 }else{
    $user_id = '';
-   header('location:login.php');
 };
 
 
@@ -224,7 +223,7 @@ li.dropdown {
         <aside class="site-off desktop-hide">
             <div class="off-canvas">
                 <div class="canvas-head flexitem">
-                    <div class="logo"><img src="assets/Untitled-1.png" alt=""></a></div>
+                <div class="logo"><img src="./assets/logo.png" alt=""></a></div>
                       <a href="" class="t-close flexcenter"><i class="ri-close-line"></i></a>
                 </div>
                 <div class="departments"></div>
@@ -328,121 +327,25 @@ li.dropdown {
                                         <?php
                                          if(isset($_SESSION['user_id'])){ ?>
                                         <div class="fly-item"><span class="item-number"><?= $total_wishlist_counts; ?></span></div>
+                                        <?php }?>
                                     </a>
                                 </li>
+
+                                
+
+                              
 
                                 
 
                                 <li class="iscart"><a href="./cart.php">
                                     <div class="icon-large">
                                         <i class="ri-shopping-cart-line"></i>
-                                        <div class="fly-item"><span class="item-number"> <?= $total_cart_counts; ?></span></div>
-                                    </div>
-                                    <?php
-                                        }else{ ?>
-                                    <div class="fly-item"><span class="item-number"><?= count($_SESSION['fav']); ?></span></div>
-                                    </a>
-                                </li>
-
-                                
-
-                                <li class="iscart"><a href="#">
-                                    <div class="icon-large">
-                                        <i class="ri-shopping-cart-line"></i>
-                                        <div class="fly-item"><span class="item-number"> <?= count($_SESSION['cart']); ?></span></div>
                                     </div>
 
-
-                                     <?php }; ?>
-                                    <div class="icon-text">
-                                        <div class="mini-text">Total</div>
-                                        <div class="cart-total">95.38 JD</div>
-                                    </div>
                                 </a>
-                                <div class="mini-cart">
-                                    <div class="content">
-                                    <?php
-                                        if(isset($_SESSION['user_id'])){ ?>
-                                        <div class="cart-head">
-                                        <?= $total_cart_counts; ?> items in cart
-                                        </div>
-
-                                       <?php }else{ ?>
-                                        <div class="cart-head">
-                                        <?= count($_SESSION['cart']); ?>items in cart
-                                        </div>
-                                        <?php }; ?>
+                               
 
 
-                                        <div class="cart-body">
-                                            <ul class="products mini">
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/QUARTZ VEIL LIQUID EYESHADOW.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">QUARTZ VEIL LIQUID EYESHADOW</a></p>
-                                                        <span class="price">
-                                                            <span>9.55 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/BEADED SHOULDER BAG.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">BEADED SHOULDER BAG</a></p>
-                                                        <span class="price">
-                                                            <span>25.99 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/EYE SHADOW PALETTE.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">EYE SHADOW PALETTE</a></p>
-                                                        <span class="price">
-                                                            <span>9.55 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/EYEBROW PENCIL.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">EYEBROW PENCIL</a></p>
-                                                        <span class="price">
-                                                            <span>5.20 JD</span>
-                                                            <span class="fly-item"><span>1x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="cart-footer">
-                                            <div class="subtotal">
-                                                <p>Subtotal</p>
-                                                <p><strong>95.38 JD</strong></p>
-                                            </div>
-                                            <div class="actions">
-                                                <a href="./checkout.php" class="secondary-button">Checkout</a>
-                                                <a href="./cart.php" class="secondary-button">View Cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
                             
                             </ul>
                         </div>
@@ -456,9 +359,26 @@ li.dropdown {
                         <div class="left">
                             <div class="dpt-cat">
                                 <div class="dpt-head">
-                                    <div class="main-text">All Departments</div>
+                                <div class="main-text">All Departments</div>
+                                    <?php
+                                    // prepare SQL query to count total number of products
+$sql = "SELECT COUNT(*) as total FROM products";
+// execute query
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+?>
+
                                     <div class="mini-text mobile-hide">
-                                        Total 40 Products
+                                        <?php
+                                    // output total number of products
+if ($stmt->rowCount() > 0) {
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $total_products = $row["total"];
+    echo "Total $total_products Products<br>";
+} else {
+    echo "No products found.";
+}
+?>
                                     </div>
                                     <a href="#" class="dpt-trigger mobile-hide">
                                         <i class="ri-menu-3-line ri-xl"></i>
@@ -467,38 +387,39 @@ li.dropdown {
                                 </div>
                                 <div class="dpt-menu">
                                     <ul class="second-links">
+                                        
                                         <li class="has-child Womens">
-                                            <a href="#">
+                                            <a href="category.php?category=1">
                                                 <div class="icon-large"><i class="ri-t-shirt-line"></i></div>
                                                 Women's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Mens">
-                                            <a href="#">
+                                            <a href="category.php?category=2">
                                                 <div class="icon-large"><i class="ri-shirt-line"></i></div>
                                                 Men's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Girls">
-                                            <a href="#">
+                                            <a href="category.php?category=3">
                                                 <div class="icon-large"><i class="ri-user-5-line"></i></div>
                                                 Girl's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Boys">
-                                            <a href="#">
+                                            <a href="category.php?category=4">
                                                 <div class="icon-large"><i class="ri-user-6-line"></i></div>
                                                 Boy's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Home">
-                                            <a href="#">
+                                            <a href="category.php?category=5">
                                                 <div class="icon-large"><i class="ri-home-4-line"></i></div>
                                                 Home & Kitchen
                                             </a>
                                         </li>
                                         <li class="has-child Brokers">
-                                            <a href="#">
+                                            <a href="category.php?category=6">
                                                 <div class="icon-large"><i class="ri-stack-line"></i></div>
                                                 Products From Brokers
                                             </a>
@@ -528,187 +449,12 @@ li.dropdown {
                 <div class="wrapper">
                     <div class="column">
                         <div class="holder">
-                            <!-- <div class="row sidebar">
-                                <div class="filter">
-                                    <div class="filter-block">
-                                        <h4>Category</h4>
-                                        <ul>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="bags">
-                                                <label for="bags">
-                                                    <span class="checked"></span>
-                                                    <span>Bags</span>
-                                                </label>
-                                                <span class="count">15</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="beauty">
-                                                <label for="beauty">
-                                                    <span class="checked"></span>
-                                                    <span>Beauty</span>
-                                                </label>
-                                                <span class="count">5</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="outdoor">
-                                                <label for="outdoor">
-                                                    <span class="checked"></span>
-                                                    <span>Outdoor</span>
-                                                </label>
-                                                <span class="count">4</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="travel">
-                                                <label for="travel">
-                                                    <span class="checked"></span>
-                                                    <span>Travel</span>
-                                                </label>
-                                                <span class="count">3</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="urban">
-                                                <label for="urban">
-                                                    <span class="checked"></span>
-                                                    <span>Urban</span>
-                                                </label>
-                                                <span class="count">7</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="filter-block">
-                                        <h4>Activity</h4>
-                                        <ul>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="athletic">
-                                                <label for="athletic">
-                                                    <span class="checked"></span>
-                                                    <span>Athletic</span>
-                                                </label>
-                                                <span class="count">11</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="lounge">
-                                                <label for="lounge">
-                                                    <span class="checked"></span>
-                                                    <span>Lounge</span>
-                                                </label>
-                                                <span class="count">8</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="cloting">
-                                                <label for="cloting">
-                                                    <span class="checked"></span>
-                                                    <span>Clothing</span>
-                                                </label>
-                                                <span class="count">6</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="jewelry">
-                                                <label for="jewelry">
-                                                    <span class="checked"></span>
-                                                    <span>Jewelry</span>
-                                                </label>
-                                                <span class="count">2</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="shoes">
-                                                <label for="shoes">
-                                                    <span class="checked"></span>
-                                                    <span>Shoes</span>
-                                                </label>
-                                                <span class="count">3</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="filter-block">
-                                        <h4>Brands</h4>
-                                        <ul>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="nike">
-                                                <label for="nike">
-                                                    <span class="checked"></span>
-                                                    <span>Nike</span>
-                                                </label>
-                                                <span class="count">1</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="louisvuitton">
-                                                <label for="louisvuitton">
-                                                    <span class="checked"></span>
-                                                    <span>Louis Vuitton</span>
-                                                </label>
-                                                <span class="count">3</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="hermes">
-                                                <label for="hermes">
-                                                    <span class="checked"></span>
-                                                    <span>Hermes</span>
-                                                </label>
-                                                <span class="count">2</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="gucci">
-                                                <label for="gucci">
-                                                    <span class="checked"></span>
-                                                    <span>Gucci</span>
-                                                </label>
-                                                <span class="count">2</span>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" name="checkbox" id="zara">
-                                                <label for="zara">
-                                                    <span class="checked"></span>
-                                                    <span>Zara</span>
-                                                </label>
-                                                <span class="count">3</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="filter-block products">
-                                        <h4>Color</h4>
-                                        <ul class="bycolor variant flexitem">
-                                            <li>
-                                                <input type="radio" name="color" id="cogrey">
-                                                <label for="cogrey" class="circle"></label>
-                                            </li>
-                                            <li>
-                                                <input type="radio" name="color" id="coblue">
-                                                <label for="coblue" class="circle"></label>
-                                            </li>
-                                            <li>
-                                                <input type="radio" name="color" id="cogreen">
-                                                <label for="cogreen" class="circle"></label>
-                                            </li>
-                                            <li>
-                                                <input type="radio" name="color" id="cored">
-                                                <label for="cored" class="circle"></label>
-                                            </li>
-                                            <li>
-                                                <input type="radio" name="color" id="colight">
-                                                <label for="colight" class="circle"></label>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="filter-block pricing">
-                                        <h4>Price</h4>
-                                        <div class="byprice">
-                                            <div class="range-track">
-                                                <input type="range" value="25000" min="0" max="100000">
-                                            </div>
-                                            <div class="price-range">
-                                                <span class="price-form">50 JD</span>
-                                                <span class="price-to">5000 JD</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> -->
+
                             <div class="section">
                                 <div class="row">
                                     <div class="cat-head">
                                         <div class="breadcrumb">
-                                            <ul class="flexitem">
+                                                                       <ul class="flexitem">
                                                 <li><a href="./home.php">Home</a></li>
                                                 <li>Shop</li>
                                             </ul>
@@ -718,488 +464,167 @@ li.dropdown {
                                         </div>
                                       
                                         <div class="cat-navigation flexitem">
-                                            <!-- <div class="item-filter desktop-hide"> -->
-                                                <!-- <a href="#" class="filter-trigger label">
-                                                    <i class="ri-menu-2-line ri-2x"></i>
-                                                    <span>Filter</span>
-                                                </a> -->
-                                            <!-- </div> -->
-                                            <!-- <div class="item-sortir">
-                                                <div class="label">
-                                                    <span class="mobile-hide">Sort By Default</span>
-                                                    <div class="desk-top-hide">Defualt</div>
-                                                    <i class="ri-arrow-down-s-line"></i>
-                                                </div>
-                                                <ul>
-                                                    <li>Default</li>
-                                                    <li>Product Name</li>
-                                                    <li>Price</li>
-                                                    <li>Brand</li>
-                                                </ul>
-                                            </div> -->
-                                            <!-- <div class="item-perpage mobile-hide">
-                                                <div class="label">Items 10 per page</div>
-                                                <div class="desktop-hide">10</div>
-                                            </div> -->
-                                            <!-- <div class="item-options">
-                                                <div class="label">
-                                                    <span class="mobile-hide">Show 10 per page</span>
-                                                    <div class="desktop-hide">10</div>
-                                                    <i class="ri-arrow-down-s-line"></i>
-                                                </div>
-                                                <ul>
-                                                    <li>10</li>
-                                                    <li>20</li>
-                                                    <li>30</li>
-                                                    <li>All</li>
-                                                </ul>
-                                            </div> -->
+                                            
                                         </div>
                                     </div>
                                 </div>
-                                <div class="products main flexwrap">
+                                <div class="features">
+    <div class="container">
+        <div class="wrapper">
+            <div class="column">
+                
+                <div class="products main flexwrap">
+                <?php
+     $select_products = $conn->prepare("SELECT * FROM `products`"); 
+     $select_products->execute();
+     if($select_products->rowCount() > 0){
+      while($fetch_product = $select_products->fetch(PDO::FETCH_ASSOC)){
+         $i=0;
+         $is_product_in_store = ($fetch_product['store']-$fetch_product['sold']);
+         if ( $is_product_in_store <= 0 ){
+            continue;
+         } else { ?>
 
+                                   
+                                    <?php 
+                                        if ($fetch_product['is_sale'] == 1){
+                                    ?>
+                                        <input type="hidden" name="price" value="<?=$fetch_product['price_discount'];?>">
+                                    <?php
+                                        } else {
+                                    ?>
+                                        <input type="hidden" name="price" value="<?=$fetch_product['price'];?>">
+                                    <?php
+                                        }
+                                    ?>
+                                    <input type="hidden" name="image" value="<?= $fetch_product['image']; ?>">
                                     <div class="item">
                                         <div class="media">
                                             <div class="thumbnail object-cover">
-                                                <a href="#">
-                                                    <img src="assets/products/BEADED SHOULDER BAG.png" alt="">
+                                                <a href="pageSingle.php?pid=<?= $fetch_product['product_id']; ?>">
+                                                    <img src="uploaded_img/<?= $fetch_product['image']; ?>" alt="">
                                                 </a>
                                             </div>
-                                            <div class="hoverable">
-                                                <ul>
-                                                    <li class="active"><a href="#"><i class="ri-heart-line"></i></a></li>
-                                                    <!-- <li><a href="#"><i class="ri-eye-line"></i></a></li> -->
-                                                    <!-- <li><a href="#"><i class="ri-shuffle-line"></i></a></li> -->
-                                                </ul>
-                                            </div>
+                                                <div class="hoverable">
+                                     <form  action="" method="post"  >
+                                     <input type="hidden" name="product_id" value="<?= $fetch_product['product_id']; ?>">
+                                    <input type="hidden" name="id" value="<?= $fetch_product['name']; ?>">
+                                                    <ul>
+                                                    <button type="submit" name="add_to_wishlist" class="active" style="  background-color: transparent;
+  border: none;"><li ><a href="#"><i class="ri-heart-line"></i></a></li></button>
+                                                    </ul>
+                                            </form>
+                                                    
+                                                </div>
                                             <!-- <div class="discount circle flexcenter"><span>25%</span></div> -->
                                         </div>
                                         <div class="content">
-                                            <!-- <div class="rating">
-                                                <div class="stars"></div>
-                                                <span class="mini-text">(2,148)</span>
-                                            </div> -->
-                                            <h3 class="main-links"><a href="#">BEADED SHOULDER BAG</a></h3>
+                                            <h3 class="main-links"><a href="pageSingle.php?pid=<?= $fetch_product['product_id']; ?>"><?= $fetch_product['name']; ?></a></h3>
                                             <div class="price">
-                                                <span class="current"> 16.99 JD</span>
-                                                <span class="normal mini-text"> 20.55 JD</span>
+                                                <?php if ($fetch_product['is_sale'] == 1){ ?>
+                                                    <div class="price"><span><del style="text-decoration:line-through; color:silver">JD<?=$fetch_product['price'];?></del><span style="color:red;  text-decoration: none;"> JD<?=$fetch_product['price_discount'];?></span> </span></div>
+                                                <?php } else { ?>
+                                                    <div class="name" style="color:#67022f; padding:20px 0px">JD<?=$fetch_product['price'];?></div> 
+                                                <?php } ?>
                                             </div>
                                         </div>
                                     </div>
-
-
-                                    <!-- <div class="item">
-                                        <div class="media">
-                                            <div class="thumbnail object-cover">
-                                                <a href="#">
-                                                    <img src="assets/products/p7.png" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="hoverable">
-                                                <ul>
-                                                    <li class="active"><a href="#"><i class="ri-heart-line"></i></a></li>
-                                                    <li><a href="#"><i class="ri-eye-line"></i></a></li>
-                                                    <li><a href="#"><i class="ri-shuffle-line"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="discount circle flexcenter"><span>25%</span></div>
-                                        </div>
-                                        <div class="content">
-                                            <div class="rating">
-                                                <div class="stars"></div>
-                                                <span class="mini-text">(2,148)</span>
-                                            </div>
-                                            <h3 class="main-links"><a href="#">Happy Sailed Woman's Summer Boho Floral</a></h3>
-                                            <div class="price">
-                                                <span class="current"> 29.74 JD</span>
-                                                <span class="normal mini-text"> 42.29 JD</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="media">
-                                            <div class="thumbnail object-cover">
-                                                <a href="#">
-                                                    <img src="assets/products/p6.png" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="hoverable">
-                                                <ul>
-                                                    <li class="active"><a href="#"><i class="ri-heart-line"></i></a></li>
-                                                    <li><a href="#"><i class="ri-eye-line"></i></a></li>
-                                                    <li><a href="#"><i class="ri-shuffle-line"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="discount circle flexcenter"><span>25%</span></div>
-                                        </div>
-                                        <div class="content">
-                                            <div class="rating">
-                                                <div class="stars"></div>
-                                                <span class="mini-text">(2,148)</span>
-                                            </div>
-                                            <h3 class="main-links"><a href="./page-offer.html">CONTRAST KNIT DRESS WITH CUTWORK EMBROIDERY</a></h3>
-                                            <div class="price">
-                                                <span class="current"> 54 JD</span>
-                                                <span class="normal mini-text"> 75 JD</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="media">
-                                            <div class="thumbnail object-cover">
-                                                <a href="#">
-                                                    <img src="assets/products/PLATFORM HEELED SLINGBACK SHOES.png" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="hoverable">
-                                                <ul>
-                                                    <li class="active"><a href="#"><i class="ri-heart-line"></i></a></li>
-                                                    <li><a href="#"><i class="ri-eye-line"></i></a></li>
-                                                    <li><a href="#"><i class="ri-shuffle-line"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="discount circle flexcenter"><span>25%</span></div>
-                                        </div>
-                                        <div class="content">
-                                            <div class="rating">
-                                                <div class="stars"></div>
-                                                <span class="mini-text">(2,548)</span>
-                                            </div>
-                                            <h3 class="main-links"><a href="#">PLATFORM HEELED SLINGBACK SHOES</a></h3>
-                                            <div class="price">
-                                                <span class="current"> 25 JD</span>
-                                                <span class="normal mini-text"> 34 JD</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="media">
-                                            <div class="thumbnail object-cover">
-                                                <a href="#">
-                                                    <img src="assets/products/p8.png" alt="">
-                                                </a>
-                                            </div>
-                                            <div class="hoverable">
-                                                <ul>
-                                                    <li class="active"><a href="#"><i class="ri-heart-line"></i></a></li>
-                                                    <li><a href="#"><i class="ri-eye-line"></i></a></li>
-                                                    <li><a href="#"><i class="ri-shuffle-line"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <div class="discount circle flexcenter"><span>25%</span></div>
-                                        </div>
-                                        <div class="content">
-                                            <div class="rating">
-                                                <div class="stars"></div>
-                                                <span class="mini-text">(2,548)</span>
-                                            </div>
-                                            <h3 class="main-links"><a href="#">Happy Sailed Woman's Summer Boho Floral</a></h3>
-                                            <div class="price">
-                                                <span class="current"> 14 JD</span>
-                                                <span class="normal mini-text"> 18 JD</span>
-                                            </div>
-                                            <!-- Additional Structure -->
-                                            <!-- <div class="footer">
-                                                <ul class="mini-text">
-                                                    <li>Polyster, Cotton</li>
-                                                    <li>Pull On Closure</li>
-                                                    <li>Fashion Personality</li>
-                                                </ul>
-                                            </div>
-                                        </div> -->
-                                    <!-- </div> -->
-                                </div> 
-                                <div class="load-more flexcenter">
-                                    <a href="#" class="secondary-button">Load More</a></div>
-                            </div>
-                        </div>
-                    </div>
+                    <?php 
+                                }
+                            }
+                        }
+                    ?>
                 </div>
-            </div>
-        </div>
-        <!-- <div class="banners">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="column">
-                        <div class="banner flexwrap">
-                            <div class="row">
-                                <div class="item">
-                                    <div class="image">
-                                        <img src="assets/slider1/s6.png" alt="">
-                                    </div>
-                                    <div class="text-content flexcol">
-                                        <h4>Brutal Sale!</h4>
-                                        <h3><span>Get the deal in here</span><br>Living Room Chair</h3>
-                                        <a href="#" class="primary-button">Shop Now</a>
-                                    </div>
-                                    <a href="#" class="over-link"></a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="item get-gray">
-                                    <div class="image">
-                                        <img src="assets/slider1/s2.png" alt="">
-                                    </div>
-                                    <div class="text-content flexcol">
-                                        <h4>Brutal Sale!</h4>
-                                        <h3><span>Discount Everyday</span><br>Office Outfit</h3>
-                                        <a href="#" class="primary-button">Shop Now</a>
-                                    </div>
-                                    <a href="#" class="over-link"></a>
-                                </div>
-                            </div>
-                         -->
-                            <!-- banners  -->
-                            <!-- <div class="product-categories flexwrap">
-                            <div class="row">
-                                <div class="item">
-                                    <div class="image">
-                                        <img src="assets/products/Advanced Snail 96 Mucin Power Essence.png" alt="">
-                                    </div>
-                                    <div class="content mini-links">
-                                        <h4>Beauty</h4>
-                                        <ul class="flexcol">
-                                            <li><a href="#">Makeup</a></li>
-                                            <li><a href="#">Skin Care</a></li>
-                                            <li><a href="#">Hair Care</a></li>
-                                            <li><a href="#">Fragrance</a></li>
-                                            <li><a href="#">Foot & Hand Care</a></li>
-                                        </ul>
-                                        <div class="second-links">
-                                            <a href="#" class="view-all">View All<i class="ri-arrow-right-line"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="item">
-                                    <div class="image">
-                                        <img src="assets/products/Rachel Bag.png" alt="">
-                                    </div>
-                                    <div class="content mini-links">
-                                        <h4>Beauty</h4>
-                                        <ul class="flexcol">
-                                            <li><a href="#">Makeup</a></li>
-                                            <li><a href="#">Skin Care</a></li>
-                                            <li><a href="#">Hair Care</a></li>
-                                            <li><a href="#">Fragrance</a></li>
-                                            <li><a href="#">Foot & Hand Care</a></li>
-                                        </ul>
-                                        <div class="second-links">
-                                            <a href="#" class="view-all">View All<i class="ri-arrow-right-line"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="item">
-                                    <div class="image">
-                                        <img src="assets/products/spela.png" alt="">
-                                    </div>
-                                    <div class="content mini-links">
-                                        <h4>Beauty</h4>
-                                        <ul class="flexcol">
-                                            <li><a href="#">Makeup</a></li>
-                                            <li><a href="#">Skin Care</a></li>
-                                            <li><a href="#">Hair Care</a></li>
-                                            <li><a href="#">Fragrance</a></li>
-                                            <li><a href="#">Foot & Hand Care</a></li>
-                                        </ul>
-                                        <div class="second-links">
-                                            <a href="#" class="view-all">View All<i class="ri-arrow-right-line"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-    </main>
-
-    <footer>
-        <div class="newsletter">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="box">
-                        <div class="content">
-                            <h3>Join Our Newsletter</h3>
-                            <p>Get E-mail updates about our latest shop and <strong>special offers</strong></p>
-                        </div>
-                        <form action="" class="search">
-                            <span class="icon-large"><i class="ri-mail-line"></i></span>
-                            <input type="mail" placeholder="Your email address" required>
-                            <button type="submit">Sign Up</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- newsletter -->
-
-        <div class="widgets">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="flexwrap">
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Help & Contact</h4>
-                                <ul class="flexcol">
-                                    <li><a href="#">Your Account</a></li>
-                                    <li><a href="#">Your Order</a></li>
-                                    <li><a href="#">Shipping Rates</a></li>
-                                    <li><a href="#">Returns</a></li>
-                                    <li><a href="#">Assistant</a></li>
-                                    <li><a href="#">Help</a></li>
-                                    <li><a href="#">Contact Us</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Payment Info</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Bussines Card</a></li>
-                                    <li><a href="">Shop with Points</a></li>
-                                    <li><a href="">Reload Your Balance</a></li>
-                                    <li><a href="">Paypal</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>About Us</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Company Info</a></li>
-                                    <li><a href="">News</a></li>
-                                    <li><a href="">Investors</a></li>
-                                    <li><a href="">Careers</a></li>
-                                    <li><a href="">Policies</a></li>
-                                    <li><a href="">Customer reviews</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Product Categories</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Bueaty</a></li>
-                                    <li><a href="">Electronic</a></li>
-                                    <li><a href="">Woman's Fashion</a></li>
-                                    <li><a href="">Men's Fashion</a></li>
-                                    <li><a href="">Home & Kitchen</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- widgets -->
-
-        <div class="footer-info">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="flexcol">
-                        <div class="logo">
-                            <a href=""><span class="circle">.Store</span></a>
-                        </div>
-                        <div class="socials">
-                            <ul class="flexitem">
-                                <li><a href="#"><i class="ri-twitter-line"></i></a></li>
-                                <li><a href="#"><i class="ri-facebook-line"></i></a></li>
-                                <li><a href="#"><i class="ri-instagram-line"></i></a></li>
-                                <li><a href="#"><i class="ri-linkedin-line"></i></a></li>
-                                <li><a href="#"><i class="ri-youtube-line"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <p class="mini-text">Copyright 2023 .StoreName. All right reserved. </p>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- footer  -->
-
-    <div class="menu-bottom desktop-hide">
-        <div class="container">
-            <div class="wrapper">
-                <nav>
-                    <ul class="flexitem menu-unorder-list">
-                        <li>
-                            <a href="#">
-                                <i class="ri-bar-chart-line"></i>
-                                <span>Trending</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="ri-user-6-line"></i>
-                                <span>Account</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="ri-heart-line"></i>
-                                <span>Wishlist</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#0" class="t-search">
-                                <i class="ri-search-line"></i>
-                                <span>Search</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#0" class="cart-trigger">
-                                <i class="ri-shopping-cart-line"></i>
-                                <span>Cart</span>
-                                <div class="fly-item">
-                                    <span class="item-number">0</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
             </div>
         </div>
     </div>
-    <!-- menu bottom  -->
+</div>
 
-    <!-- <div id="modal" class="modal">
-        <div class="content flexcol">
-            <div class="image object-cover">
-                <img src="assets/products/p3.png" alt="">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h2>Get the latest deals and coupons</h2>
-            <p class="mobile-hide">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet, velit!</p>
-            <form action="" class="search">
-                <span class="icon-large"><i class="ri-mail-line"></i></span>
-                <input type="email" placeholder="Your Email Address">
-                <button>Subscribe</button>
-            </form>
-            <a href="#" class="mini-text">Do not show me this again</a>
-            <a href="#" class="t-close modalclose flexcenter">
-                <i class="ri-close-line"></i>
-            </a>
         </div>
-    </div> -->
-    <!-- modal -->
-    <!-- <div class="backtotop">
-        <a href="#" class="flexcol">
-            <i class="ri-arrow-up-line"></i>
-            <span>Top</span>
-        </a>
-    </div> -->
+      
+    </main>
+
+    <footer>
+
+
+<div class="footer-info" style="background-color: var(--light-bg-color);">
+    <div class="container" >
+        <div class="wrapper" >
+            <div class="flexcol" >
+                <div class="logo" >
+                    <img src="./assets/logo.png" style="height: 150px;width:150px;margin-left:29px">
+                   
+                </div>
+                <div class="socials" >
+                    <ul class="flexitem" >
+                        <!-- <li><a href="#"><i class="ri-twitter-line"></i></a></li> -->
+                        <li><a href="https://www.facebook.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-facebook-line" style="color:wihte;"></i></a></li>
+                        <li><a href="https://www.instagram.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-instagram-line"></i></a></li>
+                        <li><a href="https://www.linkedin.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-linkedin-line"></i></a></li>
+                        <li><a href="https://www.youtube.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-youtube-line"></i></a></li>
+                    </ul>
+                </div>
+
+                <div style="color:black; justify-content: space-between; display: flex;gap: 20px; margin-left:50px">
+                        <!-- <li><a href="#"><i class="ri-twitter-line"></i></a></li> -->
+                        <p><a href="./shop.php" style="color:var(--secondary-dark-color);">Shop</a></p>
+                        <p><a href="./account.php" style="color:var(--secondary-dark-color);">Account</a></p>
+                        <p><a href="./whishlist.php" style="color:var(--secondary-dark-color);">Whishlist</a></p>
+                        <p><a href="./cart.php" style="color:var(--secondary-dark-color);">Cart</a></p>
+                        <p><a href="./about.php" style="color:var(--secondary-dark-color);">About </a></p>
+                        <p><a href="./contact.php" style="color:var(--secondary-dark-color);">Contact</a></p>
+                </div>
+                
+               
+            </div>
+            <p class="mini-text"  style="color:black;margin-left:50px;font-size:8px;color:var(--secondary-dark-color);">Copyright 2023 .Center Point. All right reserved </p>
+        </div>
+    </div>
+</div>
+</footer>
+<!-- footer  -->
+
+<div class="menu-bottom desktop-hide">
+<div class="container">
+    <div class="wrapper">
+        <nav>
+            <ul class="flexitem menu-unorder-list">
+               
+                <li>
+                    <a href="./account.php">
+                        <i class="ri-user-6-line"></i>
+                        <span>Account</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./whishlist.php">
+                        <i class="ri-heart-line"></i>
+                        <span>Wishlist</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#0" class="t-search">
+                        <i class="ri-search-line"></i>
+                        <span>Search</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./cart.php">
+                        <i class="ri-shopping-cart-line"></i>
+                        <span>Cart</span>
+                        
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</div>
+
 
     <div class="search-bottom desktop-hide">
         <div class="container">

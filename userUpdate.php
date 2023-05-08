@@ -65,6 +65,62 @@ if(isset($_SESSION['user_id'])){
     <link rel="icon" type="image/x-icon" href="./assets/logo.png">
 
 </head>
+<style>
+
+
+li.dropdown {
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1;}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+h3 {
+  margin-bottom: 20px;
+}
+
+.box {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 300px;
+  height: 40px;
+  font-size: 18px;
+}
+
+
+
+
+
+</style>
 <body>
     <div id="page" class="site page-cart">
         <aside class="site-off desktop-hide">
@@ -80,80 +136,279 @@ if(isset($_SESSION['user_id'])){
         </aside>
         <!-- first nav bar -->
         <header>
-            <div class="header-top mobile-hide">
+        <div class="header-top mobile-hide">
                 <div class="container">
+                    <div class="wrapper flexitem">
+                        <div class="left">
+                            <ul class="flexitem main-links">
+                                
+                            </ul>
+                        </div>
+                        <div class="right">
+                            <ul class="flexitem main-links">
+                                
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- header-top  -->
+            <div class="header-nav">
+                <div class="container">
+                    <div class="wrapper flexitem" >
+                        <a href="#" class="trigger desktop-hide"><span class="i ri-menu-2-line"></span></a>
+                        <div class="left flexitem">
+                        
+                            <div class="logo"><img src="./assets/logo.png" alt=""></a></div>
 
-            <?php include './components/user_header.php'?>
-           
+                            <nav class="mobile-hide">
+                                <ul class="flexitem second-links">
+                                    <li><a href="./home.php">Home</a></li>
+                                    <li><a href="./shop.php">Shop</a></li>
+                                    <li class="has-child">
+                                        <a href="./about.php">About Us
+                                            <div class="icon-small"></div>
+                                        </a>
+                                       
+                                    <li><a href="./contact.php">Contact
+                                            <!-- <div class="fly-item">
+                                                <span>New!</span>
+                                            </div> -->
+                                        </a>
+                                    </li>
+                                    
+                                </ul>
+                            </nav>
+
+                        </div>
+                        <div class="right">
+                            <ul class="flexitem second-links">
+                            <?php
+                             $count_wishlist_items = $conn->prepare("SELECT * FROM `favorite` WHERE user_id = ?");
+                             $count_wishlist_items->execute([$user_id]);
+                             $total_wishlist_counts = $count_wishlist_items->rowCount();
+
+                             $count_cart_items = $conn->prepare("SELECT * FROM `cart` WHERE user_id = ?");
+                             $count_cart_items->execute([$user_id]);
+                             $total_cart_counts = $count_cart_items->rowCount();
+                             ?>
+                                    <li class="dropdown mobile-hide">
+                                     <a href="javascript:void(0)" class="dropbtn"> <div class="icon-large"><i class="ri-user-3-line"></i></div></a>
+                                     <div class="dropdown-content">
+                                     <?php          
+                                    $select_profile = $conn->prepare("SELECT * FROM `users` WHERE user_id = ?");
+                                    $select_profile->execute([$user_id]);
+                                    if($select_profile->rowCount() > 0){
+                                    $fetch_profile = $select_profile->fetch(PDO::FETCH_ASSOC);
+                                     ?>
+                                    <a ><?= $fetch_profile["name"]; ?></a>
+                                     <a href="./account.php">Account</a>
+                                     <a href="./logout.php">Logout</a>
+
+                                     <?php
+                                     }else{
+                                      ?>
+                                     <a>please login or register first!</a>
+                                     <a href="./login.php">Login</a>
+                                     <a href="./register.php">Register</a>
+
+                                     <?php
+                                     }
+                                    ?>  
+                                     </div>
+                                    </li>
+
+                                <li class="mobile-hide"><a href="./whishlist.php">
+                                        <div class="icon-large"><i class="ri-heart-line"></i></div>
+                                        <?php
+                                         if(isset($_SESSION['user_id'])){ ?>
+                                        <div class="fly-item"><span class="item-number"><?= $total_wishlist_counts; ?></span></div>
+                                    </a>
+                                </li>
+
+                                
+
+                                <li class="iscart"><a href="./cart.php">
+                                    <div class="icon-large">
+                                        <i class="ri-shopping-cart-line"></i>
+                                        <div class="fly-item"><span class="item-number"> <?= $total_cart_counts; ?></span></div>
+                                    </div>
+                                    <?php
+                                        }else{ ?>
+                                    <div class="fly-item"><span class="item-number"><?= count($_SESSION['fav']); ?></span></div>
+                                    </a>
+                                </li>
+
+                                
+
+                                <li class="iscart"><a href="#">
+                                    <div class="icon-large">
+                                        <i class="ri-shopping-cart-line"></i>
+                                        <div class="fly-item"><span class="item-number"> <?= count($_SESSION['cart']); ?></span></div>
+                                    </div>
+
+
+                                     <?php }; ?>
+                                    <div class="icon-text">
+                                        <div class="mini-text">Total</div>
+                                        <div class="cart-total">95.38 JD</div>
+                                    </div>
+                                </a>
+                                <div class="mini-cart">
+                                    <div class="content">
+                                    <?php
+                                        if(isset($_SESSION['user_id'])){ ?>
+                                        <div class="cart-head">
+                                        <?= $total_cart_counts; ?> items in cart
+                                        </div>
+
+                                       <?php }else{ ?>
+                                        <div class="cart-head">
+                                        <?= count($_SESSION['cart']); ?>items in cart
+                                        </div>
+                                        <?php }; ?>
+
+                                        <div class="cart-body">
+                                            <ul class="products mini">
+                                                <li class="item">
+                                                    <div class="thumbnail object-cover">
+                                                        <a href=""><img src="assets/products/QUARTZ VEIL LIQUID EYESHADOW.png" alt=""></a>
+                                                    </div>
+                                                    <div class="item-content">
+                                                        <p><a href="#">QUARTZ VEIL LIQUID EYESHADOW</a></p>
+                                                        <span class="price">
+                                                            <span>9.55 JD</span>
+                                                            <span class="fly-item"><span>2x</span></span>
+                                                        </span>
+                                                    </div>
+                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
+                                                </li>
+                                                
+                                                
+                                            </ul>
+                                        </div>
+                                        <div class="cart-footer">
+                                            <div class="subtotal">
+                                                <p>Subtotal</p>
+                                                <p><strong>95.38 JD</strong></p>
+                                            </div>
+                                            <div class="actions">
+                                                <a href="./checkout.php" class="secondary-button">Checkout</a>
+                                                <a href="./cart.php" class="secondary-button">View Cart</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- second nav bar -->
             <div class="header-main mobile-hide">
                 <div class="container">
                     <div class="wrapper flexitem">
                         <div class="left">
-                            <div class="dpt-cat">
-                                <div class="dpt-head">
-                                    <div class="main-text">All Departments</div>
+                            <div class="dpt-cat" >
+                                <div class="dpt-head" style="margin-top:50px;">
+                                      <div class="main-text">All Departments</div>
+                                    <?php
+                                    // prepare SQL query to count total number of products
+$sql = "SELECT COUNT(*) as total FROM products";
+// execute query
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+?>
+
                                     <div class="mini-text mobile-hide">
-                                        Total 40 Products
+                                        <?php
+                                    // output total number of products
+if ($stmt->rowCount() > 0) {
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $total_products = $row["total"];
+    echo "Total $total_products Products<br>";
+} else {
+    echo "No products found.";
+}
+?>
                                     </div>
                                     <a href="#" class="dpt-trigger mobile-hide">
                                         <i class="ri-menu-3-line ri-xl"></i>
-                                        <i class="ri-close-line ri-xl"></i>
                                     </a>
                                 </div>
                                 <div class="dpt-menu">
                                     <ul class="second-links">
                                         <li class="has-child Womens">
-                                            <a href="#">
+                                            <a href="category.php?category=1">
                                                 <div class="icon-large"><i class="ri-t-shirt-line"></i></div>
                                                 Women's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Mens">
-                                            <a href="#">
+                                            <a href="category.php?category=2">
                                                 <div class="icon-large"><i class="ri-shirt-line"></i></div>
                                                 Men's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Girls">
-                                            <a href="#">
+                                            <a href="category.php?category=3">
                                                 <div class="icon-large"><i class="ri-user-5-line"></i></div>
                                                 Girl's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Boys">
-                                            <a href="#">
+                                            <a href="category.php?category=4">
                                                 <div class="icon-large"><i class="ri-user-6-line"></i></div>
                                                 Boy's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Home">
-                                            <a href="#">
+                                            <a href="category.php?category=5">
                                                 <div class="icon-large"><i class="ri-home-4-line"></i></div>
                                                 Home & Kitchen
                                             </a>
                                         </li>
                                         <li class="has-child Brokers">
-                                            <a href="#">
+                                            <a href="category.php?category=6">
                                                 <div class="icon-large"><i class="ri-stack-line"></i></div>
                                                 Products From Brokers
                                             </a>
                                         </li>
+                                       
                                     </ul>
                                 </div>
                             </div>
                         </div>
+                        
+
                         <div class="right">
-                            <div class="search-box">
-                                <form action="" class="search">
-                                    <span class="icon-large"><i class="ri-search-line"></i></span>
-                                    <input type="search" placeholder="Search for products">
-                                    <button type="submit">Search</button>
-                                </form>
-                            </div>
-                        </div>
+  <div class="search-box">
+    <form class="search" method="get" action="search.php">
+      <span class="icon-large"></span>
+      <input type="search" name="query" placeholder="Search for products" value="<?php echo isset($_GET['query']) ? $_GET['query'] : ''; ?>">
+      <button type="submit">Search</button>
+    </form>
+    <?php
+    if (isset($_GET['query'])) {
+      $query = $_GET['query'];
+
+      $sql = "SELECT * FROM products WHERE name LIKE '%".$query."%' OR description LIKE '%".$query."%'";
+      $result = $conn->query($sql);
+      
+      if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+          echo "<a href='./search.php?pid=".$row['product_id']."'>".$row['name']."</a><br>";
+        }
+      } else {
+        echo "No results found.";
+      }
+    }
+    ?>
+  </div>
+</div>
+
                     </div>
                 </div>
             </div>
@@ -202,7 +457,7 @@ if(isset($_SESSION['user_id'])){
    <input type="password" name="old_pass" placeholder="enter your old password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
    <input type="password" name="new_pass" placeholder="enter your new password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
    <input type="password" name="cpass" placeholder="confirm your new password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-   <input type="submit" value="update now" class="btn" name="submit">
+   <input type="submit" value="update now" class="primary-button" name="submit" style="border:none;">
 </form>
 
 </section>
@@ -214,177 +469,99 @@ if(isset($_SESSION['user_id'])){
     </main>
 
     <footer>
-        <!-- newsletter -->
 
-        <div class="widgets">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="flexwrap">
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Help & Contact</h4>
-                                <ul class="flexcol">
-                                    <li><a href="#">Your Account</a></li>
-                                    <li><a href="#">Your Order</a></li>
-                                    <li><a href="#">Shipping Rates</a></li>
-                                    <li><a href="#">Returns</a></li>
-                                    <li><a href="#">Assistant</a></li>
-                                    <li><a href="#">Help</a></li>
-                                    <li><a href="#">Contact Us</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Payment Info</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Bussines Card</a></li>
-                                    <li><a href="">Shop with Points</a></li>
-                                    <li><a href="">Reload Your Balance</a></li>
-                                    <li><a href="">Paypal</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>About Us</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Company Info</a></li>
-                                    <li><a href="">News</a></li>
-                                    <li><a href="">Investors</a></li>
-                                    <li><a href="">Careers</a></li>
-                                    <li><a href="">Policies</a></li>
-                                    <li><a href="">Customer reviews</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Product Categories</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Bueaty</a></li>
-                                    <li><a href="">Electronic</a></li>
-                                    <li><a href="">Woman's Fashion</a></li>
-                                    <li><a href="">Men's Fashion</a></li>
-                                    <li><a href="">Home & Kitchen</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+
+<div class="footer-info" style="background-color: var(--light-bg-color);">
+    <div class="container" >
+        <div class="wrapper" >
+            <div class="flexcol" >
+                <div class="logo" >
+                    <img src="./assets/logo.png" style="height: 150px;width:150px;margin-left:29px">
+                   
                 </div>
-            </div>
-        </div>
-        <!-- widgets -->
-
-        <div class="footer-info">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="flexcol">
-                        <div class="logo">
-                            <a href=""><span class="circle">.Store</span></a>
-                        </div>
-                        <div class="socials">
-                            <ul class="flexitem">
-                                <li><a href="#"><i class="ri-twitter-line"></i></a></li>
-                                <li><a href="#"><i class="ri-facebook-line"></i></a></li>
-                                <li><a href="#"><i class="ri-instagram-line"></i></a></li>
-                                <li><a href="#"><i class="ri-linkedin-line"></i></a></li>
-                                <li><a href="#"><i class="ri-youtube-line"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <p class="mini-text">Copyright 2023 .StoreName. All right reserved. </p>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- footer  -->
-
-    <div class="menu-bottom desktop-hide">
-        <div class="container">
-            <div class="wrapper">
-                <nav>
-                    <ul class="flexitem menu-unorder-list">
-                        <li>
-                            <a href="#">
-                                <i class="ri-bar-chart-line"></i>
-                                <span>Trending</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="ri-user-6-line"></i>
-                                <span>Account</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="ri-heart-line"></i>
-                                <span>Wishlist</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#0" class="t-search">
-                                <i class="ri-search-line"></i>
-                                <span>Search</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#0" class="cart-trigger">
-                                <i class="ri-shopping-cart-line"></i>
-                                <span>Cart</span>
-                                <div class="fly-item">
-                                    <span class="item-number">0</span>
-                                </div>
-                            </a>
-                        </li>
+                <div class="socials" >
+                    <ul class="flexitem" >
+                        <!-- <li><a href="#"><i class="ri-twitter-line"></i></a></li> -->
+                        <li><a href="https://www.facebook.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-facebook-line" style="color:wihte;"></i></a></li>
+                        <li><a href="https://www.instagram.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-instagram-line"></i></a></li>
+                        <li><a href="https://www.linkedin.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-linkedin-line"></i></a></li>
+                        <li><a href="https://www.youtube.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-youtube-line"></i></a></li>
                     </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
-    <!-- menu bottom  -->
-<!-- 
-    <div id="modal" class="modal">
-        <div class="content flexcol">
-            <div class="image object-cover">
-                <img src="assets/products/p3.png" alt="">
-            </div>
-            <h2>Get the latest deals and coupons</h2>
-            <p class="mobile-hide">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet, velit!</p>
-            <form action="" class="search">
-                <span class="icon-large"><i class="ri-mail-line"></i></span>
-                <input type="email" placeholder="Your Email Address">
-                <button>Subscribe</button>
-            </form>
-            <a href="#" class="mini-text">Do not show me this again</a>
-            <a href="#" class="t-close modalclose flexcenter">
-                <i class="ri-close-line"></i>
-            </a>
-        </div>
-    </div> -->
-    <!-- modal -->
-    <div class="backtotop">
-        <a href="#" class="flexcol">
-            <i class="ri-arrow-up-line"></i>
-            <span>Top</span>
-        </a>
-    </div>
+                </div>
 
-    <div class="search-bottom desktop-hide">
-        <div class="container">
-            <div class="wrapper">
-
-                <form action="" class="search">
-                    <a href="#" class="t-close search-close flexcenter"><i class="ri-close-line"></i></a>
-                    <span class="icon-large"><i class="ri-search-line"></i></span>
-                    <input type="search" placeholder="Your email address" required>
-                    <button type="submit">Search</button>
-                </form>
+                <div style="color:black; justify-content: space-between; display: flex;gap: 20px; margin-left:50px">
+                        <!-- <li><a href="#"><i class="ri-twitter-line"></i></a></li> -->
+                        <p><a href="./shop.php" style="color:var(--secondary-dark-color);">Shop</a></p>
+                        <p><a href="./account.php" style="color:var(--secondary-dark-color);">Account</a></p>
+                        <p><a href="./whishlist.php" style="color:var(--secondary-dark-color);">Whishlist</a></p>
+                        <p><a href="./cart.php" style="color:var(--secondary-dark-color);">Cart</a></p>
+                        <p><a href="./about.php" style="color:var(--secondary-dark-color);">About </a></p>
+                        <p><a href="./contact.php" style="color:var(--secondary-dark-color);">Contact</a></p>
+                </div>
+                
+               
             </div>
+            <p class="mini-text"  style="color:black;margin-left:50px;font-size:8px;color:var(--secondary-dark-color);">Copyright 2023 .Center Point. All right reserved </p>
         </div>
     </div>
-    <!-- Search bottom  -->
+</div>
+</footer>
+<!-- footer  -->
+
+<div class="menu-bottom desktop-hide">
+<div class="container">
+    <div class="wrapper">
+        <nav>
+            <ul class="flexitem menu-unorder-list">
+               
+                <li>
+                    <a href="./account.php">
+                        <i class="ri-user-6-line"></i>
+                        <span>Account</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./whishlist.php">
+                        <i class="ri-heart-line"></i>
+                        <span>Wishlist</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./search.php" class="t-search">
+                        <i class="ri-search-line"></i>
+                        <span>Search</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./cart.php">
+                        <i class="ri-shopping-cart-line"></i>
+                        <span>Cart</span>
+                        <div class="fly-item">
+                            <span class="item-number">0</span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</div>
+<!-- menu bottom  -->
+
+<div class="search-bottom desktop-hide">
+<div class="container">
+    <div class="wrapper">
+
+        <form action="" class="search">
+            <a href="./search.php" class="t-close search-close flexcenter"><i class="ri-close-line"></i></a>
+            <span class="icon-large"><i class="ri-search-line"></i></span>
+            <input type="search"  >
+            <button type="submit">Search</button>
+        </form>
+    </div>
+</div>
+</div>
+<!-- Search bottom  -->
 
     <!-- <div class="overlay">
         

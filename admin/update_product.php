@@ -18,9 +18,11 @@ if(isset($_POST['update'])){
    $details = $_POST['details'];
    $category_data = $_POST['category'];
    $quantity = $_POST['store'] + $_POST['store_qty'];
+   $sizes = $_POST['size'];
+   $size_str = implode(',', $sizes);
 
-   $update_product = $conn->prepare("UPDATE `products` SET name = ?, price = ?, details = ?, category_id = ?, store = ? WHERE product_id = ?");
-   $update_product->execute([$name, $price, $details, $category_data, $quantity, $pid]);
+   $update_product = $conn->prepare("UPDATE `products` SET name = ?, price = ?, details = ?, category_id = ?, store = ?, size=? WHERE product_id = ?");
+   $update_product->execute([$name, $price, $details, $category_data, $quantity,$size_str,$pid]);
 
    $message[] = 'product updated successfully!';
 
@@ -176,6 +178,8 @@ if(isset($_POST['update'])){
                             <input type="hidden" name="pid" value="<?= $fetch_products['product_id']; ?>">
                             <input type="hidden" name="old_image" value="<?= $fetch_products['image']; ?>">
                             <input type="hidden" name="store_qty" value="<?= $fetch_products['store']; ?>">
+                            <input type="hidden" name="sizes" value="<?= $fetch_products['size']; ?>">
+
 
 
                                 <div class="mb-3">
@@ -199,6 +203,15 @@ if(isset($_POST['update'])){
                                     <input type="number" name="store" class="form-control" id="exampleInputPassword1">
                                 </div>
                                 <div class="mb-3">
+                                <label for="size" class="form-label">Edit Sizes:</label><br>
+                                <input type="text" name="size[]" id="size" class="form-control"><br>
+                                <input type="text" name="size[]" id="size" class="form-control"><br>
+                                <input type="text" name="size[]" id="size" class="form-control"><br>
+                                <input type="text" name="size[]" id="size" class="form-control"><br>
+                                <input type="text" name="size[]" id="size" class="form-control"><br>
+                                </div>
+
+                                <div class="mb-3">
                                 <select name="category" placeholder="enter product category" class="box" required maxlength="500" cols="60" rows="10">
                                         <?php
                                                 $prepare_category = $conn->prepare("SELECT * FROM `category`");
@@ -217,8 +230,9 @@ if(isset($_POST['update'])){
                                 </select>
                                 </div>
 
+
                                 <button style="background-color: green;" type="submit" name="update" class="btn btn-primary" value="Update">Update</button>
-                                <button style="background-color: yellow !important;" class="btn btn-primary"> <a href="./update_product.php" class="option-btn">Go Back</a> </button>
+                                <button style="background-color: yellow !important;" class="btn btn-primary"> <a href="./products.php" class="option-btn">Go Back</a> </button>
                             </form>
                             <?php
                                     }
