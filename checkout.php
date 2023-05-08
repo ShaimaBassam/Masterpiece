@@ -161,19 +161,26 @@ li.dropdown {
                 <div class="thetop-nav"></div>
             </div>
         </aside>
-        <!-- first nav bar -->
-        <header>
-        <div class="header-top mobile-hide">
+           <!-- first nav bar -->
+      <header>
+            <div class="header-top mobile-hide">
+            </div>
+            <!-- header-top  -->
+            <div class="header-top mobile-hide">
                 <div class="container">
                     <div class="wrapper flexitem">
                         <div class="left">
                             <ul class="flexitem main-links">
-                                
+                                <!-- <li><a href="#"></a>Wishlist</li>
+                                <li><a href="#"></a>Order Tracking</li> -->
                             </ul>
                         </div>
                         <div class="right">
                             <ul class="flexitem main-links">
-                                
+                                <!-- <li><a href="#"></a>Sign Up</li>
+                                <li><a href="#"></a>My Account</li>
+                                <li><a href="#">English</a></li>
+                                <li><a href="#">JOD</a></li> -->
                             </ul>
                         </div>
                     </div>
@@ -250,97 +257,39 @@ li.dropdown {
                                         <?php
                                          if(isset($_SESSION['user_id'])){ ?>
                                         <div class="fly-item"><span class="item-number"><?= $total_wishlist_counts; ?></span></div>
+                                        <?php }?>
                                     </a>
                                 </li>
+
+                                
+
+                              
 
                                 
 
                                 <li class="iscart"><a href="./cart.php">
                                     <div class="icon-large">
                                         <i class="ri-shopping-cart-line"></i>
-                                        <div class="fly-item"><span class="item-number"> <?= $total_cart_counts; ?></span></div>
-                                    </div>
-                                    <?php
-                                        }else{ ?>
-                                    <div class="fly-item"><span class="item-number"><?= count($_SESSION['fav']); ?></span></div>
-                                    </a>
-                                </li>
-
-                                
-
-                                <li class="iscart"><a href="#">
-                                    <div class="icon-large">
-                                        <i class="ri-shopping-cart-line"></i>
-                                        <div class="fly-item"><span class="item-number"> <?= count($_SESSION['cart']); ?></span></div>
                                     </div>
 
-
-                                     <?php }; ?>
-                                    <div class="icon-text">
-                                        <div class="mini-text">Total</div>
-                                        <div class="cart-total">95.38 JD</div>
-                                    </div>
                                 </a>
-                                <div class="mini-cart">
-                                    <div class="content">
-                                    <?php
-                                        if(isset($_SESSION['user_id'])){ ?>
-                                        <div class="cart-head">
-                                        <?= $total_cart_counts; ?> items in cart
-                                        </div>
+                               
 
-                                       <?php }else{ ?>
-                                        <div class="cart-head">
-                                        <?= count($_SESSION['cart']); ?>items in cart
-                                        </div>
-                                        <?php }; ?>
 
-                                        <div class="cart-body">
-                                            <ul class="products mini">
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href=""><img src="assets/products/QUARTZ VEIL LIQUID EYESHADOW.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">QUARTZ VEIL LIQUID EYESHADOW</a></p>
-                                                        <span class="price">
-                                                            <span>9.55 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                
-                                                
-                                            </ul>
-                                        </div>
-                                        <div class="cart-footer">
-                                            <div class="subtotal">
-                                                <p>Subtotal</p>
-                                                <p><strong>95.38 JD</strong></p>
-                                            </div>
-                                            <div class="actions">
-                                                <a href="./checkout.php" class="secondary-button">Checkout</a>
-                                                <a href="./cart.php" class="secondary-button">View Cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
                             
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- second nav bar -->
+
             <div class="header-main mobile-hide">
                 <div class="container">
                     <div class="wrapper flexitem">
                         <div class="left">
                             <div class="dpt-cat">
                                 <div class="dpt-head">
-                                      <div class="main-text">All Departments</div>
+                                <div class="main-text">All Departments</div>
                                     <?php
                                     // prepare SQL query to count total number of products
 $sql = "SELECT COUNT(*) as total FROM products";
@@ -363,10 +312,12 @@ if ($stmt->rowCount() > 0) {
                                     </div>
                                     <a href="#" class="dpt-trigger mobile-hide">
                                         <i class="ri-menu-3-line ri-xl"></i>
+                                        <i class="ri-close-line ri-xl"></i>
                                     </a>
                                 </div>
                                 <div class="dpt-menu">
                                     <ul class="second-links">
+                                        
                                         <li class="has-child Womens">
                                             <a href="category.php?category=1">
                                                 <div class="icon-large"><i class="ri-t-shirt-line"></i></div>
@@ -403,13 +354,11 @@ if ($stmt->rowCount() > 0) {
                                                 Products From Brokers
                                             </a>
                                         </li>
-                                       
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         
-
                         <div class="right">
   <div class="search-box">
     <form class="search" method="get" action="search.php">
@@ -435,7 +384,6 @@ if ($stmt->rowCount() > 0) {
     ?>
   </div>
 </div>
-
                     </div>
                 </div>
             </div>
@@ -553,85 +501,55 @@ if ($stmt->rowCount() > 0) {
     <!-- footer  -->
 
     <div class="menu-bottom desktop-hide">
-        <div class="container">
-            <div class="wrapper">
-                <nav>
-                    <ul class="flexitem menu-unorder-list">
-                       
-                        <li>
-                            <a href="./account.php">
-                                <i class="ri-user-6-line"></i>
-                                <span>Account</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="./whishlist.php">
-                                <i class="ri-heart-line"></i>
-                                <span>Wishlist</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="t-search">
-                                <i class="ri-search-line"></i>
-                                <span>Search</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="./cart.php">
-                                <i class="ri-shopping-cart-line"></i>
-                                <span>Cart</span>
-                                <div class="fly-item">
-                                    <span class="item-number">0</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
+<div class="container">
+    <div class="wrapper">
+        <nav>
+            <ul class="flexitem menu-unorder-list">
+               
+                <li>
+                    <a href="./account.php">
+                        <i class="ri-user-6-line"></i>
+                        <span>Account</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./whishlist.php">
+                        <i class="ri-heart-line"></i>
+                        <span>Wishlist</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#0" class="t-search">
+                        <i class="ri-search-line"></i>
+                        <span>Search</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./cart.php">
+                        <i class="ri-shopping-cart-line"></i>
+                        <span>Cart</span>
+                        
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
-    <!-- menu bottom  -->
-
-    <div class="search-bottom desktop-hide">
+</div>
+</div>
+<div class="search-bottom desktop-hide">
         <div class="container">
             <div class="wrapper">
 
-            <form class="search" method="get" action="search.php">
-      <span class="icon-large"><i class="ri-search-line"></i></span>
-      <input type="search" name="query" placeholder="Search for products" value="<?php echo isset($_GET['query']) ? $_GET['query'] : ''; ?>">
-      <button type="submit">Search</button>
-    </form>
-    <?php
-    if (isset($_GET['query'])) {
-      $query = $_GET['query'];
-
-      $sql = "SELECT * FROM products WHERE name LIKE '%".$query."%' OR description LIKE '%".$query."%'";
-      $result = $conn->query($sql);
-      
-      if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-          echo "<a href='./search.php?pid=".$row['product_id']."'>".$row['name']."</a><br>";
-        }
-      } else {
-        echo "No results found.";
-      }
-    }
-    ?>
+                <form action="" class="search">
+                    <a href="#" class="t-close search-close flexcenter"><i class="ri-close-line"></i></a>
+                    <span class="icon-large"><i class="ri-search-line"></i></span>
+                    <input type="search" placeholder="Your email address" required>
+                    <button type="submit">Search</button>
+                </form>
             </div>
         </div>
     </div>
     <!-- Search bottom  -->
-
-    <div class="backtotop">
-        <a href="#" class="flexcol">
-            <i class="ri-arrow-up-line"></i>
-            <span>Top</span>
-        </a>
-    </div>
-
-    <!-- <div class="overlay">
-        
-    </div> -->
     </div>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.3.1/index.js"></script>

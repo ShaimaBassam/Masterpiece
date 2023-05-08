@@ -459,22 +459,7 @@ li.dropdown {
       <input type="search" name="query" placeholder="Search for products" value="<?php echo isset($_GET['query']) ? $_GET['query'] : ''; ?>">
       <button type="submit">Search</button>
     </form>
-    <?php
-    if (isset($_GET['query'])) {
-      $query = $_GET['query'];
-
-      $sql = "SELECT * FROM products WHERE name LIKE '%".$query."%' OR description LIKE '%".$query."%'";
-      $result = $conn->query($sql);
-      
-      if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-          echo "<a href='./search.php?pid=".$row['product_id']."'>".$row['name']."</a><br>";
-        }
-      } else {
-        echo "No results found.";
-      }
-    }
-    ?>
+    
             </div>
         </div>
     </div>

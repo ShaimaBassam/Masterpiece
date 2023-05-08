@@ -286,8 +286,8 @@ li.dropdown {
                 <div class="thetop-nav"></div>
             </div>
         </aside>
-        <!-- first nav bar -->
-        <header>
+       <!-- first nav bar -->
+      <header>
             <div class="header-top mobile-hide">
             </div>
             <!-- header-top  -->
@@ -382,121 +382,25 @@ li.dropdown {
                                         <?php
                                          if(isset($_SESSION['user_id'])){ ?>
                                         <div class="fly-item"><span class="item-number"><?= $total_wishlist_counts; ?></span></div>
+                                        <?php }?>
                                     </a>
                                 </li>
+
+                                
+
+                              
 
                                 
 
                                 <li class="iscart"><a href="./cart.php">
                                     <div class="icon-large">
                                         <i class="ri-shopping-cart-line"></i>
-                                        <div class="fly-item"><span class="item-number"> <?= $total_cart_counts; ?></span></div>
-                                    </div>
-                                    <?php
-                                        }else{ ?>
-                                    <div class="fly-item"><span class="item-number"><?= count($_SESSION['fav']); ?></span></div>
-                                    </a>
-                                </li>
-
-                                
-
-                                <li class="iscart"><a href="#">
-                                    <div class="icon-large">
-                                        <i class="ri-shopping-cart-line"></i>
-                                        <div class="fly-item"><span class="item-number"> <?= count($_SESSION['cart']); ?></span></div>
                                     </div>
 
-
-                                     <?php }; ?>
-                                    <div class="icon-text">
-                                        <div class="mini-text">Total</div>
-                                        <div class="cart-total">95.38 JD</div>
-                                    </div>
                                 </a>
-                                <div class="mini-cart">
-                                    <div class="content">
-                                    <?php
-                                        if(isset($_SESSION['user_id'])){ ?>
-                                        <div class="cart-head">
-                                        <?= $total_cart_counts; ?> items in cart
-                                        </div>
-
-                                       <?php }else{ ?>
-                                        <div class="cart-head">
-                                        <?= count($_SESSION['cart']); ?>items in cart
-                                        </div>
-                                        <?php }; ?>
+                               
 
 
-                                        <div class="cart-body">
-                                            <ul class="products mini">
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/QUARTZ VEIL LIQUID EYESHADOW.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">QUARTZ VEIL LIQUID EYESHADOW</a></p>
-                                                        <span class="price">
-                                                            <span>9.55 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/BEADED SHOULDER BAG.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">BEADED SHOULDER BAG</a></p>
-                                                        <span class="price">
-                                                            <span>25.99 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/EYE SHADOW PALETTE.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">EYE SHADOW PALETTE</a></p>
-                                                        <span class="price">
-                                                            <span>9.55 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/EYEBROW PENCIL.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">EYEBROW PENCIL</a></p>
-                                                        <span class="price">
-                                                            <span>5.20 JD</span>
-                                                            <span class="fly-item"><span>1x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="cart-footer">
-                                            <div class="subtotal">
-                                                <p>Subtotal</p>
-                                                <p><strong>95.38 JD</strong></p>
-                                            </div>
-                                            <div class="actions">
-                                                <a href="./checkout.php" class="secondary-button">Checkout</a>
-                                                <a href="./cart.php" class="secondary-button">View Cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
                             
                             </ul>
                         </div>
@@ -510,9 +414,26 @@ li.dropdown {
                         <div class="left">
                             <div class="dpt-cat">
                                 <div class="dpt-head">
-                                    <div class="main-text">All Departments</div>
+                                <div class="main-text">All Departments</div>
+                                    <?php
+                                    // prepare SQL query to count total number of products
+$sql = "SELECT COUNT(*) as total FROM products";
+// execute query
+$stmt = $conn->prepare($sql);
+$stmt->execute();
+?>
+
                                     <div class="mini-text mobile-hide">
-                                        Total 40 Products
+                                        <?php
+                                    // output total number of products
+if ($stmt->rowCount() > 0) {
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $total_products = $row["total"];
+    echo "Total $total_products Products<br>";
+} else {
+    echo "No products found.";
+}
+?>
                                     </div>
                                     <a href="#" class="dpt-trigger mobile-hide">
                                         <i class="ri-menu-3-line ri-xl"></i>
@@ -521,38 +442,39 @@ li.dropdown {
                                 </div>
                                 <div class="dpt-menu">
                                     <ul class="second-links">
+                                        
                                         <li class="has-child Womens">
-                                            <a href="#">
+                                            <a href="category.php?category=1">
                                                 <div class="icon-large"><i class="ri-t-shirt-line"></i></div>
                                                 Women's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Mens">
-                                            <a href="#">
+                                            <a href="category.php?category=2">
                                                 <div class="icon-large"><i class="ri-shirt-line"></i></div>
                                                 Men's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Girls">
-                                            <a href="#">
+                                            <a href="category.php?category=3">
                                                 <div class="icon-large"><i class="ri-user-5-line"></i></div>
                                                 Girl's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Boys">
-                                            <a href="#">
+                                            <a href="category.php?category=4">
                                                 <div class="icon-large"><i class="ri-user-6-line"></i></div>
                                                 Boy's Fashion
                                             </a>
                                         </li>
                                         <li class="has-child Home">
-                                            <a href="#">
+                                            <a href="category.php?category=5">
                                                 <div class="icon-large"><i class="ri-home-4-line"></i></div>
                                                 Home & Kitchen
                                             </a>
                                         </li>
                                         <li class="has-child Brokers">
-                                            <a href="#">
+                                            <a href="category.php?category=6">
                                                 <div class="icon-large"><i class="ri-stack-line"></i></div>
                                                 Products From Brokers
                                             </a>
@@ -561,15 +483,32 @@ li.dropdown {
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="right">
-                            <div class="search-box">
-                                <form action="" class="search">
-                                    <span class="icon-large"><i class="ri-search-line"></i></span>
-                                    <input type="search" placeholder="Search for products">
-                                    <button type="submit">Search</button>
-                                </form>
-                            </div>
-                        </div>
+  <div class="search-box">
+    <form class="search" method="get" action="search.php">
+      <span class="icon-large"><i class="ri-search-line"></i></span>
+      <input type="search" name="query" placeholder="Search for products" value="<?php echo isset($_GET['query']) ? $_GET['query'] : ''; ?>">
+      <button type="submit">Search</button>
+    </form>
+    <?php
+    if (isset($_GET['query'])) {
+      $query = $_GET['query'];
+
+      $sql = "SELECT * FROM products WHERE name LIKE '%".$query."%' OR description LIKE '%".$query."%'";
+      $result = $conn->query($sql);
+      
+      if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+          echo "<a href='./search.php?pid=".$row['product_id']."'>".$row['name']."</a><br>";
+        }
+      } else {
+        echo "No results found.";
+      }
+    }
+    ?>
+  </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -744,12 +683,10 @@ li.dropdown {
                     </a>
                 </li>
                 <li>
-                    <a href="#0">
+                    <a href="./cart.php">
                         <i class="ri-shopping-cart-line"></i>
                         <span>Cart</span>
-                        <div class="fly-item">
-                            <span class="item-number">0</span>
-                        </div>
+                       
                     </a>
                 </li>
             </ul>

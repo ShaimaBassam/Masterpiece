@@ -232,7 +232,7 @@ li.dropdown {
             </div>
         </aside>
         <!-- first nav bar -->
-        <header>
+      <header>
             <div class="header-top mobile-hide">
             </div>
             <!-- header-top  -->
@@ -428,15 +428,32 @@ if ($stmt->rowCount() > 0) {
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="right">
-                            <div class="search-box">
-                                <form action="" class="search">
-                                    <span class="icon-large"><i class="ri-search-line"></i></span>
-                                    <input type="search" placeholder="Search for products">
-                                    <button type="submit">Search</button>
-                                </form>
-                            </div>
-                        </div>
+  <div class="search-box">
+    <form class="search" method="get" action="search.php">
+      <span class="icon-large"><i class="ri-search-line"></i></span>
+      <input type="search" name="query" placeholder="Search for products" value="<?php echo isset($_GET['query']) ? $_GET['query'] : ''; ?>">
+      <button type="submit">Search</button>
+    </form>
+    <?php
+    if (isset($_GET['query'])) {
+      $query = $_GET['query'];
+
+      $sql = "SELECT * FROM products WHERE name LIKE '%".$query."%' OR description LIKE '%".$query."%'";
+      $result = $conn->query($sql);
+      
+      if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+          echo "<a href='./search.php?pid=".$row['product_id']."'>".$row['name']."</a><br>";
+        }
+      } else {
+        echo "No results found.";
+      }
+    }
+    ?>
+  </div>
+</div>
                     </div>
                 </div>
             </div>
@@ -587,7 +604,6 @@ if ($stmt->rowCount() > 0) {
 </div>
 </footer>
 <!-- footer  -->
-
 <div class="menu-bottom desktop-hide">
 <div class="container">
     <div class="wrapper">
@@ -624,9 +640,7 @@ if ($stmt->rowCount() > 0) {
     </div>
 </div>
 </div>
-
-
-    <div class="search-bottom desktop-hide">
+<div class="search-bottom desktop-hide">
         <div class="container">
             <div class="wrapper">
 

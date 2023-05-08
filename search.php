@@ -223,7 +223,7 @@ li.dropdown {
         <aside class="site-off desktop-hide">
             <div class="off-canvas">
                 <div class="canvas-head flexitem">
-                    <div class="logo"><img src="assets/Untitled-1.png" alt=""></a></div>
+                    <div class="logo"><img src="assets/logo.png" alt=""></a></div>
                       <a href="" class="t-close flexcenter"><i class="ri-close-line"></i></a>
                 </div>
                 <div class="departments"></div>
@@ -332,116 +332,27 @@ li.dropdown {
 
                                 
 
-                                <li class="iscart"><a href="./cart.php">
-                                    <div class="icon-large">
-                                        <i class="ri-shopping-cart-line"></i>
-                                        <div class="fly-item"><span class="item-number"> <?= $total_cart_counts; ?></span></div>
-                                    </div>
+                                
                                     <?php
                                         }else{ ?>
                                     <div class="fly-item"><span class="item-number"><?= count($_SESSION['fav']); ?></span></div>
+                                    <?php } ?>
                                     </a>
                                 </li>
 
                                 
 
-                                <li class="iscart"><a href="#">
+                                <li class="iscart"><a href="./cart.php">
                                     <div class="icon-large">
                                         <i class="ri-shopping-cart-line"></i>
-                                        <div class="fly-item"><span class="item-number"> <?= count($_SESSION['cart']); ?></span></div>
                                     </div>
 
 
-                                     <?php }; ?>
-                                    <div class="icon-text">
-                                        <div class="mini-text">Total</div>
-                                        <div class="cart-total">95.38 JD</div>
-                                    </div>
-                                </a>
-                                <div class="mini-cart">
-                                    <div class="content">
-                                    <?php
-                                        if(isset($_SESSION['user_id'])){ ?>
-                                        <div class="cart-head">
-                                        <?= $total_cart_counts; ?> items in cart
-                                        </div>
-
-                                       <?php }else{ ?>
-                                        <div class="cart-head">
-                                        <?= count($_SESSION['cart']); ?>items in cart
-                                        </div>
-                                        <?php }; ?>
+                                    
+                                
 
 
-                                        <div class="cart-body">
-                                            <ul class="products mini">
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/QUARTZ VEIL LIQUID EYESHADOW.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">QUARTZ VEIL LIQUID EYESHADOW</a></p>
-                                                        <span class="price">
-                                                            <span>9.55 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/BEADED SHOULDER BAG.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">BEADED SHOULDER BAG</a></p>
-                                                        <span class="price">
-                                                            <span>25.99 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/EYE SHADOW PALETTE.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">EYE SHADOW PALETTE</a></p>
-                                                        <span class="price">
-                                                            <span>9.55 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href="#"><img src="assets/products/EYEBROW PENCIL.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">EYEBROW PENCIL</a></p>
-                                                        <span class="price">
-                                                            <span>5.20 JD</span>
-                                                            <span class="fly-item"><span>1x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="cart-footer">
-                                            <div class="subtotal">
-                                                <p>Subtotal</p>
-                                                <p><strong>95.38 JD</strong></p>
-                                            </div>
-                                            <div class="actions">
-                                                <a href="./checkout.php" class="secondary-button">Checkout</a>
-                                                <a href="./cart.php" class="secondary-button">View Cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
+                                      
                             
                             </ul>
                         </div>
@@ -686,12 +597,10 @@ if ($stmt->rowCount() > 0) {
                     </a>
                 </li>
                 <li>
-                    <a href="#0">
+                    <a href="./cart.php">
                         <i class="ri-shopping-cart-line"></i>
                         <span>Cart</span>
-                        <div class="fly-item">
-                            <span class="item-number">0</span>
-                        </div>
+                        
                     </a>
                 </li>
             </ul>
@@ -699,10 +608,7 @@ if ($stmt->rowCount() > 0) {
     </div>
 </div>
 </div>
-<!-- menu bottom  -->
-
-
-    <div class="search-bottom desktop-hide">
+<div class="search-bottom desktop-hide">
         <div class="container">
             <div class="wrapper">
 
@@ -716,11 +622,6 @@ if ($stmt->rowCount() > 0) {
         </div>
     </div>
     <!-- Search bottom  -->
-<!-- 
-    <div class="overlay">
-        
-    </div>
-    </div> -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.3.1/index.js"></script>
     <script>

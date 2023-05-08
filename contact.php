@@ -141,65 +141,70 @@ if(isset($_POST['add_to_wishlist'])){
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC72vZw-6tGqFyRhhg5CkF2fqfILn2Tsw"></script>
     <script type="text/javascript" src="./gmap.js"></script>
 </head>
+
 <style>
-    .image-container {
-  position: relative;
+    .header-main{
+        margin-bottom: 0em !important;
+    }
+    li.dropdown {
+  display: inline-block;
 }
 
-.image-text {
+.dropdown-content {
+  display: none;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color:#fff;
-  font-size: 18px;
-  text-align:center;
-  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
-
-
-}
-.text-container p {
-  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
-}
-/* Styling for the container of the form */
-.containerform {
-  width: 50%;
-  /* margin-top: 40px; */
-  margin-left: 30%;
-padding: 50px;
-
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
 }
 
-/* Styling for the labels */
-label {
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
   display: block;
-  margin-bottom: 5px;
+  text-align: left;
 }
 
-/* Styling for the input fields */
-input[type=text], select, textarea {
+.dropdown-content a:hover {background-color: #f1f1f1;}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+.containerform {
+  background-color: #f2f2f2;
+  padding: 20px;
+  border-radius: 5px;
+  margin: 20px auto;
+  max-width: 500px;
+}
+
+.containerform label {
+  font-weight: bold;
+}
+
+.containerform input[type="email"],
+.containerform textarea {
+  padding: 5px;
+  margin: 5px 0;
   width: 100%;
-  padding: 12px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  margin-bottom: 10px;
+  border-radius: 3px;
 }
 
-/* Styling for the submit button */
-input[type=submit] {
+.containerform input[type="submit"] {
   background-color: #4CAF50;
   color: white;
-  padding: 12px 20px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 3px;
   cursor: pointer;
 }
 
-input[type=submit]:hover {
-  background-color: #45a049;
+.containerform input[type="submit"]:hover {
+  background-color: #3e8e41;
 }
-
 </style>
 
 <body>
@@ -215,19 +220,26 @@ input[type=submit]:hover {
                 <div class="thetop-nav"></div>
             </div>
         </aside>
-        <!-- first nav bar -->
-        <header>
-        <div class="header-top mobile-hide">
+           <!-- first nav bar -->
+      <header>
+            <div class="header-top mobile-hide">
+            </div>
+            <!-- header-top  -->
+            <div class="header-top mobile-hide">
                 <div class="container">
                     <div class="wrapper flexitem">
                         <div class="left">
                             <ul class="flexitem main-links">
-                                
+                                <!-- <li><a href="#"></a>Wishlist</li>
+                                <li><a href="#"></a>Order Tracking</li> -->
                             </ul>
                         </div>
                         <div class="right">
                             <ul class="flexitem main-links">
-                                
+                                <!-- <li><a href="#"></a>Sign Up</li>
+                                <li><a href="#"></a>My Account</li>
+                                <li><a href="#">English</a></li>
+                                <li><a href="#">JOD</a></li> -->
                             </ul>
                         </div>
                     </div>
@@ -304,97 +316,39 @@ input[type=submit]:hover {
                                         <?php
                                          if(isset($_SESSION['user_id'])){ ?>
                                         <div class="fly-item"><span class="item-number"><?= $total_wishlist_counts; ?></span></div>
+                                        <?php }?>
                                     </a>
                                 </li>
+
+                                
+
+                              
 
                                 
 
                                 <li class="iscart"><a href="./cart.php">
                                     <div class="icon-large">
                                         <i class="ri-shopping-cart-line"></i>
-                                        <div class="fly-item"><span class="item-number"> <?= $total_cart_counts; ?></span></div>
-                                    </div>
-                                    <?php
-                                        }else{ ?>
-                                    <div class="fly-item"><span class="item-number"><?= count($_SESSION['fav']); ?></span></div>
-                                    </a>
-                                </li>
-
-                                
-
-                                <li class="iscart"><a href="#">
-                                    <div class="icon-large">
-                                        <i class="ri-shopping-cart-line"></i>
-                                        <div class="fly-item"><span class="item-number"> <?= count($_SESSION['cart']); ?></span></div>
                                     </div>
 
-
-                                     <?php }; ?>
-                                    <div class="icon-text">
-                                        <div class="mini-text">Total</div>
-                                        <div class="cart-total">95.38 JD</div>
-                                    </div>
                                 </a>
-                                <div class="mini-cart">
-                                    <div class="content">
-                                    <?php
-                                        if(isset($_SESSION['user_id'])){ ?>
-                                        <div class="cart-head">
-                                        <?= $total_cart_counts; ?> items in cart
-                                        </div>
+                               
 
-                                       <?php }else{ ?>
-                                        <div class="cart-head">
-                                        <?= count($_SESSION['cart']); ?>items in cart
-                                        </div>
-                                        <?php }; ?>
 
-                                        <div class="cart-body">
-                                            <ul class="products mini">
-                                                <li class="item">
-                                                    <div class="thumbnail object-cover">
-                                                        <a href=""><img src="assets/products/QUARTZ VEIL LIQUID EYESHADOW.png" alt=""></a>
-                                                    </div>
-                                                    <div class="item-content">
-                                                        <p><a href="#">QUARTZ VEIL LIQUID EYESHADOW</a></p>
-                                                        <span class="price">
-                                                            <span>9.55 JD</span>
-                                                            <span class="fly-item"><span>2x</span></span>
-                                                        </span>
-                                                    </div>
-                                                    <a href="" class="item-remove"><i class="ri-close-line"></i></a>
-                                                </li>
-                                                
-                                                
-                                            </ul>
-                                        </div>
-                                        <div class="cart-footer">
-                                            <div class="subtotal">
-                                                <p>Subtotal</p>
-                                                <p><strong>95.38 JD</strong></p>
-                                            </div>
-                                            <div class="actions">
-                                                <a href="./checkout.php" class="secondary-button">Checkout</a>
-                                                <a href="./cart.php" class="secondary-button">View Cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
                             
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- second nav bar -->
+
             <div class="header-main mobile-hide">
                 <div class="container">
                     <div class="wrapper flexitem">
                         <div class="left">
                             <div class="dpt-cat">
                                 <div class="dpt-head">
-                                      <div class="main-text">All Departments</div>
+                                <div class="main-text">All Departments</div>
                                     <?php
                                     // prepare SQL query to count total number of products
 $sql = "SELECT COUNT(*) as total FROM products";
@@ -417,10 +371,12 @@ if ($stmt->rowCount() > 0) {
                                     </div>
                                     <a href="#" class="dpt-trigger mobile-hide">
                                         <i class="ri-menu-3-line ri-xl"></i>
+                                        <i class="ri-close-line ri-xl"></i>
                                     </a>
                                 </div>
                                 <div class="dpt-menu">
                                     <ul class="second-links">
+                                        
                                         <li class="has-child Womens">
                                             <a href="category.php?category=1">
                                                 <div class="icon-large"><i class="ri-t-shirt-line"></i></div>
@@ -457,13 +413,11 @@ if ($stmt->rowCount() > 0) {
                                                 Products From Brokers
                                             </a>
                                         </li>
-                                       
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         
-
                         <div class="right">
   <div class="search-box">
     <form class="search" method="get" action="search.php">
@@ -489,223 +443,134 @@ if ($stmt->rowCount() > 0) {
     ?>
   </div>
 </div>
-
                     </div>
                 </div>
             </div>
         </header>
          <!-- header  -->
     <main>
-         <div class="single-cart">
-            <!-- <div class="container"> -->
-            <div class="containerform">
-                <?php
-            // insert form data into database
-if (isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email'])) {
-    $first_name = $_POST['first_name'];
-    $last_name = $_POST['last_name'];
-    $email = $_POST['email'];
-    $phone = isset($_POST['phone']) ? $_POST['phone'] : NULL;
-    $address = isset($_POST['address']) ? $_POST['address'] : NULL;
-    $city = isset($_POST['city']) ? $_POST['city'] : NULL;
-    $state = isset($_POST['state']) ? $_POST['state'] : NULL;
-    
-    $sql = "INSERT INTO contacts (first_name, last_name, email, phone, address, city, state) VALUES ('$first_name', '$last_name', '$email', '$phone', '$address', '$city', '$state')";
-    
-    
+    <?php
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get form input values
+    $email = trim($_POST['email']);
+    $message = trim($_POST['message']);
+
+    // Check if email and message fields are not empty
+    if (!empty($email) && !empty($message)) {
+        // Insert input values into database
+        try {
+            $stmt = $conn->prepare("INSERT INTO contact_messages (email, message) VALUES (:email, :message)");
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':message', $message);
+            $stmt->execute();
+            echo "Message sent successfully";
+        } catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    } else {
+        echo "Email and message fields are required";
+    }
 }
 ?>
-  <form action="" style="  padding: 20px;
-  background-color: #f2f2f2;
-  border-radius: 5px;" method="post" action="">
 
-      <label for="first_name">First Name:</label>
-      <input type="text" id="first_name" name="first_name" required><br>
-
-      <label for="last_name">Last Name:</label>
-      <input type="text" id="last_name" name="last_name" required><br>
-
-     
-
-      <label for="address">Address:</label>
-      <input type="text" id="address" name="address"><br>
-
-      <label for="city">City:</label>
-      <input type="text" id="city" name="city"><br>
-      
+<div class="single-cart" style="position:relative;">
+  <img src="./assets/easy-wireless-yechnology-payment.jpg" alt="" style="height:700px;width:2000px;">
+  <div class="containerform" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);background-color: #f2f2f2; padding: 20px; border-radius: 5px; width: 500px;height: 300px;">
+    <form action="#" method="POST">
       <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required><br>
-
-      <label for="phone">Phone:</label>
-      <input type="tel" id="phone" name="phone"><br><br>
-      
-      <input type="submit" value="Submit">
-</form>
+      <br><br>
+      <input type="email" id="email" name="email" style="width: 450px;height: 50px;"><br><br>
+      <label for="message">Message:</label>
+      <textarea id="message" name="message" style="width: 450px;height: 50px;"></textarea><br><br>
+      <input type="submit" value="Send"   style="background-color: var(--primary-color);
+    color: var(--white-color); padding: 10px 20px; border: none; border-radius: 3px; cursor: pointer;">
+    </form>
+  </div>
 </div>
-         </div>
+
 
     </main>
 
     <footer>
-       
-        <!-- newsletter -->
 
-        <div class="widgets">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="flexwrap">
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Help & Contact</h4>
-                                <ul class="flexcol">
-                                    <li><a href="#">Your Account</a></li>
-                                    <li><a href="#">Your Order</a></li>
-                                    <li><a href="#">Shipping Rates</a></li>
-                                    <li><a href="#">Returns</a></li>
-                                    <li><a href="#">Assistant</a></li>
-                                    <li><a href="#">Help</a></li>
-                                    <li><a href="#">Contact Us</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Payment Info</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Bussines Card</a></li>
-                                    <li><a href="">Shop with Points</a></li>
-                                    <li><a href="">Reload Your Balance</a></li>
-                                    <li><a href="">Paypal</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>About Us</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Company Info</a></li>
-                                    <li><a href="">News</a></li>
-                                    <li><a href="">Investors</a></li>
-                                    <li><a href="">Careers</a></li>
-                                    <li><a href="">Policies</a></li>
-                                    <li><a href="">Customer reviews</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="item mini-links">
-                                <h4>Product Categories</h4>
-                                <ul class="flexcol">
-                                    <li><a href="">Bueaty</a></li>
-                                    <li><a href="">Electronic</a></li>
-                                    <li><a href="">Woman's Fashion</a></li>
-                                    <li><a href="">Men's Fashion</a></li>
-                                    <li><a href="">Home & Kitchen</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- widgets -->
 
-        <div class="footer-info">
-            <div class="container">
-                <div class="wrapper">
-                    <div class="flexcol">
-                        <div class="logo">
-                            <a href=""><span class="circle">.Store</span></a>
-                        </div>
-                        <div class="socials">
-                            <ul class="flexitem">
-                                <li><a href="#"><i class="ri-twitter-line"></i></a></li>
-                                <li><a href="#"><i class="ri-facebook-line"></i></a></li>
-                                <li><a href="#"><i class="ri-instagram-line"></i></a></li>
-                                <li><a href="#"><i class="ri-linkedin-line"></i></a></li>
-                                <li><a href="#"><i class="ri-youtube-line"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <p class="mini-text">Copyright 2023 .StoreName. All right reserved. </p>
+<div class="footer-info" style="background-color: var(--light-bg-color);">
+    <div class="container" >
+        <div class="wrapper" >
+            <div class="flexcol" >
+                <div class="logo" >
+                    <img src="./assets/logo.png" style="height: 150px;width:150px;margin-left:29px">
+                   
                 </div>
+                <div class="socials" >
+                    <ul class="flexitem" >
+                        <!-- <li><a href="#"><i class="ri-twitter-line"></i></a></li> -->
+                        <li><a href="https://www.facebook.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-facebook-line" style="color:wihte;"></i></a></li>
+                        <li><a href="https://www.instagram.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-instagram-line"></i></a></li>
+                        <li><a href="https://www.linkedin.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-linkedin-line"></i></a></li>
+                        <li><a href="https://www.youtube.com/" target="_blank" style="background-color: var(--primary-color)!important;color:white;"><i class="ri-youtube-line"></i></a></li>
+                    </ul>
+                </div>
+
+                <div style="color:black; justify-content: space-between; display: flex;gap: 20px; margin-left:50px">
+                        <!-- <li><a href="#"><i class="ri-twitter-line"></i></a></li> -->
+                        <p><a href="./shop.php" style="color:var(--secondary-dark-color);">Shop</a></p>
+                        <p><a href="./account.php" style="color:var(--secondary-dark-color);">Account</a></p>
+                        <p><a href="./whishlist.php" style="color:var(--secondary-dark-color);">Whishlist</a></p>
+                        <p><a href="./cart.php" style="color:var(--secondary-dark-color);">Cart</a></p>
+                        <p><a href="./about.php" style="color:var(--secondary-dark-color);">About </a></p>
+                        <p><a href="./contact.php" style="color:var(--secondary-dark-color);">Contact</a></p>
+                </div>
+                
+               
             </div>
+            <p class="mini-text"  style="color:black;margin-left:50px;font-size:8px;color:var(--secondary-dark-color);">Copyright 2023 .Center Point. All right reserved </p>
         </div>
-    </footer>
-    <!-- footer  -->
+    </div>
+</div>
+</footer>
+<!-- footer  -->
 
     <div class="menu-bottom desktop-hide">
-        <div class="container">
-            <div class="wrapper">
-                <nav>
-                    <ul class="flexitem menu-unorder-list">
-                        <li>
-                            <a href="#">
-                                <i class="ri-bar-chart-line"></i>
-                                <span>Trending</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="ri-user-6-line"></i>
-                                <span>Account</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="ri-heart-line"></i>
-                                <span>Wishlist</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#0" class="t-search">
-                                <i class="ri-search-line"></i>
-                                <span>Search</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#0" class="cart-trigger">
-                                <i class="ri-shopping-cart-line"></i>
-                                <span>Cart</span>
-                                <div class="fly-item">
-                                    <span class="item-number">0</span>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
+<div class="container">
+    <div class="wrapper">
+        <nav>
+            <ul class="flexitem menu-unorder-list">
+               
+                <li>
+                    <a href="./account.php">
+                        <i class="ri-user-6-line"></i>
+                        <span>Account</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./whishlist.php">
+                        <i class="ri-heart-line"></i>
+                        <span>Wishlist</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#0" class="t-search">
+                        <i class="ri-search-line"></i>
+                        <span>Search</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="./cart.php">
+                        <i class="ri-shopping-cart-line"></i>
+                        <span>Cart</span>
+                        
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
-    <!-- menu bottom  -->
-<!-- 
-    <div id="modal" class="modal">
-        <div class="content flexcol">
-            <div class="image object-cover">
-                <img src="assets/products/p3.png" alt="">
-            </div>
-            <h2>Get the latest deals and coupons</h2>
-            <p class="mobile-hide">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eveniet, velit!</p>
-            <form action="" class="search">
-                <span class="icon-large"><i class="ri-mail-line"></i></span>
-                <input type="email" placeholder="Your Email Address">
-                <button>Subscribe</button>
-            </form>
-            <a href="#" class="mini-text">Do not show me this again</a>
-            <a href="#" class="t-close modalclose flexcenter">
-                <i class="ri-close-line"></i>
-            </a>
-        </div>
-    </div> -->
-    <!-- modal -->
-    <div class="backtotop">
-        <a href="#" class="flexcol">
-            <i class="ri-arrow-up-line"></i>
-            <span>Top</span>
-        </a>
-    </div>
+</div>
+</div>
 
-    <div class="search-bottom desktop-hide">
+
+<div class="search-bottom desktop-hide">
         <div class="container">
             <div class="wrapper">
 
@@ -719,10 +584,6 @@ if (isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['e
         </div>
     </div>
     <!-- Search bottom  -->
-
-    <!-- <div class="overlay">
-        
-    </div> -->
     </div>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fslightbox/3.3.1/index.js"></script>
