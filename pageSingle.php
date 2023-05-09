@@ -468,18 +468,24 @@ if ($stmt->rowCount() > 0) {
 
   if(!empty($sizes)){
     foreach (explode(' ', $sizes) as $index => $size) {
-      $id = 'size-' . $index;
+      // Exclude empty sizes
+      if(!empty(trim($size))) {
+        $id = 'size-' . $index;
 ?>
       <p>
-        <input type="radio"  name="size" id="<?php echo $id; ?>" value="<?php echo $size; ?>" <?php if($size_filter == $size) {echo 'checked';} ?>>
+        <input type="radio" name="size" id="<?php echo $id; ?>" value="<?php echo $size; ?>" <?php if($size_filter == $size) {echo 'checked';} ?>>
         <label for="<?php echo $id; ?>" class="circle"><span><?php echo $size; ?></span></label>
       </p>
 <?php 
+      }
     }
   } else {
     echo "No sizes available";
   }
 ?>
+
+
+
 
 
 

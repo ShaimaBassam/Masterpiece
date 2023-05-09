@@ -387,43 +387,24 @@ if ($stmt->rowCount() > 0) {
                                 </div>
                                 <div class="dpt-menu">
                                     <ul class="second-links">
-                                        
-                                        <li class="has-child Womens">
-                                            <a href="category.php?category=1">
-                                                <div class="icon-large"><i class="ri-t-shirt-line"></i></div>
-                                                Women's Fashion
-                                            </a>
-                                        </li>
-                                        <li class="has-child Mens">
-                                            <a href="category.php?category=2">
-                                                <div class="icon-large"><i class="ri-shirt-line"></i></div>
-                                                Men's Fashion
-                                            </a>
-                                        </li>
-                                        <li class="has-child Girls">
-                                            <a href="category.php?category=3">
-                                                <div class="icon-large"><i class="ri-user-5-line"></i></div>
-                                                Girl's Fashion
-                                            </a>
-                                        </li>
-                                        <li class="has-child Boys">
-                                            <a href="category.php?category=4">
-                                                <div class="icon-large"><i class="ri-user-6-line"></i></div>
-                                                Boy's Fashion
-                                            </a>
-                                        </li>
-                                        <li class="has-child Home">
-                                            <a href="category.php?category=5">
-                                                <div class="icon-large"><i class="ri-home-4-line"></i></div>
-                                                Home & Kitchen
-                                            </a>
-                                        </li>
-                                        <li class="has-child Brokers">
-                                            <a href="category.php?category=6">
-                                                <div class="icon-large"><i class="ri-stack-line"></i></div>
-                                                Products From Brokers
-                                            </a>
-                                        </li>
+                                    <?php
+            // Query the database to retrieve categories
+            $stmt = $conn->query('SELECT * FROM category');
+            $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+            <?php
+            $list_html = '';
+foreach ($categories as $category) {
+    $list_html .= '<li class="has-child Womens" style="color:black; font-size:10px;">';
+    $list_html .='<hr>';
+    $list_html .= '<a href="category.php?category=' . $category['category_id'] . '">';
+    $list_html .= '<div class="icon-large">' . $category['category_name'] . '</div>';
+    $list_html .= '</a>';
+    $list_html .= '</li>';
+}
+echo '<ul class="second-links">' . $list_html . '</ul>';
+?>
+
                                     </ul>
                                 </div>
                             </div>

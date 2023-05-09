@@ -137,32 +137,62 @@ if(isset($_POST['new-admin']) && isset($_POST['password-newadmin'])){
     <link href="../css/dashboardstyle.css" rel="stylesheet">
 
     <style>
-        <?php include("../css/dashboardstyle.css") ?>
+    <?php include("../css/dashboardstyle.css") ?>
 
-        .fa-bars:before {
-            content: "\f0c9";
-        }
-        .btn-primary {
-            background-color: #42246C;
-            border-color: #42246C;
-        }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 250px;
-            height: 100vh;
-            overflow-y: auto;
-            transition: 0.5s;
-            z-index: 999;        }
-        input {
-            background-color: #fff !important;
-        }
-        .bg-secondary {
-            background-color: #e8c91a !important;
-        }
-    </style>
+    .fa-bars:before {
+        content: "\f0c9";
+    }
+
+    .btn-primary {
+        background-color: #42246C;
+        border-color: #42246C;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 250px;
+        height: 100vh;
+        overflow-y: auto;
+        transition: 0.5s;
+        z-index: 999;
+    }
+
+    input {
+        background-color: #fff !important;
+    }
+
+    .bg-secondary {
+        background-color: #e8c91a !important;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: row;
+    }
+
+    /* Style for category cards */
+    .card-container {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+
+    .card {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 20px;
+       
+    }
+
+    .card img {
+        max-width: 100px;
+        max-height: 100px;
+    }
+</style>
 </head>
 
 <body>
@@ -207,132 +237,41 @@ if(isset($_POST['new-admin']) && isset($_POST['password-newadmin'])){
 
         <!-- Content Start -->
         <div class="content">
+    <!-- Recent Sales Start -->
+    <div class="container-fluid pt-4 px-4">
+        <div class="bg-secondary text-center rounded p-4" style="background-color: #fff !important;">
+            <?php
+            // Query the database to retrieve categories
+            $stmt = $conn->query('SELECT * FROM category');
+            $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            <!-- <div class="container-fluid pt-4 px-4">
-                <div class="row g-4">
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #fff !important; ">
-                            <i class="fa fa-chart-line fa-3x text-primary" style="color:rgb(0, 0, 69) !important"></i>
-                            <div class="ms-3">
-                                <p class="mb-2">Today Sale</p>
-                                <h6 class="mb-0" style="color:black !important">$234</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #fff !important; ">
-                            <i class="fa fa-chart-bar fa-3x text-primary" style="color:rgb(0, 0, 69) !important"></i>
-                            <div class="ms-3">
-                                <p class="mb-2">Total Sale</p>
-                                <h6 class="mb-0" style="color:black !important">$3522</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #fff !important; ">
-                            <i class="fa fa-chart-area fa-3x text-primary" style="color:rgb(0, 0, 69) !important"></i>
-                            <div class="ms-3">
-                                <p class="mb-2">Today Revenue</p>
-                                <h6 class="mb-0" style="color:black !important">$104</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4" style="background-color: #fff !important; ">
-                            <i class="fa fa-chart-pie fa-3x text-primary" style="color:rgb(0, 0, 69) !important"></i>
-                            <div class="ms-3">
-                                <p class="mb-2">Total Revenue</p>
-                                <h6 class="mb-0" style="color:black !important">$2606</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-            
-            <!-- Sales Chart End -->
+            // Create HTML cards for each category
+            $cards_html = '';
+            foreach ($categories as $category) {
+                $cards_html .= '<div class="card">';
+                $cards_html .= '<img src="../uploaded_img/'.$category['image_01'] . '">';
+                $cards_html .= '<h2 style="color:black !important;font-size:12px;">' .$category['category_name'] . '</h2>';
+                $cards_html .= '</div>';
+            }
 
-            <!-- <div class="container-fluid pt-4 px-4">
-                <div class="row g-4">
-                    <div class="col-sm-12 col-xl-6">
-                        <div class="bg-secondary text-center rounded p-4" style="background-color: #fff !important; ">
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h6 class="mb-0" style="color:black !important">Worldwide Sales</h6>
-                            </div>
-                            <img src="https://www.imf.org/wp-content/uploads/2021/12/COTW-FDI-update.gif" width="320px">
-                        </div>
-                    </div>
-                    <div class="col-sm-12 col-xl-6">
-                        <div class="bg-secondary text-center rounded p-4" style="background-color: #fff !important; ">
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h6 class="mb-0" style="color:black !important">Salse & Revenue</h6>
-                            </div>
-                            <img src="https://exceljet.net/sites/default/files/images/chart/inline/income%20statement%20annual%20final.png">
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-            <!-- Sales Chart End -->
+            // Output the HTML cards
+            echo '<div class="card-container">' . $cards_html . '</div>';
 
-
-            <!-- Recent Sales Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="bg-secondary text-center rounded p-4" style="background-color: #fff !important; ">
-                    <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0" style="color:black !important">Top Products</h6>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table text-start align-middle table-bordered table-hover mb-0">
-                            <thead>
-                                <tr class="text-white">
-                                    <th scope="col" style="color:black !important">Product Name</th>
-                                    <th scope="col" style="color:black !important">Customer</th>
-                                    <th scope="col" style="color:black !important">Amount</th>
-                                    <th scope="col" style="color:black !important">Review</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Mandala Quilling</td>
-                                    <td>asem</td>
-                                    <td>$530</td>
-                                    <td>Excellent</td>                                   
-                                </tr>
-                                <tr>
-                                    <td>Realistic and real</td>
-                                    <td>abood</td>
-                                    <td>$430</td>
-                                    <td>Amazing</td>                                    
-                                </tr>
-                                <tr>
-                                    <td>Sun and Moon</td>
-                                    <td>Abdelmajied</td>
-                                    <td>$250</td>
-                                    <td>Very Good</td>                                   
-                                </tr>
-                                <tr>
-                                    <td>Acrylic and gold leaf</td>
-                                    <td>abrar</td>
-                                    <td>$150</td>
-                                    <td>Interesting Product</td>                                   
-                                </tr>
-                                <tr>
-                                    <td>Resin Art Inspo</td>
-                                    <td>Aladdin Amayreh</td>
-                                    <td>$135</td>
-                                    <td>Very Good</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            // Display the total number of categories
+            $total_categories = count($categories);
+            echo 'Total categories: ' . $total_categories;
+            ?>
         </div>
-        <!-- Content End -->
-
-
-        <!-- Back to Top -->
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
+</div>
+<!-- Content End -->
+
+ 
+
+<!-- Back to Top -->
+<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
